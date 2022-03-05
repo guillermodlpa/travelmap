@@ -2,6 +2,8 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Grommet, Main, Box } from 'grommet';
 import Map from '../components/Map/Map';
+import { useState } from 'react';
+import CountryTags from '../components/CountryTags';
 
 const theme = {
   global: {
@@ -17,6 +19,8 @@ const theme = {
 };
 
 const Home: NextPage = () => {
+  const [highlightedCountries, setHighlightedCountries] = useState<string[]>([]);
+
   return (
     <Grommet theme={theme} full="min" themeMode="light">
       <Head>
@@ -27,7 +31,17 @@ const Home: NextPage = () => {
       <Main>
         <Box border={{ color: 'gray', size: 'large' }} pad="medium">
           <Box border={{ color: 'brand', size: 'large' }} pad="medium">
-            <Map />
+            <Map
+              highlightedCountries={highlightedCountries}
+              onCountryClicked={(country) => {
+                setHighlightedCountries(
+                  highlightedCountries.includes(country)
+                    ? highlightedCountries.filter((c) => c !== country)
+                    : highlightedCountries.concat(country)
+                );
+              }}
+            />
+            <CountryTags countries={highlightedCountries} />
           </Box>
         </Box>
       </Main>

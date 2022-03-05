@@ -1,12 +1,15 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-import iso from 'iso-3166-1';
-import { useEffect, useRef, useState } from 'react';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from 'grommet';
 
-const Map: React.FC = () => {
-  const [highlightedCountries, setHighlightedCountries] = useState<Array<string>>([]);
+const Map: React.FC<{
+  highlightedCountries: string[];
+  onCountryClicked: (country: string) => void;
+}> = ({ highlightedCountries, onCountryClicked }) => {
   const mapRef = useRef<mapboxgl.Map>();
+  const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
@@ -90,19 +93,16 @@ const Map: React.FC = () => {
         map.setFilter('country-fills-hover', ['==', 'name', '']);
       });
 
-      map.on('click', function (e) {
-        const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-        const country = features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
-        if (country) {
-          setHighlightedCountries((highlightedCountries) =>
-            highlightedCountries.includes(country)
-              ? highlightedCountries.filter((c) => c !== country)
-              : highlightedCountries.concat(country)
-          );
-        }
-      });
+      // map.on('click', function (e) {
+      //   const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+      //   const country = features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
+      //   if (country) {
+      //     onCountryClicked(country);
+      //   }
+      // });
 
       mapRef.current = map;
+      setMapLoaded(true);
     });
 
     return () => {
@@ -113,12 +113,32 @@ const Map: React.FC = () => {
     };
   }, []);
 
+  const onClick = useCallback(
+    (e) => {
+      const features = mapRef.current?.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+      const country = features && features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
+      if (country) {
+        onCountryClicked(country);
+      }
+    },
+    [onCountryClicked]
+  );
+
   useEffect(() => {
-    if (mapRef.current) {
-      // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
-      mapRef.current.setFilter('country-boundaries', ['in', 'iso_3166_1_alpha_3', ...highlightedCountries]);
+    if (mapLoaded) {
+      mapRef.current?.on('click', onClick);
+      return () => {
+        mapRef.current?.off('click', onClick);
+      };
     }
-  }, [highlightedCountries]);
+  }, [onClick, mapLoaded]);
+
+  useEffect(() => {
+    if (mapLoaded) {
+      // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
+      mapRef.current?.setFilter('country-boundaries', ['in', 'iso_3166_1_alpha_3', ...highlightedCountries]);
+    }
+  }, [highlightedCountries, mapLoaded]);
 
   return <Box id="map" height="300px" />;
 };
