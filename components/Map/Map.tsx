@@ -1,10 +1,13 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import iso from 'iso-3166-1';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box } from 'grommet';
 
 const Map: React.FC = () => {
+  const [highlightedCountries, setHighlightedCountries] = useState<Array<string>>([]);
+  const mapRef = useRef<mapboxgl.Map>();
+
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
     const map = new mapboxgl.Map({
@@ -64,16 +67,14 @@ const Map: React.FC = () => {
       });
 
       // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
-      const highlightedCountries = [iso.whereCountry('Spain')?.alpha3, iso.whereCountry('France')?.alpha3];
-
-      map.setFilter('country-boundaries', ['in', 'iso_3166_1_alpha_3', ...highlightedCountries]);
+      map.setFilter('country-boundaries', ['in', 'iso_3166_1_alpha_3']);
 
       // When the user moves their mouse over the page, we look for features
       // at the mouse position (e.point) and within the states layer (states-fill).
       // If a feature is found, then we'll update the filter in the state-fills-hover
       // layer to only show that state, thus making a hover effect.
       map.on('mousemove', function (e) {
-        var features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+        const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
         if (features.length) {
           map.getCanvas().style.cursor = 'pointer';
           map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
@@ -90,15 +91,34 @@ const Map: React.FC = () => {
       });
 
       map.on('click', function (e) {
-        var features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-        if (features.length) {
-          console.log('map click', features[0].properties?.iso_3166_1_alpha_3);
+        const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+        const country = features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
+        if (country) {
+          setHighlightedCountries((highlightedCountries) =>
+            highlightedCountries.includes(country)
+              ? highlightedCountries.filter((c) => c !== country)
+              : highlightedCountries.concat(country)
+          );
         }
       });
+
+      mapRef.current = map;
     });
 
-    return () => map.remove(); // @todo: confirm this is the function
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove(); // @todo: confirm this is the function
+        mapRef.current = undefined;
+      }
+    };
   }, []);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
+      mapRef.current.setFilter('country-boundaries', ['in', 'iso_3166_1_alpha_3', ...highlightedCountries]);
+    }
+  }, [highlightedCountries]);
 
   return <Box id="map" height="300px" />;
 };
