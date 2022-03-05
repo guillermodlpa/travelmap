@@ -9,15 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "grommet": "^2.21.0",
+    "iso-3166-1": "^2.1.1",
+    "mapbox-gl": "^2.7.0",
     "next": "12.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "styled-components": "^5.3.3"
   },
+  "browserslist": ">0.2%, not dead, not ie 11, not chrome < 51, not safari < 10",
   "devDependencies": {
+    "@types/mapbox-gl": "^2.6.3",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",
     "eslint": "8.10.0",
     "eslint-config-next": "12.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "2.5.1",
     "typescript": "4.6.2"
   }
 }
