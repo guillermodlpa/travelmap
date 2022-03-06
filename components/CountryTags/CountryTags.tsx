@@ -14,9 +14,8 @@ const iso3ToCountryName: { [iso3: string]: string } = simplifiedWorldAdministrat
 
 const CountryTags: React.FC<{
   countries: string[];
-  onRemove: (countryAlpha3: string) => void;
   onSelect: (countryAlpha3: string) => void;
-}> = ({ countries, onRemove, onSelect }) => {
+}> = ({ countries, onSelect }) => {
   return (
     <Box
       align="center"
@@ -30,9 +29,6 @@ const CountryTags: React.FC<{
           value={iso3ToCountryName[countryIso3] || countryIso3}
           key={countryIso3}
           onClick={() => onSelect(countryIso3)}
-          // @todo: uncomment this. Make an option to show the X buttons for deleting
-          // Note that when onRemove is passed, onClick shouldn't be
-          // onRemove={() => onRemove(countryObject!.alpha3)}
         />
       ))}
 

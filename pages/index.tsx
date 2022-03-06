@@ -58,7 +58,10 @@ const Home: NextPage = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const countryIso3Codes = (urlParams.get('countries') || '').split('-');
-    const filteredCodes = countryIso3Codes.filter((code) => allCountryCodes.includes(code));
+    const uniqueCodes = countryIso3Codes.filter(
+      (code, index) => countryIso3Codes.indexOf(code) === index
+    );
+    const filteredCodes = uniqueCodes.filter((code) => allCountryCodes.includes(code));
     if (filteredCodes.length > 0) {
       setHighlightedCountries(filteredCodes);
     }
@@ -74,7 +77,7 @@ const Home: NextPage = () => {
       <AppHeader />
 
       <Main background={{ color: 'dark-5', opacity: 'weak' }} align="center">
-        <Box width="100%" height={{ min: '50vh' }}>
+        <Box width="100%" height={{ min: '45vh' }}>
           <Map
             highlightedCountries={highlightedCountries}
             onCountryClicked={(countryAlpha3) => {
@@ -86,29 +89,30 @@ const Home: NextPage = () => {
           />
         </Box>
 
-        <Box width="large" pad="medium" direction="row" justify="center">
+        <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>
           <Box gap="small" align="center">
             <Text size="3xl">{highlightedCountries.length}</Text>
             <Text>Countries visited</Text>
           </Box>
         </Box>
 
-        <Box width="large" pad={{ horizontal: 'medium', vertical: 'medium' }}>
+        <Box width="large" pad={{ horizontal: 'medium', vertical: 'medium' }} responsive={false}>
           <CountryTags
             countries={highlightedCountries}
             onSelect={(countryAlpha3) => setCountryZoomedInto(countryAlpha3)}
-            onRemove={(countryAlpha3) => removeCountry(countryAlpha3)}
           />
           <CountrySearch
             disabledCountries={highlightedCountries}
             onCountrySelected={(countryAlpha3) => {
-              addCountry(countryAlpha3);
+              highlightedCountries.includes(countryAlpha3)
+                ? removeCountry(countryAlpha3)
+                : addCountry(countryAlpha3);
             }}
           />
         </Box>
       </Main>
 
-      <Footer pad={{ horizontal: 'medium', vertical: 'medium' }}>
+      <Footer pad={{ horizontal: 'medium', vertical: 'medium' }} responsive={false}>
         <Anchor
           href="https://guillermodelapuente.com"
           target="_blank"

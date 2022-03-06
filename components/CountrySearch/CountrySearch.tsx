@@ -23,12 +23,12 @@ const CountrySearch: React.FC<{
     <SearchableSelect
       options={options}
       labelKey="label"
-      disabled={disabledCountries}
       valueKey="value"
-      value={''}
+      value={disabledCountries}
       dropHeight="small"
       placeholder="Add country"
       a11yTitle="Add country"
+      multiple
       onChange={({ option }) => {
         onCountrySelected(option.value);
       }}
