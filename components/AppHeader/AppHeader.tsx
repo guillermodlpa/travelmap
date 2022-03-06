@@ -1,4 +1,6 @@
-import { Box, Heading, Button } from 'grommet';
+import { Box, Heading } from 'grommet';
+
+import CopyToClipboardButton from './CopyToClipboardButton';
 
 const AppHeader: React.FC = () => (
   <Box
@@ -9,14 +11,19 @@ const AppHeader: React.FC = () => (
     align="center"
     justify="between"
     responsive={false}
-    pad="small"
+    pad={{ horizontal: 'small', vertical: 'medium' }}
   >
     <Heading margin="none" level={1} size="small">
       Travelmap
     </Heading>
 
     <Box direction="row" align="center" pad={{ horizontal: 'small' }}>
-      <Button primary label="Make your own" />
+      <CopyToClipboardButton
+        primary
+        label="Share link"
+        labelCopied="Link copied to clipboard!"
+        labelError="Error"
+      />
     </Box>
   </Box>
 );

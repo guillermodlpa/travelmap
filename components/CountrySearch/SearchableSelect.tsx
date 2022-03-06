@@ -1,7 +1,7 @@
 import { Select, SelectExtendedProps } from 'grommet';
 import { useState } from 'react';
 
-interface Option {
+export interface Option {
   label: string;
   value: string;
 }

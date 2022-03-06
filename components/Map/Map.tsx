@@ -11,7 +11,9 @@ import { Box } from 'grommet';
  * Dataset in GeoJSON format can be downloaded from:
  * https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/
  */
-import simplifiedWorldAdministrativeBoundaries from './simplified-world-administrative-boundaries.json';
+import simplifiedWorldAdministrativeBoundaries from '../../constants/simplified-world-administrative-boundaries.json';
+
+const MAP_OCEAN_COLOR = 'rgb(101, 196, 236)';
 
 const Map: React.FC<{
   highlightedCountries: string[];
@@ -78,7 +80,6 @@ const Map: React.FC<{
         'country-label'
       );
 
-      // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
       map.setFilter('highlighted-countries', ['in', 'iso_3166_1_alpha_3']);
 
       // When the user moves their mouse over the page, we look for features
@@ -147,7 +148,6 @@ const Map: React.FC<{
 
   useEffect(() => {
     if (mapLoaded) {
-      // https://github.com/ecrmnn/iso-3166-1/blob/master/src/iso-3166.ts
       mapRef.current?.setFilter('highlighted-countries', [
         'in',
         'iso_3166_1_alpha_3',
@@ -163,11 +163,13 @@ const Map: React.FC<{
       );
       if (descriptor?.bounds) {
         mapRef.current?.fitBounds(descriptor?.bounds as [number, number, number, number]);
+      } else {
+        console.log(`Bounds not found for ${countryZoomedInto}`, descriptor);
       }
     }
   }, [countryZoomedInto, mapLoaded]);
 
-  return <Box id="map" flex="grow" />;
+  return <Box id="map" flex="grow" background={MAP_OCEAN_COLOR} />;
 };
 
 export default Map;
