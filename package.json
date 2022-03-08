@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "grommet": "^2.21.0",
+    "grommet-icons": "^4.7.0",
     "mapbox-gl": "^2.7.0",
     "next": "12.1.0",
     "react": "17.0.2",

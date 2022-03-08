@@ -12,6 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           margin: 0;
           height: 100%;
         }
+        * {
+          transition: background-color 0.2s;
+        }
       `}</style>
       <Component {...pageProps} />
     </>

@@ -50,16 +50,18 @@ const Home: NextPage = () => {
     }
   }, []);
 
+  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('dark');
+
   return (
-    <Grommet theme={theme} full="min" themeMode="light">
+    <Grommet theme={theme} full="min" themeMode={themeMode}>
       <Head>
         <title>Travel map</title>
         <meta name="description" content="To Do" />
       </Head>
 
-      <AppHeader />
+      <AppHeader themeMode={themeMode} setThemeMode={setThemeMode} />
 
-      <Main background={{ color: 'dark-5', opacity: 'weak' }} align="center">
+      <Main background="background-back" align="center">
         <Box width="100%" height={{ min: '45vh' }}>
           <NoSsr>
             <Map
@@ -97,7 +99,11 @@ const Home: NextPage = () => {
         </Box>
       </Main>
 
-      <Footer pad={{ horizontal: 'medium', vertical: 'medium' }} responsive={false}>
+      <Footer
+        pad={{ horizontal: 'medium', vertical: 'medium' }}
+        responsive={false}
+        background="background-front"
+      >
         <Anchor
           href="https://guillermodelapuente.com"
           target="_blank"

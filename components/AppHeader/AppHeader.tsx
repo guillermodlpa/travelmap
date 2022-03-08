@@ -1,15 +1,19 @@
-import { Box, Heading } from 'grommet';
+import { Header, Box, Heading } from 'grommet';
 
+import ThemeModeButton from './ThemeModeButton';
 import CopyToClipboardButton from './CopyToClipboardButton';
 
-const AppHeader: React.FC = () => (
-  <Box
+const AppHeader: React.FC<{
+  themeMode: 'dark' | 'light';
+  setThemeMode: (mode: 'dark' | 'light') => void;
+}> = ({ themeMode, setThemeMode }) => (
+  <Header
     flex={false}
     tag="header"
     direction="row"
-    background="white"
     align="center"
     justify="between"
+    background="background-front"
     responsive={false}
     pad={{ horizontal: 'small', vertical: 'medium' }}
   >
@@ -18,6 +22,7 @@ const AppHeader: React.FC = () => (
     </Heading>
 
     <Box direction="row" align="center" pad={{ horizontal: 'small' }}>
+      <ThemeModeButton themeMode={themeMode} setThemeMode={setThemeMode} />
       <CopyToClipboardButton
         primary
         label="Share link"
@@ -25,7 +30,7 @@ const AppHeader: React.FC = () => (
         labelError="Error"
       />
     </Box>
-  </Box>
+  </Header>
 );
 
 export default AppHeader;
