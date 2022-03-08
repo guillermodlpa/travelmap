@@ -6,6 +6,7 @@ import Map from '../components/Map/Map';
 import { useEffect, useState } from 'react';
 import CountryTags from '../components/CountryTags';
 import AppHeader from '../components/AppHeader';
+import NoSsr from '../components/NoSsr';
 import CountrySearch from '../components/CountrySearch';
 import simplifiedWorldAdministrativeBoundaries from '../constants/simplified-world-administrative-boundaries.json';
 
@@ -83,15 +84,17 @@ const Home: NextPage = () => {
 
       <Main background={{ color: 'dark-5', opacity: 'weak' }} align="center">
         <Box width="100%" height={{ min: '45vh' }}>
-          <Map
-            visitedCountries={visitedCountries}
-            onCountryClicked={(countryAlpha3) => {
-              visitedCountries.includes(countryAlpha3)
-                ? removeCountry(countryAlpha3)
-                : addCountry(countryAlpha3);
-            }}
-            countryZoomedInto={countryZoomedInto}
-          />
+          <NoSsr>
+            <Map
+              visitedCountries={visitedCountries}
+              onCountryClicked={(countryAlpha3) => {
+                visitedCountries.includes(countryAlpha3)
+                  ? removeCountry(countryAlpha3)
+                  : addCountry(countryAlpha3);
+              }}
+              countryZoomedInto={countryZoomedInto}
+            />
+          </NoSsr>
         </Box>
 
         <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>

@@ -20,14 +20,17 @@ const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v11';
 const getIncrementalId = (() => {
   let lastId = 0;
   return () => {
-    console.log('getIncrementalId called');
     lastId = lastId + 1;
     return lastId;
   };
 })();
 
-const useUniqueId = () => {
-  return useMemo(() => getIncrementalId(), []);
+const useUniqueId = (prefix = '') => {
+  const idRef = useRef<string>();
+  if (idRef.current === undefined) {
+    idRef.current = `${prefix}${getIncrementalId()}`;
+  }
+  return idRef.current;
 };
 
 const Map: React.FC<{
@@ -37,106 +40,111 @@ const Map: React.FC<{
 }> = ({ visitedCountries, onCountryClicked, countryZoomedInto }) => {
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState(false);
-  const uniqueMapId = `map-${useUniqueId()}`;
+  const uniqueMapId = useUniqueId('map_');
 
   useEffect(() => {
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
-    const map = new mapboxgl.Map({
-      container: uniqueMapId, // @todo: change this for something random
-      style: MAPBOX_STYLE,
-      center: INITIAL_MAP_CENTER,
-      zoom: INITIAL_MAP_ZOOM,
-    });
+    try {
+      mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
 
-    map.on('load', function () {
-      // include the information of country boundaries
-      map.addSource('countryBoundariesV1', {
-        type: 'vector',
-        url: 'mapbox://mapbox.country-boundaries-v1',
+      const map = new mapboxgl.Map({
+        container: uniqueMapId, // @todo: change this for something random
+        style: MAPBOX_STYLE,
+        center: INITIAL_MAP_CENTER,
+        zoom: INITIAL_MAP_ZOOM,
       });
 
-      // add a transparent layer of countries. We use it when interacting with the map to know
-      // which country it is
-      map.addLayer({
-        id: 'country-fills',
-        type: 'fill',
-        source: 'countryBoundariesV1',
-        'source-layer': 'country_boundaries',
-        layout: {},
-        paint: {
-          'fill-color': '#fff',
-          'fill-opacity': 0,
-        },
-      });
+      map.on('load', function () {
+        // include the information of country boundaries
+        map.addSource('countryBoundariesV1', {
+          type: 'vector',
+          url: 'mapbox://mapbox.country-boundaries-v1',
+        });
 
-      // add a layer of countries, in which only one filtered country is visible. We'll configure that
-      // filter when hovering over the map
-      map.addLayer(
-        {
-          id: 'country-fills-hover',
+        // add a transparent layer of countries. We use it when interacting with the map to know
+        // which country it is
+        map.addLayer({
+          id: 'country-fills',
           type: 'fill',
           source: 'countryBoundariesV1',
           'source-layer': 'country_boundaries',
           layout: {},
           paint: {
-            'fill-color': '#627BC1',
-            'fill-opacity': 0.25,
+            'fill-color': '#fff',
+            'fill-opacity': 0,
           },
-          filter: ['==', 'name', ''],
-        },
-        'country-label'
-      );
+        });
 
-      // add a layer of visited countries
-      map.addLayer(
-        {
-          id: 'visited-countries',
-          source: 'countryBoundariesV1',
-          'source-layer': 'country_boundaries',
-          type: 'fill',
-          paint: {
-            'fill-color': '#d2361e',
-            'fill-opacity': 0.25,
+        // add a layer of countries, in which only one filtered country is visible. We'll configure that
+        // filter when hovering over the map
+        map.addLayer(
+          {
+            id: 'country-fills-hover',
+            type: 'fill',
+            source: 'countryBoundariesV1',
+            'source-layer': 'country_boundaries',
+            layout: {},
+            paint: {
+              'fill-color': '#627BC1',
+              'fill-opacity': 0.25,
+            },
+            filter: ['==', 'name', ''],
           },
-        },
-        'country-label'
-      );
+          'country-label'
+        );
 
-      // for now, we set the filter without any countries
-      map.setFilter('visited-countries', ['in', 'iso_3166_1_alpha_3']);
+        // add a layer of visited countries
+        map.addLayer(
+          {
+            id: 'visited-countries',
+            source: 'countryBoundariesV1',
+            'source-layer': 'country_boundaries',
+            type: 'fill',
+            paint: {
+              'fill-color': '#d2361e',
+              'fill-opacity': 0.25,
+            },
+          },
+          'country-label'
+        );
 
-      // When the user moves their mouse over the page, we look for features
-      // at the mouse position (e.point) and within the states layer (states-fill).
-      // If a feature is found, then we'll update the filter in the state-fills-hover
-      // layer to only show that state, thus making a hover effect.
-      map.on('mousemove', (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-        const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-        if (features.length) {
-          map.getCanvas().style.cursor = 'pointer';
-          map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
-        } else {
+        // for now, we set the filter without any countries
+        map.setFilter('visited-countries', ['in', 'iso_3166_1_alpha_3']);
+
+        // When the user moves their mouse over the page, we look for features
+        // at the mouse position (e.point) and within the states layer (states-fill).
+        // If a feature is found, then we'll update the filter in the state-fills-hover
+        // layer to only show that state, thus making a hover effect.
+        map.on('mousemove', (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+          const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+          if (features.length) {
+            map.getCanvas().style.cursor = 'pointer';
+            map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
+          } else {
+            map.setFilter('country-fills-hover', ['==', 'name', '']);
+            map.getCanvas().style.cursor = '';
+          }
+        });
+
+        // Reset the country-fills-hover layer's filter when the mouse leaves the map
+        map.on('mouseout', function () {
+          map.getCanvas().style.cursor = 'auto';
           map.setFilter('country-fills-hover', ['==', 'name', '']);
-          map.getCanvas().style.cursor = '';
+        });
+
+        mapRef.current = map;
+        setMapLoaded(true);
+      });
+
+      return () => {
+        if (mapRef.current) {
+          setMapLoaded(false);
+          mapRef.current.remove(); // @todo: confirm this is the function
+          mapRef.current = undefined;
         }
-      });
-
-      // Reset the country-fills-hover layer's filter when the mouse leaves the map
-      map.on('mouseout', function () {
-        map.getCanvas().style.cursor = 'auto';
-        map.setFilter('country-fills-hover', ['==', 'name', '']);
-      });
-
-      mapRef.current = map;
-      setMapLoaded(true);
-    });
-
-    return () => {
-      if (mapRef.current) {
-        setMapLoaded(false);
-        mapRef.current.remove(); // @todo: confirm this is the function
-        mapRef.current = undefined;
-      }
-    };
+      };
+    } catch (error) {
+      console.error(error);
+    }
   }, [uniqueMapId]);
 
   const onClick = useCallback(
