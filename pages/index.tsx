@@ -16,12 +16,17 @@ const allCountryCodes = simplifiedWorldAdministrativeBoundaries
 const theme = {
   global: {
     font: {
-      family: 'Roboto',
+      family: "'Roboto', sans-serif",
       size: '18px',
       height: '20px',
     },
     colors: {
-      brand: '#228BE6',
+      brand: '#646AA8',
+    },
+  },
+  heading: {
+    font: {
+      family: "'Rye', cursive",
     },
   },
   select: {
