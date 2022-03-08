@@ -54,9 +54,19 @@ const Map: React.FC<{
         style: MAPBOX_STYLE,
         center: INITIAL_MAP_CENTER,
         zoom: INITIAL_MAP_ZOOM,
+        localFontFamily: "'Roboto', sans-serif",
+        doubleClickZoom: false,
+        scrollZoom: false,
       });
 
       map.on('load', function () {
+        map.addControl(
+          new mapboxgl.NavigationControl({
+            showCompass: false,
+            showZoom: true,
+          })
+        );
+
         // include the information of country boundaries
         map.addSource('countryBoundariesV1', {
           type: 'vector',
