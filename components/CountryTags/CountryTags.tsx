@@ -1,6 +1,6 @@
 import { Box, Tag } from 'grommet';
 
-import simplifiedWorldAdministrativeBoundaries from '../../constants/simplified-world-administrative-boundaries.json';
+import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 
 const iso3ToCountryName: { [iso3: string]: string } = simplifiedWorldAdministrativeBoundaries
   .filter((descriptor) => Boolean(descriptor.iso3))

@@ -13,7 +13,7 @@ const AppHeader: React.FC = () => (
     responsive={false}
     pad={{ horizontal: 'small', vertical: 'medium' }}
   >
-    <Heading margin="none" level={1} size="small">
+    <Heading margin="none" level={1} size="small" color="brand">
       Travelmap
     </Heading>
 

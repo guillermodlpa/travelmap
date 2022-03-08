@@ -1,7 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
-import { Box } from 'grommet';
+import { useMemo, useRef, useState, useEffect, useCallback, useContext } from 'react';
+import { Box, ThemeContext } from 'grommet';
 
 /**
  * This JSON file is a simplification of the World Administrative Boundaries dataset
@@ -10,7 +10,8 @@ import { Box } from 'grommet';
  * Dataset in GeoJSON format can be downloaded from:
  * https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/
  */
-import simplifiedWorldAdministrativeBoundaries from '../../constants/simplified-world-administrative-boundaries.json';
+import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
+import { CustomTheme } from '../../util/theme';
 
 const MAP_OCEAN_COLOR = 'rgb(101, 196, 236)';
 const INITIAL_MAP_CENTER: [number, number] = [25, 20];
@@ -41,6 +42,8 @@ const Map: React.FC<{
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState(false);
   const uniqueMapId = useUniqueId('map_');
+
+  const theme = useContext(ThemeContext) as CustomTheme;
 
   useEffect(() => {
     try {
@@ -84,8 +87,8 @@ const Map: React.FC<{
             'source-layer': 'country_boundaries',
             layout: {},
             paint: {
-              'fill-color': '#627BC1',
-              'fill-opacity': 0.25,
+              'fill-color': theme.global.colors['status-ok'] || 'green',
+              'fill-opacity': 0.5,
             },
             filter: ['==', 'name', ''],
           },
@@ -100,8 +103,8 @@ const Map: React.FC<{
             'source-layer': 'country_boundaries',
             type: 'fill',
             paint: {
-              'fill-color': '#d2361e',
-              'fill-opacity': 0.25,
+              'fill-color': theme.global.colors.brand || 'black',
+              'fill-opacity': 0.5,
             },
           },
           'country-label'

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import SearchableSelect, { Option } from './SearchableSelect';
 
-import simplifiedWorldAdministrativeBoundaries from '../../constants/simplified-world-administrative-boundaries.json';
+import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 
 const CountrySearch: React.FC<{
   onCountrySelected: (countryAlpha3: string) => void;

@@ -8,34 +8,12 @@ import CountryTags from '../components/CountryTags';
 import AppHeader from '../components/AppHeader';
 import NoSsr from '../components/NoSsr';
 import CountrySearch from '../components/CountrySearch';
-import simplifiedWorldAdministrativeBoundaries from '../constants/simplified-world-administrative-boundaries.json';
+import theme from '../util/theme';
+import simplifiedWorldAdministrativeBoundaries from '../util/simplified-world-administrative-boundaries.json';
 
 const allCountryCodes = simplifiedWorldAdministrativeBoundaries
   .map(({ iso3 }) => iso3)
   .filter(Boolean) as string[];
-
-const theme = {
-  global: {
-    font: {
-      family: "'Roboto', sans-serif",
-      size: '18px',
-      height: '20px',
-    },
-    colors: {
-      brand: '#646AA8',
-    },
-  },
-  heading: {
-    font: {
-      family: "'Rye', cursive",
-    },
-  },
-  select: {
-    options: {
-      container: { align: 'start', pad: 'small' },
-    },
-  },
-};
 
 const Home: NextPage = () => {
   const [visitedCountries, setVisitedCountrioes] = useState<string[]>([]);
@@ -51,7 +29,6 @@ const Home: NextPage = () => {
   const router = useRouter();
   const countriesQuery = [...visitedCountries].sort((a, b) => a.localeCompare(b)).join('-');
   useEffect(() => {
-    console.log('query', countriesQuery !== '' ? { countries: countriesQuery } : null);
     router.replace(
       {
         query: countriesQuery !== '' ? { countries: countriesQuery } : null,
