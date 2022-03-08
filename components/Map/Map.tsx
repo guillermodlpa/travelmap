@@ -1,7 +1,6 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import { Box } from 'grommet';
 
 /**
@@ -14,30 +13,50 @@ import { Box } from 'grommet';
 import simplifiedWorldAdministrativeBoundaries from '../../constants/simplified-world-administrative-boundaries.json';
 
 const MAP_OCEAN_COLOR = 'rgb(101, 196, 236)';
+const INITIAL_MAP_CENTER: [number, number] = [25, 20];
+const INITIAL_MAP_ZOOM = 1;
+const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v11';
+
+const getIncrementalId = (() => {
+  let lastId = 0;
+  return () => {
+    console.log('getIncrementalId called');
+    lastId = lastId + 1;
+    return lastId;
+  };
+})();
+
+const useUniqueId = () => {
+  return useMemo(() => getIncrementalId(), []);
+};
 
 const Map: React.FC<{
-  highlightedCountries: string[];
+  visitedCountries: string[];
   onCountryClicked: (country: string) => void;
   countryZoomedInto: string | undefined;
-}> = ({ highlightedCountries, onCountryClicked, countryZoomedInto }) => {
+}> = ({ visitedCountries, onCountryClicked, countryZoomedInto }) => {
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState(false);
+  const uniqueMapId = `map-${useUniqueId()}`;
 
   useEffect(() => {
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
     const map = new mapboxgl.Map({
-      container: 'map', // container ID
-      style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [-74.5, 40], // starting position [lng, lat]
-      zoom: 1, // starting zoom
+      container: uniqueMapId, // @todo: change this for something random
+      style: MAPBOX_STYLE,
+      center: INITIAL_MAP_CENTER,
+      zoom: INITIAL_MAP_ZOOM,
     });
 
     map.on('load', function () {
+      // include the information of country boundaries
       map.addSource('countryBoundariesV1', {
         type: 'vector',
         url: 'mapbox://mapbox.country-boundaries-v1',
       });
 
+      // add a transparent layer of countries. We use it when interacting with the map to know
+      // which country it is
       map.addLayer({
         id: 'country-fills',
         type: 'fill',
@@ -46,10 +65,12 @@ const Map: React.FC<{
         layout: {},
         paint: {
           'fill-color': '#fff',
-          'fill-opacity': 0, // @todo, figure out a better way
+          'fill-opacity': 0,
         },
       });
 
+      // add a layer of countries, in which only one filtered country is visible. We'll configure that
+      // filter when hovering over the map
       map.addLayer(
         {
           id: 'country-fills-hover',
@@ -59,28 +80,30 @@ const Map: React.FC<{
           layout: {},
           paint: {
             'fill-color': '#627BC1',
-            'fill-opacity': 1,
+            'fill-opacity': 0.25,
           },
           filter: ['==', 'name', ''],
         },
         'country-label'
       );
 
+      // add a layer of visited countries
       map.addLayer(
         {
-          id: 'highlighted-countries',
+          id: 'visited-countries',
           source: 'countryBoundariesV1',
           'source-layer': 'country_boundaries',
           type: 'fill',
           paint: {
             'fill-color': '#d2361e',
-            'fill-opacity': 0.4,
+            'fill-opacity': 0.25,
           },
         },
         'country-label'
       );
 
-      map.setFilter('highlighted-countries', ['in', 'iso_3166_1_alpha_3']);
+      // for now, we set the filter without any countries
+      map.setFilter('visited-countries', ['in', 'iso_3166_1_alpha_3']);
 
       // When the user moves their mouse over the page, we look for features
       // at the mouse position (e.point) and within the states layer (states-fill).
@@ -103,25 +126,18 @@ const Map: React.FC<{
         map.setFilter('country-fills-hover', ['==', 'name', '']);
       });
 
-      // map.on('click', function (e) {
-      //   const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-      //   const country = features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
-      //   if (country) {
-      //     onCountryClicked(country);
-      //   }
-      // });
-
       mapRef.current = map;
       setMapLoaded(true);
     });
 
     return () => {
       if (mapRef.current) {
+        setMapLoaded(false);
         mapRef.current.remove(); // @todo: confirm this is the function
         mapRef.current = undefined;
       }
     };
-  }, []);
+  }, [uniqueMapId]);
 
   const onClick = useCallback(
     (e) => {
@@ -137,6 +153,7 @@ const Map: React.FC<{
     [onCountryClicked]
   );
 
+  // Handles the click event, which depends on an external callback
   useEffect(() => {
     if (mapLoaded) {
       mapRef.current?.on('click', onClick);
@@ -146,16 +163,18 @@ const Map: React.FC<{
     }
   }, [onClick, mapLoaded]);
 
+  // Updates the visited countries higlighted in the map
   useEffect(() => {
     if (mapLoaded) {
-      mapRef.current?.setFilter('highlighted-countries', [
+      mapRef.current?.setFilter('visited-countries', [
         'in',
         'iso_3166_1_alpha_3',
-        ...highlightedCountries,
+        ...visitedCountries,
       ]);
     }
-  }, [highlightedCountries, mapLoaded]);
+  }, [visitedCountries, mapLoaded]);
 
+  // Moves the map camera to a specific country when `countryZoomedInto` changes
   useEffect(() => {
     if (mapLoaded && countryZoomedInto) {
       const descriptor = simplifiedWorldAdministrativeBoundaries.find(
@@ -169,7 +188,7 @@ const Map: React.FC<{
     }
   }, [countryZoomedInto, mapLoaded]);
 
-  return <Box id="map" flex="grow" background={MAP_OCEAN_COLOR} />;
+  return <Box id={uniqueMapId} flex="grow" background={MAP_OCEAN_COLOR} />;
 };
 
 export default Map;

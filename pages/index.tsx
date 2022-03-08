@@ -32,18 +32,18 @@ const theme = {
 };
 
 const Home: NextPage = () => {
-  const [highlightedCountries, setHighlightedCountries] = useState<string[]>([]);
+  const [visitedCountries, setVisitedCountrioes] = useState<string[]>([]);
   const [countryZoomedInto, setCountryZoomedInto] = useState<string>();
 
   const addCountry = (country: string) => {
-    setHighlightedCountries(highlightedCountries.concat(country));
+    setVisitedCountrioes(visitedCountries.concat(country));
   };
   const removeCountry = (country: string) => {
-    setHighlightedCountries(highlightedCountries.filter((c) => c !== country));
+    setVisitedCountrioes(visitedCountries.filter((c) => c !== country));
   };
 
   const router = useRouter();
-  const countriesQuery = [...highlightedCountries].sort((a, b) => a.localeCompare(b)).join('-');
+  const countriesQuery = [...visitedCountries].sort((a, b) => a.localeCompare(b)).join('-');
   useEffect(() => {
     console.log('query', countriesQuery !== '' ? { countries: countriesQuery } : null);
     router.replace(
@@ -63,7 +63,7 @@ const Home: NextPage = () => {
     );
     const filteredCodes = uniqueCodes.filter((code) => allCountryCodes.includes(code));
     if (filteredCodes.length > 0) {
-      setHighlightedCountries(filteredCodes);
+      setVisitedCountrioes(filteredCodes);
     }
   }, []);
 
@@ -79,9 +79,9 @@ const Home: NextPage = () => {
       <Main background={{ color: 'dark-5', opacity: 'weak' }} align="center">
         <Box width="100%" height={{ min: '45vh' }}>
           <Map
-            highlightedCountries={highlightedCountries}
+            visitedCountries={visitedCountries}
             onCountryClicked={(countryAlpha3) => {
-              highlightedCountries.includes(countryAlpha3)
+              visitedCountries.includes(countryAlpha3)
                 ? removeCountry(countryAlpha3)
                 : addCountry(countryAlpha3);
             }}
@@ -91,20 +91,20 @@ const Home: NextPage = () => {
 
         <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>
           <Box gap="small" align="center">
-            <Text size="3xl">{highlightedCountries.length}</Text>
+            <Text size="3xl">{visitedCountries.length}</Text>
             <Text>Countries visited</Text>
           </Box>
         </Box>
 
         <Box width="large" pad={{ horizontal: 'medium', vertical: 'medium' }} responsive={false}>
           <CountryTags
-            countries={highlightedCountries}
+            countries={visitedCountries}
             onSelect={(countryAlpha3) => setCountryZoomedInto(countryAlpha3)}
           />
           <CountrySearch
-            disabledCountries={highlightedCountries}
+            disabledCountries={visitedCountries}
             onCountrySelected={(countryAlpha3) => {
-              highlightedCountries.includes(countryAlpha3)
+              visitedCountries.includes(countryAlpha3)
                 ? removeCountry(countryAlpha3)
                 : addCountry(countryAlpha3);
             }}
