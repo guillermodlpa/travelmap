@@ -56,7 +56,6 @@ const Map: React.FC<{
         zoom: INITIAL_MAP_ZOOM,
         localFontFamily: "'Roboto', sans-serif",
         doubleClickZoom: false,
-        scrollZoom: false,
       });
 
       map.on('load', function () {

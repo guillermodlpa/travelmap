@@ -21,7 +21,7 @@ const AppHeader: React.FC<{
       Travelmap
     </Heading>
 
-    <Box direction="row" align="center" pad={{ horizontal: 'small' }}>
+    <Box direction="row" align="center" pad={{ horizontal: 'small' }} gap="small">
       <ThemeModeButton themeMode={themeMode} setThemeMode={setThemeMode} />
       <CopyToClipboardButton
         primary
