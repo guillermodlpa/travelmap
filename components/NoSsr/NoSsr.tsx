@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const NoSsr: React.FC = ({ children }) => {
   const [mountedState, setMountedState] = useState(false);

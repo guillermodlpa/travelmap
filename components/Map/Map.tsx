@@ -1,7 +1,9 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
-import { useMemo, useRef, useState, useEffect, useCallback, useContext } from 'react';
+import { useRef, useState, useEffect, useCallback, useContext } from 'react';
 import { Box, ThemeContext } from 'grommet';
+
+import withNoSsr from '../NoSsr/withNoSsr';
 
 /**
  * This JSON file is a simplification of the World Administrative Boundaries dataset
@@ -211,4 +213,4 @@ const Map: React.FC<{
   return <Box id={uniqueMapId} flex="grow" background={MAP_OCEAN_COLOR} />;
 };
 
-export default Map;
+export default withNoSsr(Map);
