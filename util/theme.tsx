@@ -19,11 +19,6 @@ const theme = deepMerge(grommet, {
       },
     },
   },
-  heading: {
-    font: {
-      family: "'Rye', cursive",
-    },
-  },
   select: {
     options: {
       container: { align: 'start', pad: 'small' },

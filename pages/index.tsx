@@ -13,6 +13,7 @@ import AppFooter from '../components/AppFooter/AppFooter';
 import AppLayout from '../components/AppLayout';
 import FloatingLogo from '../components/FloatingLogo';
 import ViewportSizeListener from '../components/ViewportSizeListener';
+import MapTitle from '../components/MapTitle';
 
 const allCountryCodes = simplifiedWorldAdministrativeBoundaries
   .map(({ iso3 }) => iso3)
@@ -78,15 +79,10 @@ const Home: NextPage = () => {
       <ViewportSizeListener onSize={setSize} />
 
       <AppLayout
-        header={<AppHeader themeMode={themeMode} setThemeMode={setThemeMode} />}
+        header={<AppHeader />}
         main={
           <>
-            <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>
-              <Box gap="small" align="center">
-                <Text size="3xl">{visitedCountries.length}</Text>
-                <Text>Countries visited</Text>
-              </Box>
-            </Box>
+            <MapTitle />
 
             <Box
               width="large"
@@ -114,7 +110,7 @@ const Home: NextPage = () => {
             </Box>
           </>
         }
-        footer={<AppFooter />}
+        footer={<AppFooter themeMode={themeMode} setThemeMode={setThemeMode} />}
       />
     </Grommet>
   );

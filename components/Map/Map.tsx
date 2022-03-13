@@ -1,7 +1,7 @@
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import { useRef, useState, useEffect, useCallback, useContext } from 'react';
-import { Box, ThemeContext } from 'grommet';
+import { Box, ResponsiveContext, ThemeContext } from 'grommet';
 
 import withNoSsr from '../NoSsr/withNoSsr';
 
@@ -209,6 +209,17 @@ const Map: React.FC<{
       }
     }
   }, [countryZoomedInto, mapLoaded]);
+
+  const size = useContext(ResponsiveContext);
+  useEffect(() => {
+    // fix map resizing when toggling responsive mode when developing with dev tools
+    if (process.env.NODE_ENV === 'development') {
+      const timeout = setTimeout(() => {
+        mapRef.current?.resize();
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [size]);
 
   return <Box id={uniqueMapId} flex="grow" background={MAP_BACKGROUND_COLOR} />;
 };

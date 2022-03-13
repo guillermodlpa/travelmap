@@ -8,11 +8,15 @@ const FloatingBox = styled(Box)`
   z-index: 1;
 `;
 
+const LogoHeading = styled(Heading)`
+  font-family: 'Rye', cursive;
+`;
+
 const FloatingLogo: React.FC = () => (
   <FloatingBox background="background-front" pad="small" round="small">
-    <Heading margin="none" level={1} size="small" color="brand">
+    <LogoHeading margin="none" level={1} size="small" color="brand">
       Travelmap
-    </Heading>
+    </LogoHeading>
   </FloatingBox>
 );
 

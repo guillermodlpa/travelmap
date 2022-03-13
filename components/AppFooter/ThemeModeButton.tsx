@@ -7,12 +7,13 @@ const ThemeModeButton: React.FC<{
 }> = ({ themeMode, setThemeMode }) => (
   <Button
     aria-label="Toggle color mode"
-    plain={false}
+    plain
     onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
     style={{ display: 'flex' }}
+    size="small"
   >
-    <Sun size="medium" color={themeMode === 'light' ? 'brand' : undefined} />
-    <Moon size="medium" color={themeMode === 'dark' ? 'brand' : undefined} />
+    <Sun size="small" color={themeMode === 'light' ? 'brand' : undefined} />
+    <Moon size="small" color={themeMode === 'dark' ? 'brand' : undefined} />
   </Button>
 );
 

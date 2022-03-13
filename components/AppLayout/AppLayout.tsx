@@ -14,7 +14,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ header, mapContainer, main, foote
       fill
       mediumGridProps={{
         rows: ['auto', 'flex', 'auto'],
-        columns: ['50%', '50%'],
+        columns: ['66%', '34%'],
         areas: [
           { name: 'mapContainer', start: [0, 0], end: [0, 2] },
           { name: 'header', start: [1, 0], end: [1, 0] },
@@ -37,7 +37,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ header, mapContainer, main, foote
 
       <Header
         gridArea="header"
-        background="background-front"
+        background="background-back"
         responsive={false}
         pad={{ horizontal: 'small', vertical: 'medium' }}
       >
