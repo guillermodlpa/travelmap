@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Grommet, Main, Box, Text } from 'grommet';
+import { Grommet, Box, Text } from 'grommet';
 import Map from '../components/Map/Map';
 import { useCallback, useEffect, useState } from 'react';
 import CountryTags from '../components/CountryTags';
@@ -10,6 +10,9 @@ import CountrySearch from '../components/CountrySearch';
 import theme from '../util/theme';
 import simplifiedWorldAdministrativeBoundaries from '../util/simplified-world-administrative-boundaries.json';
 import AppFooter from '../components/AppFooter/AppFooter';
+import AppLayout from '../components/AppLayout';
+import FloatingLogo from '../components/FloatingLogo';
+import ViewportSizeListener from '../components/ViewportSizeListener';
 
 const allCountryCodes = simplifiedWorldAdministrativeBoundaries
   .map(({ iso3 }) => iso3)
@@ -59,39 +62,60 @@ const Home: NextPage = () => {
   useLoadInitialCountriesFromUrl(setVisitedCountries);
 
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('dark');
+  const [size, setSize] = useState<string>();
 
   return (
-    <Grommet theme={theme} full="min" themeMode={themeMode}>
+    <Grommet
+      theme={theme}
+      full={size === 'small' || size === undefined ? 'min' : true}
+      themeMode={themeMode}
+    >
       <Head>
         <title>Travel map</title>
         <meta name="description" content="To Do" />
       </Head>
 
-      <AppHeader themeMode={themeMode} setThemeMode={setThemeMode} />
+      <ViewportSizeListener onSize={setSize} />
 
-      <Main background="background-back" align="center">
-        <Box width="100%" height={{ min: '45vh' }}>
-          <Map
-            visitedCountries={visitedCountries}
-            onCountryClicked={toggleCountry}
-            countryZoomedInto={countryZoomedInto}
-          />
-        </Box>
+      <AppLayout
+        header={<AppHeader themeMode={themeMode} setThemeMode={setThemeMode} />}
+        main={
+          <>
+            <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>
+              <Box gap="small" align="center">
+                <Text size="3xl">{visitedCountries.length}</Text>
+                <Text>Countries visited</Text>
+              </Box>
+            </Box>
 
-        <Box width="large" pad="medium" direction="row" justify="center" responsive={false}>
-          <Box gap="small" align="center">
-            <Text size="3xl">{visitedCountries.length}</Text>
-            <Text>Countries visited</Text>
-          </Box>
-        </Box>
+            <Box
+              width="large"
+              pad={{ horizontal: 'medium', vertical: 'medium' }}
+              responsive={false}
+            >
+              <CountryTags countries={visitedCountries} onSelect={setCountryZoomedInto} />
+              <CountrySearch
+                disabledCountries={visitedCountries}
+                onCountrySelected={toggleCountry}
+              />
+            </Box>
+          </>
+        }
+        mapContainer={
+          <>
+            <FloatingLogo />
 
-        <Box width="large" pad={{ horizontal: 'medium', vertical: 'medium' }} responsive={false}>
-          <CountryTags countries={visitedCountries} onSelect={setCountryZoomedInto} />
-          <CountrySearch disabledCountries={visitedCountries} onCountrySelected={toggleCountry} />
-        </Box>
-      </Main>
-
-      <AppFooter />
+            <Box width="100%" height={{ min: '100%' }}>
+              <Map
+                visitedCountries={visitedCountries}
+                onCountryClicked={toggleCountry}
+                countryZoomedInto={countryZoomedInto}
+              />
+            </Box>
+          </>
+        }
+        footer={<AppFooter />}
+      />
     </Grommet>
   );
 };

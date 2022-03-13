@@ -15,7 +15,7 @@ import withNoSsr from '../NoSsr/withNoSsr';
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 import { CustomTheme } from '../../util/theme';
 
-const MAP_OCEAN_COLOR = 'rgb(101, 196, 236)';
+const MAP_BACKGROUND_COLOR = 'rgb(101, 196, 236)';
 const INITIAL_MAP_CENTER: [number, number] = [25, 20];
 const INITIAL_MAP_ZOOM = 1;
 const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v11';
@@ -210,7 +210,7 @@ const Map: React.FC<{
     }
   }, [countryZoomedInto, mapLoaded]);
 
-  return <Box id={uniqueMapId} flex="grow" background={MAP_OCEAN_COLOR} />;
+  return <Box id={uniqueMapId} flex="grow" background={MAP_BACKGROUND_COLOR} />;
 };
 
 export default withNoSsr(Map);
