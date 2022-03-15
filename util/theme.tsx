@@ -11,11 +11,22 @@ const theme = deepMerge(grommet, {
     },
     colors: {
       brand: brandColor,
+      paper: 'rgb(169, 111, 45)',
       focus: 'rgb(101, 196, 236)',
       'status-ok': '#00C781',
       control: {
         dark: 'brand',
         light: 'brand',
+      },
+    },
+  },
+  heading: {
+    level: {
+      1: {
+        small: {
+          size: '24px',
+          height: '28px',
+        },
       },
     },
   },

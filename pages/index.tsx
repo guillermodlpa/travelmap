@@ -7,12 +7,11 @@ import { useCallback, useEffect, useState } from 'react';
 import CountryTags from '../components/CountryTags';
 import AppHeader from '../components/AppHeader';
 import CountrySearch from '../components/CountrySearch';
-import theme from '../util/theme';
 import simplifiedWorldAdministrativeBoundaries from '../util/simplified-world-administrative-boundaries.json';
 import AppFooter from '../components/AppFooter/AppFooter';
 import AppLayout from '../components/AppLayout';
 import FloatingLogo from '../components/FloatingLogo';
-import ViewportSizeListener from '../components/ViewportSizeListener';
+
 import MapTitle from '../components/MapTitle';
 
 const allCountryCodes = simplifiedWorldAdministrativeBoundaries
@@ -62,21 +61,12 @@ const Home: NextPage = () => {
   useUpdateUrlWithCountries(visitedCountries);
   useLoadInitialCountriesFromUrl(setVisitedCountries);
 
-  const [themeMode, setThemeMode] = useState<'light' | 'dark'>('dark');
-  const [size, setSize] = useState<string>();
-
   return (
-    <Grommet
-      theme={theme}
-      full={size === 'small' || size === undefined ? 'min' : true}
-      themeMode={themeMode}
-    >
+    <>
       <Head>
         <title>Travel map</title>
         <meta name="description" content="To Do" />
       </Head>
-
-      <ViewportSizeListener onSize={setSize} />
 
       <AppLayout
         header={<AppHeader />}
@@ -110,9 +100,9 @@ const Home: NextPage = () => {
             </Box>
           </>
         }
-        footer={<AppFooter themeMode={themeMode} setThemeMode={setThemeMode} />}
+        footer={<AppFooter />}
       />
-    </Grommet>
+    </>
   );
 };
 
