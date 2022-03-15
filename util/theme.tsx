@@ -21,6 +21,9 @@ const theme = deepMerge(grommet, {
     },
   },
   heading: {
+    font: {
+      family: "'Rye', sans-serif",
+    },
     level: {
       1: {
         small: {
@@ -44,6 +47,17 @@ const theme = deepMerge(grommet, {
     color: {
       dark: 'brand',
       light: 'brand',
+    },
+  },
+  button: {
+    border: { radius: '0px' },
+    size: {
+      large: {
+        border: { radius: 0 },
+        pad: { vertical: '24px', horizontal: '32px' },
+      },
+      medium: { border: { radius: 0 } },
+      small: { border: { radius: 0 } },
     },
   },
 });

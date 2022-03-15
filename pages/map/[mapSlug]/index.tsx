@@ -1,6 +1,10 @@
+/**
+ * View map page
+ */
+
 import { Box, Avatar, Heading, Text } from 'grommet';
 import styled from 'styled-components';
-import MapBackground from '../../components/MapBackground';
+import StaticMap from '../../../components/Maps/StaticMap';
 
 const Legend = styled(Box).attrs({
   background: 'paper',
@@ -22,10 +26,10 @@ const LegendTitle: React.FC = ({ children }) => (
 );
 const LegendBody: React.FC = ({ children }) => <Box>{children}</Box>;
 
-const MapPage: React.FC = () => {
+const ViewMapPage: React.FC = () => {
   return (
     <>
-      <MapBackground />
+      <StaticMap />
 
       <Legend>
         <LegendTitle>
@@ -45,4 +49,4 @@ const MapPage: React.FC = () => {
   );
 };
 
-export default MapPage;
+export default ViewMapPage;

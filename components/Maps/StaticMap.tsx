@@ -8,7 +8,7 @@ import withNoSsr from '../NoSsr/withNoSsr';
 const MAP_BACKGROUND_COLOR = 'rgb(101, 196, 236)';
 const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v11';
 
-const MapBackground: React.FC = () => {
+const StaticMap: React.FC = () => {
   const uniqueMapId = useUniqueId('map-background-');
 
   useEffect(() => {
@@ -36,4 +36,4 @@ const MapBackground: React.FC = () => {
   return <Box id={uniqueMapId} height="100%" background={MAP_BACKGROUND_COLOR} />;
 };
 
-export default withNoSsr(MapBackground);
+export default withNoSsr(StaticMap);
