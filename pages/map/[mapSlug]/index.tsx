@@ -2,47 +2,28 @@
  * View map page
  */
 
-import { Box, Avatar, Heading, Text } from 'grommet';
-import styled from 'styled-components';
+import { Paragraph } from 'grommet';
 import StaticMap from '../../../components/Maps/StaticMap';
-
-const Legend = styled(Box).attrs({
-  background: 'paper',
-  pad: 'medium',
-  elevation: 'small',
-})`
-  position: absolute;
-  bottom: 2rem;
-  right: 1rem;
-  z-index: 1;
-  width: 450px;
-  max-width: 50%;
-`;
-
-const LegendTitle: React.FC = ({ children }) => (
-  <Box direction="row" margin={{ bottom: 'medium' }} align="end" gap="small" wrap>
-    {children}
-  </Box>
-);
-const LegendBody: React.FC = ({ children }) => <Box>{children}</Box>;
+import Legend from '../../../components/Legend/Legend';
+import LegendTitle from '../../../components/Legend/LegendTitle';
+import LegendBody from '../../../components/Legend/LegendBody';
+import LegendCountryList from '../../../components/Legend/LegendCountryList';
 
 const ViewMapPage: React.FC = () => {
+  const countries = ['ESP', 'BLZ', 'MAR', 'MYS'];
   return (
     <>
       <StaticMap />
 
       <Legend>
-        <LegendTitle>
-          <Avatar border={{ color: 'white', size: 'small' }} size="medium">
-            GP
-          </Avatar>
-          <Box border={{ color: 'white', size: 'small', side: 'bottom' }} flex>
-            <Heading level={1} size="small">{`Guillermo's Travelmap`}</Heading>
-          </Box>
-        </LegendTitle>
+        <LegendTitle
+          avatarContent="GP"
+          avatarSrc={undefined}
+          headingText={`Guillermo's Travelmap`}
+        />
 
         <LegendBody>
-          <Text>Spain, Portugal, France, Italy, United Kingdom, Norway, Russia, Yemen, Brazil</Text>
+          <LegendCountryList countries={countries} />
         </LegendBody>
       </Legend>
     </>

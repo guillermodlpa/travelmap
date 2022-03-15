@@ -26,8 +26,8 @@ const CountrySearch: React.FC<{
       valueKey="value"
       value={disabledCountries}
       dropHeight="small"
-      placeholder="Add country"
-      a11yTitle="Add country"
+      placeholder="Select countries"
+      a11yTitle="Select countries"
       multiple
       onChange={({ option }) => {
         onCountrySelected(option.value);
