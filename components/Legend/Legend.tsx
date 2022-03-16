@@ -1,17 +1,29 @@
-import { Box } from 'grommet';
+import { Box, ResponsiveContext } from 'grommet';
+import { useContext } from 'react';
 import styled from 'styled-components';
 
-const Legend = styled(Box).attrs({
-  background: 'paper',
-  pad: 'medium',
-  elevation: 'small',
-})`
+const LegendContainer = styled(Box)<{ $viewportSize: string }>`
   position: absolute;
-  bottom: 2rem;
-  right: 1rem;
-  z-index: 1;
-  width: 450px;
-  max-width: 50%;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  max-width: ${(props) => (props.$viewportSize === 'small' ? '100%' : '50%')};
 `;
+
+const Legend: React.FC = ({ children }) => {
+  const size = useContext(ResponsiveContext);
+  return (
+    <LegendContainer
+      background="paper"
+      pad="medium"
+      margin={{ bottom: 'large', horizontal: 'large' }}
+      elevation="small"
+      width={size === 'small' ? 'auto' : '450px'}
+      $viewportSize={size}
+    >
+      {children}
+    </LegendContainer>
+  );
+};
 
 export default Legend;

@@ -4,11 +4,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
 import useUniqueId from './useUniqueId';
 import withNoSsr from '../NoSsr/withNoSsr';
+import { HeightType } from 'grommet/utils';
 
 const MAP_BACKGROUND_COLOR = 'rgb(101, 196, 236)';
 const MAPBOX_STYLE = 'mapbox://styles/mapbox/streets-v11';
 
-const StaticMap: React.FC = () => {
+const StaticMap: React.FC<{ height?: HeightType }> = ({ height = '100%' }) => {
   const uniqueMapId = useUniqueId('map-background-');
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const StaticMap: React.FC = () => {
     }
   }, [uniqueMapId]);
 
-  return <Box id={uniqueMapId} height="100%" background={MAP_BACKGROUND_COLOR} />;
+  return <Box id={uniqueMapId} height={height} background={MAP_BACKGROUND_COLOR} />;
 };
 
 export default withNoSsr(StaticMap);
