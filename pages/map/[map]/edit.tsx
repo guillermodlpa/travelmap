@@ -14,6 +14,7 @@ import LegendActions from '../../../components/Legend/LegendActions';
 import UserMenu from '../../../components/UserMenu';
 import { useRouter } from 'next/router';
 import fixtures from '../../../fixtures';
+import ThemeModeToggle from '../../../components/ThemeModeToggle';
 
 const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
   userMap,
@@ -35,6 +36,8 @@ const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
   return (
     <>
       <StaticMap height="100vh" id="background-map" />
+
+      <ThemeModeToggle />
 
       {userLoggedIn && <UserMenu />}
 

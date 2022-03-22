@@ -1,11 +1,16 @@
-import { createContext, useContext } from 'react';
+import { createContext, SetStateAction, Dispatch, useContext } from 'react';
+
+type ThemeMode = 'light' | 'dark';
 
 interface ThemeModeContextValue {
-  mode: 'light' | 'dark';
-  setMode: (mode: 'light' | 'dark') => void;
+  mode: ThemeMode;
+  setMode: Dispatch<SetStateAction<ThemeMode>>;
 }
 
-const ThemeModeContext = createContext<ThemeModeContextValue>({ mode: 'light', setMode: () => {} });
+const ThemeModeContext = createContext<ThemeModeContextValue>({
+  mode: 'light',
+  setMode: () => 'light',
+});
 
 export const ThemeModeContextProvider = ThemeModeContext.Provider;
 

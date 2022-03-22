@@ -13,6 +13,7 @@ import LegendActions from '../../components/Legend/LegendActions';
 import { InfoNotification } from '../../components/Info';
 import { useRouter } from 'next/router';
 import { CircleInformation } from 'grommet-icons';
+import ThemeModeToggle from '../../components/ThemeModeToggle';
 
 const NewMapPage: React.FC = () => {
   const [countries, setCountries] = useState<string[]>([]);
@@ -33,6 +34,8 @@ const NewMapPage: React.FC = () => {
   return (
     <>
       <StaticMap height="100vh" id="background-map" />
+
+      <ThemeModeToggle />
 
       <InfoNotification
         relativeRef={legendRef}

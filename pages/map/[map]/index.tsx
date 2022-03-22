@@ -15,6 +15,7 @@ import UserMenu from '../../../components/UserMenu';
 import { InfoNotification } from '../../../components/Info';
 import fixtures from '../../../fixtures';
 import { createRef } from 'react';
+import ThemeModeToggle from '../../../components/ThemeModeToggle';
 
 const ViewMapPage: React.FC<{
   userMap: UserMap;
@@ -26,6 +27,8 @@ const ViewMapPage: React.FC<{
   return (
     <>
       <StaticMap height="100vh" id="background-map" />
+
+      <ThemeModeToggle />
 
       {userLoggedIn && <UserMenu />}
 

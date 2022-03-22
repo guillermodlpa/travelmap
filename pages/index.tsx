@@ -6,6 +6,7 @@ import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
+import ThemeModeToggle from '../components/ThemeModeToggle';
 
 const BoxRelative = styled(Box)`
   position: relative;
@@ -42,6 +43,8 @@ const Welcome: React.FC = () => {
       <FullScreenBackground>
         <StaticMap height="100vh" id="background-map" />
       </FullScreenBackground>
+
+      <ThemeModeToggle />
 
       <Parchment>
         <Heading level={2} margin={{ top: '0' }}>
