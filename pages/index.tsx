@@ -1,8 +1,11 @@
-import { Box, Button, Heading, Paragraph, ResponsiveContext, List } from 'grommet';
-import { useContext } from 'react';
+import { Box, Button, Heading, Paragraph, ResponsiveContext, Text } from 'grommet';
+import { useContext, Suspense } from 'react';
 import NextLink from 'next/link';
 import styled, { useTheme } from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
+import withNoSsr from '../components/NoSsr/withNoSsr';
+import RecentMapsList from '../components/RecentMapsList';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const BoxRelative = styled(Box)`
   position: relative;
@@ -28,13 +31,16 @@ const FullScreenBackground = styled.div`
   height: 100%;
 `;
 
+const SuspenseNoSsr = withNoSsr(Suspense);
+
 const Welcome: React.FC = () => {
   console.log(useTheme());
   const size = useContext(ResponsiveContext);
+
   return (
     <>
       <FullScreenBackground>
-        <StaticMap height="100vh" />
+        <StaticMap height="100vh" id="background-map" />
       </FullScreenBackground>
 
       <Parchment>
@@ -60,7 +66,7 @@ const Welcome: React.FC = () => {
           flex={{ shrink: 0 }}
         >
           <Box fill>
-            <NextLink href="/map/1" passHref>
+            <NextLink href="/map/guillermodlpa" passHref>
               <ButtonTextCentered primary size="large" fill label="Log in" />
             </NextLink>
           </Box>
@@ -76,17 +82,17 @@ const Welcome: React.FC = () => {
             Recenly Created Travelmaps
           </Heading>
 
-          <List
-            data={[
-              { name: `Carla's Travelmap` },
-              { name: `Jon's Travelmap` },
-              { name: `Taylor's Travelmap` },
-              { name: `Fito's Travelmap` },
-              { name: `Fito's Travelmap` },
-              { name: `Fito's Travelmap` },
-              { name: `Fito's Travelmap` },
-            ]}
-          />
+          <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
+            <SuspenseNoSsr
+              fallback={
+                <Box animation={{ delay: 2000, type: 'fadeIn' }}>
+                  <Text>Loading...</Text>
+                </Box>
+              }
+            >
+              <RecentMapsList />
+            </SuspenseNoSsr>
+          </ErrorBoundary>
         </Box>
       </Parchment>
     </>
