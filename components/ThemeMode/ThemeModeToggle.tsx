@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Box, Button } from 'grommet';
 import { Sun, Moon } from 'grommet-icons';
-import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
+import { useThemeMode } from './ThemeModeContext';
 
 const FloatingBox = styled(Box)`
   position: absolute;

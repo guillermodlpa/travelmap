@@ -14,7 +14,8 @@ import LegendActions from '../../../components/Legend/LegendActions';
 import UserMenu from '../../../components/UserMenu';
 import { useRouter } from 'next/router';
 import fixtures from '../../../fixtures';
-import ThemeModeToggle from '../../../components/ThemeModeToggle';
+import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
+import { useTheme } from 'styled-components';
 
 const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
   userMap,
@@ -32,6 +33,8 @@ const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
   const onSave = () => {
     router.push(`/map/${userMap.slug}`);
   };
+
+  console.log(useTheme());
 
   return (
     <>

@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
-import { ThemeModeContextProvider } from '../components/ThemeModeContext/ThemeModeContext';
+import { ThemeModeContextProvider } from '../components/ThemeMode/ThemeModeContext';
 
 /**
  * @see {@link https://nextjs.org/docs/advanced-features/custom-app}
  */
 function MyApp({ Component, pageProps }: AppProps) {
-  const [mode, setMode] = useState<'light' | 'dark'>('dark');
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
   const [size, setSize] = useState<string>();
 
   return (

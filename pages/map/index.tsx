@@ -13,7 +13,7 @@ import LegendActions from '../../components/Legend/LegendActions';
 import { InfoNotification } from '../../components/Info';
 import { useRouter } from 'next/router';
 import { CircleInformation } from 'grommet-icons';
-import ThemeModeToggle from '../../components/ThemeModeToggle';
+import ThemeModeToggle from '../../components/ThemeMode/ThemeModeToggle';
 
 const NewMapPage: React.FC = () => {
   const [countries, setCountries] = useState<string[]>([]);

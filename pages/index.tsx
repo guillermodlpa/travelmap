@@ -6,7 +6,7 @@ import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import ThemeModeToggle from '../components/ThemeModeToggle';
+import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
 
 const BoxRelative = styled(Box)`
   position: relative;

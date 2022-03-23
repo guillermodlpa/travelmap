@@ -15,7 +15,7 @@ import UserMenu from '../../../components/UserMenu';
 import { InfoNotification } from '../../../components/Info';
 import fixtures from '../../../fixtures';
 import { createRef } from 'react';
-import ThemeModeToggle from '../../../components/ThemeModeToggle';
+import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
 
 const ViewMapPage: React.FC<{
   userMap: UserMap;
