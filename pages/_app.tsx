@@ -24,6 +24,10 @@ function MyApp({ Component, pageProps }: AppProps) {
         * {
           transition: background-color 0.2s;
         }
+        ::placeholder {
+          font-weight: normal;
+          -webkit-font-smoothing: auto;
+        }
       `}</style>
       <Grommet
         theme={theme}

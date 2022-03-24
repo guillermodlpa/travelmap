@@ -1,9 +1,7 @@
 import { grommet } from 'grommet';
+import { FormDown, FormUp } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 import { css } from 'styled-components';
-
-const brandColorLight = 'rgb(219, 98, 9)';
-const brandColorDark = 'rgb(217, 94, 4)';
 
 const theme = deepMerge(grommet, {
   global: {
@@ -13,29 +11,22 @@ const theme = deepMerge(grommet, {
       height: '20px',
     },
     colors: {
-      brand: {
-        light: brandColorLight,
-        dark: brandColorDark,
-      },
-      paper: {
-        dark: 'rgb(120, 79, 34)',
-        light: 'rgb(217, 152, 78)',
-      },
+      brand: { light: 'rgb(219, 98, 9)', dark: 'rgb(217, 94, 4)' },
+      paper: { dark: 'rgb(120, 79, 34)', light: 'rgb(217, 152, 78)' },
+      popup: { dark: 'rgb(49, 31, 11)', light: 'rgb(238, 209, 175)' },
       info: '#FFCA58',
       focus: 'rgb(101, 196, 236)',
       'status-ok': '#00C781',
-      control: {
-        dark: 'brand',
-        light: 'brand',
-      },
+      control: 'brand',
       border: {
         dark: 'rgba(255, 255, 255, 0.66)',
         light: 'rgba(0, 0, 0, 0.66)',
       },
-      text: {
-        dark: '#f8f8f8',
-        light: '#0f0f0f',
-      },
+      placeholder: 'text',
+      text: { dark: '#f8f8f8', light: '#0f0f0f' },
+      'text-strong': { dark: '#FFFFFF', light: '#000000' },
+      'text-weak': { dark: '#CCCCCC', light: '#555555' },
+      'text-xweak': { dark: '#BBBBBB', light: '#666666' },
     },
     elevation: {
       dark: {
@@ -60,6 +51,7 @@ const theme = deepMerge(grommet, {
     font: {
       family: "'Rye', sans-serif",
     },
+    extend: { '-webkit-font-smoothing': 'auto' },
     level: {
       1: {
         small: {
@@ -70,25 +62,38 @@ const theme = deepMerge(grommet, {
     },
   },
   select: {
+    background: 'transparent',
     options: {
-      container: { align: 'start', pad: 'small' },
+      container: {
+        background: 'popup',
+        extend: () => css`
+          font-smooth: auto;
+          -webkit-font-smoothing: auto;
+        `,
+      },
     },
-    control: {
-      extend: () => css`
-        /* background-color: red !important; */
-      `,
+    icons: {
+      down: FormDown,
+      up: FormUp,
     },
+    // control: {
+    //   extend: (/* { open, theme } */) => css`
+    //     & input::placeholder {
+    //       font-weight: normal;
+    //     }
+    //   `,
+    // },
+  },
+  layer: {
+    background: 'red',
   },
   tag: {
     border: {
-      color: brandColorLight,
+      color: 'brand',
     },
   },
   anchor: {
-    color: {
-      dark: 'brand',
-      light: 'brand',
-    },
+    color: 'brand',
   },
   button: {
     border: { radius: '0px' },
@@ -100,6 +105,12 @@ const theme = deepMerge(grommet, {
       medium: { border: { radius: 0 } },
       small: { border: { radius: 0 } },
     },
+  },
+  text: {
+    extend: { '-webkit-font-smoothing': 'auto' },
+  },
+  paragraph: {
+    extend: { '-webkit-font-smoothing': 'auto' },
   },
 });
 

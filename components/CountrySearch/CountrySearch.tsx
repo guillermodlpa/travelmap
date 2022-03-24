@@ -2,11 +2,12 @@ import { useMemo } from 'react';
 import SearchableSelect, { Option } from './SearchableSelect';
 
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
+import { Box, CheckBox, Text } from 'grommet';
 
 const CountrySearch: React.FC<{
   onCountrySelected: (countryAlpha3: string) => void;
-  disabledCountries: string[];
-}> = ({ onCountrySelected, disabledCountries }) => {
+  selectedCountries: string[];
+}> = ({ onCountrySelected, selectedCountries }) => {
   const options = useMemo(
     () =>
       simplifiedWorldAdministrativeBoundaries
@@ -24,15 +25,29 @@ const CountrySearch: React.FC<{
       options={options}
       labelKey="label"
       valueKey="value"
-      value={disabledCountries}
-      dropHeight="small"
+      value={selectedCountries}
+      dropHeight="medium"
       placeholder="Select countries"
+      searchPlaceholder="Search countries"
+      emptySearchMessage="No results"
       a11yTitle="Select countries"
       multiple
+      closeOnChange={false}
       onChange={({ option }) => {
         onCountrySelected(option.value);
       }}
-    />
+    >
+      {({ label, value }: Option) => (
+        <Box direction="row" align="center" pad="small" background="popup" flex={false}>
+          <CheckBox
+            tabIndex={-1}
+            checked={selectedCountries.some((country) => country === value)}
+            label={<Text size="medium">{label}</Text>}
+            onChange={() => {}}
+          />
+        </Box>
+      )}
+    </SearchableSelect>
   );
 };
 

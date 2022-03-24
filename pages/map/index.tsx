@@ -48,7 +48,7 @@ const NewMapPage: React.FC = () => {
 
         <LegendBody>
           <LegendCountryList countries={countries} />
-          <CountrySearch disabledCountries={countries} onCountrySelected={toggleCountry} />
+          <CountrySearch selectedCountries={countries} onCountrySelected={toggleCountry} />
 
           <LegendActions>
             <Button primary label="Save" disabled={countries.length === 0} onClick={onSave} />
