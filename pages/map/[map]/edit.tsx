@@ -16,12 +16,14 @@ import { useRouter } from 'next/router';
 import fixtures from '../../../fixtures';
 import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
 import { useTheme } from 'styled-components';
+import getTravelMapNameForUsers from '../../../util/getTravelMapName';
 
-const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
-  userMap,
+const EditMapPage: React.FC<{ travelMap: TravelMap; users: User[]; userLoggedIn: boolean }> = ({
+  travelMap,
+  users,
   userLoggedIn,
 }) => {
-  const [countries, setCountries] = useState<string[]>(userMap.countries);
+  const [countries, setCountries] = useState<string[]>(travelMap.countries);
   const toggleCountry = (country: string) =>
     setCountries((countries) =>
       countries.includes(country)
@@ -31,7 +33,7 @@ const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
 
   const router = useRouter();
   const onSave = () => {
-    router.push(`/map/${userMap.slug}`);
+    router.push(`/map/${travelMap.slug}`);
   };
 
   console.log(useTheme());
@@ -45,7 +47,11 @@ const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
       {userLoggedIn && <UserMenu />}
 
       <Legend>
-        <LegendTitle avatarContent="" avatarSrc={undefined} headingText={`Your Travelmap`} />
+        <LegendTitle
+          avatarContent=""
+          avatarSrc={undefined}
+          headingText={getTravelMapNameForUsers(users)}
+        />
 
         <LegendBody>
           <LegendCountryList countries={countries} />
@@ -60,29 +66,35 @@ const EditMapPage: React.FC<{ userMap: UserMap; userLoggedIn: boolean }> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps<{ userMap: UserMap }, { map: string }> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<
+  { travelMap: TravelMap; users: User[] },
+  { map: string }
+> = async (context) => {
   const mapId = context.params?.map;
   if (!mapId) {
     return { notFound: true };
   }
-  const userMap = Object.values(fixtures.userMapsBySlug).find(({ id }) => id === mapId);
-  if (!userMap) {
+  const travelMap = fixtures.travelMaps.find(({ id }) => id === mapId);
+  if (!travelMap) {
     // try with the slug
-    const userMap = Object.values(fixtures.userMapsBySlug).find(({ slug }) => slug === mapId);
-    if (userMap) {
+    const travelMapBySlug = fixtures.travelMaps.find(({ slug }) => slug === mapId);
+    if (travelMapBySlug) {
       return {
         redirect: {
           permanent: false,
-          destination: `/map/${userMap.id}/edit`,
+          destination: `/map/${travelMapBySlug.id}/edit`,
         },
       };
     }
 
     return { notFound: true };
   }
-  return { props: { userMap, userLoggedIn: true } };
+  const users = fixtures.userTravelMaps
+    .filter(({ travelMapId }) => travelMapId === travelMap.id)
+    .map(({ userId }) => fixtures.users.find(({ id }) => id === userId))
+    .map((user) => user as User);
+
+  return { props: { travelMap, users, userLoggedIn: true } };
 };
 
 export default EditMapPage;

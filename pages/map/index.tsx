@@ -59,4 +59,9 @@ const NewMapPage: React.FC = () => {
   );
 };
 
+export const getServerSideProps = async () => {
+  // @todo: implement functionality to redirect to user's main travelmap if it already exists
+  return { props: {} };
+};
+
 export default NewMapPage;

@@ -16,12 +16,14 @@ import { InfoNotification } from '../../../components/Info';
 import fixtures from '../../../fixtures';
 import { createRef } from 'react';
 import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
+import getTravelMapNameForUsers from '../../../util/getTravelMapName';
 
 const ViewMapPage: React.FC<{
-  userMap: UserMap;
+  travelMap: TravelMap;
+  users: User[];
   isLoggedInUser: boolean;
   userLoggedIn: boolean;
-}> = ({ userMap, isLoggedInUser, userLoggedIn }) => {
+}> = ({ travelMap, users, isLoggedInUser, userLoggedIn }) => {
   const legendRef = createRef<HTMLDivElement>();
 
   return (
@@ -50,16 +52,16 @@ const ViewMapPage: React.FC<{
         <LegendTitle
           avatarContent="GP"
           avatarSrc={undefined}
-          headingText={`${userMap.userDisplayName}'s Travelmap`}
+          headingText={getTravelMapNameForUsers(users)}
         />
 
         <LegendBody>
-          <LegendCountryList countries={userMap.countries} />
+          <LegendCountryList countries={travelMap.countries} />
         </LegendBody>
 
         <LegendActions>
           {isLoggedInUser && (
-            <NextLink href={`/map/${userMap.id}/edit`} passHref>
+            <NextLink href={`/map/${travelMap.id}/edit`} passHref>
               <Button label="Edit" />
             </NextLink>
           )}
@@ -71,20 +73,26 @@ const ViewMapPage: React.FC<{
 
 export default ViewMapPage;
 
-export const getServerSideProps: GetServerSideProps<{ userMap: UserMap }, { map: string }> = async (
-  context
-) => {
+export const getServerSideProps: GetServerSideProps<
+  { travelMap: TravelMap; users: User[] },
+  { map: string }
+> = async (context) => {
   const mapSlug = context.params?.map;
   if (!mapSlug) {
     return { notFound: true };
   }
-  const userMap = fixtures.userMapsBySlug[mapSlug];
-  if (!userMap) {
+  const travelMap = fixtures.travelMaps.find(({ slug }) => slug === mapSlug);
+  if (!travelMap) {
     return { notFound: true };
   }
+  const users = fixtures.userTravelMaps
+    .filter(({ travelMapId }) => travelMapId === travelMap.id)
+    .map(({ userId }) => fixtures.users.find(({ id }) => id === userId))
+    .map((user) => user as User);
   return {
     props: {
-      userMap,
+      travelMap,
+      users,
       isLoggedInUser: mapSlug === 'guillermodlpa' ? true : false,
       userLoggedIn: mapSlug === 'guillermodlpa' ? true : false,
     },

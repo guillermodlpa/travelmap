@@ -1,12 +1,14 @@
 import { Box, Button, Heading, Paragraph, ResponsiveContext, Text } from 'grommet';
 import { useContext, Suspense } from 'react';
+import { GetServerSideProps } from 'next';
 import NextLink from 'next/link';
 import styled, { useTheme } from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
-import RecentMapsList from '../components/MapList/RecentMapsList';
+import UserMapList from '../components/MapList/UserMapList';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
+import fixtures from '../fixtures';
 
 const BoxRelative = styled(Box)`
   position: relative;
@@ -34,7 +36,7 @@ const FullScreenBackground = styled.div`
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
-const Welcome: React.FC = () => {
+const UserMaps: React.FC<{ loggedInUser: LoggedInUser }> = ({ loggedInUser }) => {
   console.log(useTheme());
   const size = useContext(ResponsiveContext);
 
@@ -48,41 +50,12 @@ const Welcome: React.FC = () => {
 
       <Parchment>
         <Heading level={2} margin={{ top: '0' }}>
-          Welcome, traveler
+          Welcome, {loggedInUser.name}
         </Heading>
 
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Paragraph margin={{ top: '0' }} fill size="large">
-            “Why do you go away? So that you can come back. So that you can see the place you came
-            from with new eyes and extra colors. And the people there see you differently, too.
-            Coming back to where you started is not the same as never leaving.”
-          </Paragraph>
-          <Paragraph fill textAlign="end" margin={{ top: '0' }}>
-            ― Terry Pratchett, A Hat Full of Sky
-          </Paragraph>
-        </Box>
-
-        <Box
-          direction={size === 'small' ? 'column' : 'row'}
-          justify="around"
-          gap="large"
-          flex={{ shrink: 0 }}
-        >
-          <Box fill>
-            <NextLink href="/map/guillermodlpa" passHref>
-              <ButtonTextCentered primary size="large" fill label="Log in" />
-            </NextLink>
-          </Box>
-          <Box fill>
-            <NextLink href="/map" passHref>
-              <ButtonTextCentered primary size="large" fill label="Craft your map" />
-            </NextLink>
-          </Box>
-        </Box>
-
-        <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
           <Heading level={4} margin={{ top: '0' }}>
-            Recenly Created Travelmaps
+            Your Maps
           </Heading>
 
           <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
@@ -93,7 +66,7 @@ const Welcome: React.FC = () => {
                 </Box>
               }
             >
-              <RecentMapsList />
+              <UserMapList userId={loggedInUser.id} />
             </SuspenseNoSsr>
           </ErrorBoundary>
         </Box>
@@ -102,4 +75,12 @@ const Welcome: React.FC = () => {
   );
 };
 
-export default Welcome;
+export const getServerSideProps: GetServerSideProps<
+  { loggedInUser: LoggedInUser },
+  {}
+> = async () => {
+  const loggedInUser = fixtures.users[3];
+  return { props: { loggedInUser } };
+};
+
+export default UserMaps;
