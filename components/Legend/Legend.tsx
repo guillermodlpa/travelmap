@@ -1,29 +1,30 @@
-import { Box, ResponsiveContext } from 'grommet';
+import { Box, BoxExtendedProps, ResponsiveContext } from 'grommet';
+import { EdgeSizeType } from 'grommet/utils';
 import { useContext, forwardRef, PropsWithChildren } from 'react';
 import styled from 'styled-components';
+import Parchment from '../Parchment';
 
-const LegendContainer = styled(Box)`
+const LegendContainer = styled(Box)<BoxExtendedProps & { $size: ResponsiveViewportSize }>`
   position: absolute;
   bottom: 0;
   right: 0;
   z-index: 10;
+  left: ${({ $size }) => ($size === 'small' ? '0' : 'auto')};
 `;
 
 const Legend = forwardRef<HTMLDivElement, PropsWithChildren<{}>>(({ children }, ref) => {
-  const size = useContext(ResponsiveContext);
+  const size = useContext(ResponsiveContext) as ResponsiveViewportSize;
   return (
     <LegendContainer
-      background="paper"
-      pad="medium"
       margin={{ bottom: 'large', horizontal: 'large' }}
-      elevation="small"
       width={{
         width: size === 'small' ? 'auto' : '450px',
         max: size === 'small' ? '100%' : '50%',
       }}
+      $size={size}
       ref={ref}
     >
-      {children}
+      <Parchment contentPad={{ horizontal: 'medium', vertical: 'small' }}>{children}</Parchment>
     </LegendContainer>
   );
 });

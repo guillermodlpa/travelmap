@@ -16,7 +16,6 @@ const ThemeModeToggle: React.FC = () => {
     <FloatingBox pad="small" round="small">
       <Button
         plain
-        color="paper"
         onClick={() => {
           setMode((m) => (m === 'light' ? 'dark' : 'light'));
         }}

@@ -11,7 +11,7 @@ import { ThemeModeContextProvider } from '../components/ThemeMode/ThemeModeConte
  */
 function MyApp({ Component, pageProps }: AppProps) {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
-  const [size, setSize] = useState<string>();
+  const [, setSize] = useState<ResponsiveViewportSize>();
 
   return (
     <>
@@ -29,11 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           -webkit-font-smoothing: auto;
         }
       `}</style>
-      <Grommet
-        theme={theme}
-        full={size === 'small' || size === undefined ? 'min' : true}
-        themeMode={mode}
-      >
+      <Grommet theme={theme} full themeMode={mode}>
         <ThemeModeContextProvider value={{ mode, setMode }}>
           <ViewportSizeListener onSize={setSize} />
           <Component {...pageProps} />

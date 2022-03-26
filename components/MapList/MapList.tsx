@@ -26,7 +26,7 @@ const MapList: React.FC<{
               {item.users.map((user, index) => (
                 <Avatar
                   key={user.id}
-                  background="paper"
+                  background="parchment"
                   border={{ color: 'brand', size: 'small' }}
                   margin={{ left: `-${24 * index}px` }}
                   style={{ zIndex: item.users.length - index }}

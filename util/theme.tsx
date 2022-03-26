@@ -12,8 +12,9 @@ const theme = deepMerge(grommet, {
     },
     colors: {
       brand: { light: 'rgb(219, 98, 9)', dark: 'rgb(217, 94, 4)' },
-      paper: { dark: 'rgb(120, 79, 34)', light: 'rgb(217, 152, 78)' },
-      popup: { dark: 'rgb(49, 31, 11)', light: 'rgb(238, 209, 175)' },
+      parchment: { light: '#FCF5E5', dark: 'rgb(120, 79, 34)' },
+      parchmentInset: { light: '#8f5922', dark: '#000' },
+      popup: { light: 'rgb(238, 209, 175)', dark: 'rgb(49, 31, 11)' },
       info: '#FFCA58',
       focus: 'rgb(101, 196, 236)',
       'status-ok': '#00C781',
@@ -111,6 +112,11 @@ const theme = deepMerge(grommet, {
   },
   paragraph: {
     extend: { '-webkit-font-smoothing': 'auto' },
+  },
+  grommet: {
+    extend: {
+      overflow: 'hidden',
+    },
   },
 });
 

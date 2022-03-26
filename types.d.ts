@@ -17,3 +17,5 @@ interface UserTravelMap {
   userId: string;
   travelMapId: string;
 }
+
+type ResponsiveViewportSize = 'small' | 'medium' | 'large';

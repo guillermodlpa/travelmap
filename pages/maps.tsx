@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Text } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
@@ -10,22 +10,11 @@ import fixtures from '../fixtures';
 import UserMenu from '../components/UserMenu';
 import { useMockSession } from '../util/mockUseSession';
 import { useRouter } from 'next/router';
+import Parchment from '../components/Parchment';
 
-const BoxRelative = styled(Box)`
+const RelativeBox = styled(Box)`
   position: relative;
 `;
-
-const ButtonTextCentered = styled(Button)`
-  text-align: center;
-`;
-
-const Parchment: React.FC = ({ children }) => (
-  <BoxRelative pad={{ vertical: 'large', horizontal: 'medium' }} align="center" height="100%">
-    <Box background="paper" pad="large" elevation="small" width="large" overflow="auto">
-      {children}
-    </Box>
-  </BoxRelative>
-);
 
 const FullScreenBackground = styled.div`
   position: fixed;
@@ -63,29 +52,35 @@ const UserMaps: React.FC = () => {
       <UserMenu />
 
       {authStatus === 'authenticated' && (
-        <Parchment>
-          <Heading level={2} margin={{ top: '0' }}>
-            Welcome, {data?.user.name}
-          </Heading>
-
-          <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-            <Heading level={4} margin={{ top: '0' }}>
-              Your Maps
+        <RelativeBox
+          align="center"
+          height="100%"
+          pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}
+        >
+          <Parchment contentPad="large">
+            <Heading level={2} margin={{ top: '0' }}>
+              Welcome, {data?.user.name}
             </Heading>
 
-            <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
-              <SuspenseNoSsr
-                fallback={
-                  <Box animation={{ delay: 2000, type: 'fadeIn' }}>
-                    <Text>Loading...</Text>
-                  </Box>
-                }
-              >
-                <UserMapList userId={data?.user.id!} />
-              </SuspenseNoSsr>
-            </ErrorBoundary>
-          </Box>
-        </Parchment>
+            <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
+              <Heading level={4} margin={{ top: '0' }}>
+                Your Maps
+              </Heading>
+
+              <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
+                <SuspenseNoSsr
+                  fallback={
+                    <Box animation={{ delay: 2000, type: 'fadeIn' }}>
+                      <Text>Loading...</Text>
+                    </Box>
+                  }
+                >
+                  <UserMapList userId={data?.user.id!} />
+                </SuspenseNoSsr>
+              </ErrorBoundary>
+            </Box>
+          </Parchment>
+        </RelativeBox>
       )}
     </>
   );
