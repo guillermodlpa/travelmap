@@ -18,11 +18,7 @@ import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
 import { useTheme } from 'styled-components';
 import getTravelMapNameForUsers from '../../../util/getTravelMapName';
 
-const EditMapPage: React.FC<{ travelMap: TravelMap; users: User[]; userLoggedIn: boolean }> = ({
-  travelMap,
-  users,
-  userLoggedIn,
-}) => {
+const EditMapPage: React.FC<{ travelMap: TravelMap; users: User[] }> = ({ travelMap, users }) => {
   const [countries, setCountries] = useState<string[]>(travelMap.countries);
   const toggleCountry = (country: string) =>
     setCountries((countries) =>
@@ -44,7 +40,7 @@ const EditMapPage: React.FC<{ travelMap: TravelMap; users: User[]; userLoggedIn:
 
       <ThemeModeToggle />
 
-      {userLoggedIn && <UserMenu />}
+      <UserMenu />
 
       <Legend>
         <LegendTitle
@@ -94,7 +90,7 @@ export const getServerSideProps: GetServerSideProps<
     .map(({ userId }) => fixtures.users.find(({ id }) => id === userId))
     .map((user) => user as User);
 
-  return { props: { travelMap, users, userLoggedIn: true } };
+  return { props: { travelMap, users } };
 };
 
 export default EditMapPage;

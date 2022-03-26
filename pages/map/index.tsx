@@ -11,9 +11,10 @@ import LegendCountryList from '../../components/Legend/LegendCountryList';
 import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
 import { InfoNotification } from '../../components/Info';
-import { useRouter } from 'next/router';
 import { CircleInformation } from 'grommet-icons';
 import ThemeModeToggle from '../../components/ThemeMode/ThemeModeToggle';
+import UserMenu from '../../components/UserMenu';
+import { mockSignIn } from '../../util/mockUseSession';
 
 const NewMapPage: React.FC = () => {
   const [countries, setCountries] = useState<string[]>([]);
@@ -24,9 +25,19 @@ const NewMapPage: React.FC = () => {
         : countries.concat(country)
     );
 
-  const router = useRouter();
   const onSave = () => {
-    router.push(`/auth?countries=${countries.join(',')}`);
+    const callbackUrl = `/signUpCallback?countries=${countries.join(',')}`;
+    mockSignIn(
+      undefined,
+      { callbackUrl },
+      {
+        _newUser: {
+          id: `${Math.round(Math.random() * 10000)}`,
+          name: 'New User',
+          email: `myemail+${Math.round(Math.random() * 10000)}@example.com`,
+        },
+      }
+    );
   };
 
   const legendRef = createRef<HTMLDivElement>();
@@ -36,6 +47,8 @@ const NewMapPage: React.FC = () => {
       <StaticMap height="100vh" id="background-map" />
 
       <ThemeModeToggle />
+
+      <UserMenu />
 
       <InfoNotification
         relativeRef={legendRef}

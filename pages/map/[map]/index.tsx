@@ -32,7 +32,7 @@ const ViewMapPage: React.FC<{
 
       <ThemeModeToggle />
 
-      {userLoggedIn && <UserMenu />}
+      <UserMenu />
 
       {!userLoggedIn && (
         <InfoNotification

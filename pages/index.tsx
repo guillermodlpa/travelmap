@@ -7,6 +7,8 @@ import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/MapList/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
+import { mockSignIn, useMockSession } from '../util/mockUseSession';
+import UserMenu from '../components/UserMenu';
 
 const BoxRelative = styled(Box)`
   position: relative;
@@ -38,6 +40,8 @@ const Welcome: React.FC = () => {
   console.log(useTheme());
   const size = useContext(ResponsiveContext);
 
+  const { status: authStatus } = useMockSession();
+
   return (
     <>
       <FullScreenBackground>
@@ -45,6 +49,8 @@ const Welcome: React.FC = () => {
       </FullScreenBackground>
 
       <ThemeModeToggle />
+
+      <UserMenu />
 
       <Parchment>
         <Heading level={2} margin={{ top: '0' }}>
@@ -68,16 +74,32 @@ const Welcome: React.FC = () => {
           gap="large"
           flex={{ shrink: 0 }}
         >
-          <Box fill>
-            <NextLink href="/maps" passHref>
-              <ButtonTextCentered primary size="large" fill label="Log in" />
-            </NextLink>
-          </Box>
-          <Box fill>
-            <NextLink href="/map" passHref>
-              <ButtonTextCentered primary size="large" fill label="Craft your map" />
-            </NextLink>
-          </Box>
+          {authStatus === 'authenticated' ? (
+            <Box fill>
+              <NextLink href="/maps" passHref>
+                <ButtonTextCentered primary size="large" fill label="View Your Maps" />
+              </NextLink>
+            </Box>
+          ) : (
+            <>
+              <Box fill>
+                <ButtonTextCentered
+                  primary
+                  size="large"
+                  fill
+                  label="Log in"
+                  onClick={() => {
+                    mockSignIn(undefined, { callbackUrl: '/maps' });
+                  }}
+                />
+              </Box>
+              <Box fill>
+                <NextLink href="/map" passHref>
+                  <ButtonTextCentered primary size="large" fill label="Craft your map" />
+                </NextLink>
+              </Box>
+            </>
+          )}
         </Box>
 
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>

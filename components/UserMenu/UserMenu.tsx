@@ -1,7 +1,8 @@
 import { Menu as MenuIcon } from 'grommet-icons';
 import { Box, Menu } from 'grommet';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
+import { mockSignOut, useMockSession } from '../../util/mockUseSession';
+import withNoSsr from '../NoSsr/withNoSsr';
 
 const MenuContainer = styled(Box)`
   position: absolute;
@@ -11,7 +12,12 @@ const MenuContainer = styled(Box)`
 `;
 
 const UserMenu: React.FC = () => {
-  const router = useRouter();
+  const { status: authStatus } = useMockSession();
+
+  if (authStatus !== 'authenticated') {
+    return <></>;
+  }
+
   return (
     <MenuContainer margin="small">
       <Menu
@@ -21,15 +27,15 @@ const UserMenu: React.FC = () => {
           {
             label: 'Log out',
             onClick: () => {
-              router.push('/');
+              mockSignOut({ callbackUrl: '/' });
             },
           },
         ]}
         dropProps={{ align: { top: 'bottom', right: 'right' } }}
-        icon={<MenuIcon color="paper" size="medium" />}
+        icon={<MenuIcon color="brand" size="medium" />}
       />
     </MenuContainer>
   );
 };
 
-export default UserMenu;
+export default withNoSsr(UserMenu);
