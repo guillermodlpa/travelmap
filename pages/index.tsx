@@ -69,7 +69,7 @@ const Welcome: React.FC = () => {
           flex={{ shrink: 0 }}
         >
           <Box fill>
-            <NextLink href="/map/guillermodlpa" passHref>
+            <NextLink href="/maps" passHref>
               <ButtonTextCentered primary size="large" fill label="Log in" />
             </NextLink>
           </Box>
