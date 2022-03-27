@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from 'grommet';
+import { Avatar, Box, Heading, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
@@ -54,16 +54,23 @@ const UserMaps: React.FC = () => {
       {authStatus === 'authenticated' && (
         <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
           <Parchment contentPad="large">
-            <Heading level={2} margin={{ top: '0' }}>
-              Welcome, {data?.user.name}
-            </Heading>
+            <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
+              <Avatar border={{ color: 'white', size: 'small' }} size="medium">
+                Gp
+              </Avatar>
+              <Box flex>
+                <Heading level={2} margin={'0'}>
+                  Welcome, {data?.user.name}
+                </Heading>
+              </Box>
+            </Box>
 
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
               <Heading level={4} margin={{ top: '0' }}>
                 Your Maps
               </Heading>
 
-              <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
+              <ErrorBoundary fallback={<Text>Could not fetch your maps.</Text>}>
                 <SuspenseNoSsr
                   fallback={
                     <Box animation={{ delay: 2000, type: 'fadeIn' }}>

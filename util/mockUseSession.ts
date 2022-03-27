@@ -52,6 +52,7 @@ export const mockSignIn = (
       name: user.name,
       email: user.email,
       image: '',
+      id: user.id,
     },
     expires: new Date(),
   };
