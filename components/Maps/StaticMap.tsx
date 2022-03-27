@@ -9,11 +9,11 @@ import { useThemeMode } from '../ThemeMode/ThemeModeContext';
 const MAP_STYLES = {
   dark: {
     backgroundColor: '#78543a',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl13v693v000d16p6av56zszg',
+    mapboxStyle: 'mapbox://styles/gpuenteallott/cl195e9ja002f14o09biv9ntq',
   },
   light: {
     backgroundColor: '#cfb19b',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl13uyc77006k14m4lmeto0zj',
+    mapboxStyle: 'mapbox://styles/gpuenteallott/cl1953d18005r14o33cb7z60t',
   },
 };
 
