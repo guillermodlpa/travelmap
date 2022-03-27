@@ -12,7 +12,7 @@ const theme = deepMerge(grommet, {
     },
     colors: {
       brand: { light: 'rgb(219, 98, 9)', dark: 'rgb(217, 94, 4)' },
-      parchment: { light: '#FCF5E5', dark: 'rgb(120, 79, 34)' },
+      parchment: { light: '#FCF5E5', dark: '#532E21' },
       parchmentInset: { light: '#8f5922', dark: '#000' },
       popup: { light: 'rgb(238, 209, 175)', dark: 'rgb(49, 31, 11)' },
       info: '#FFCA58',
@@ -24,7 +24,7 @@ const theme = deepMerge(grommet, {
         light: 'rgba(0, 0, 0, 0.66)',
       },
       placeholder: 'text',
-      text: { dark: '#f8f8f8', light: '#0f0f0f' },
+      text: { dark: '#FCF5E5', light: '#0f0f0f' },
       'text-strong': { dark: '#FFFFFF', light: '#000000' },
       'text-weak': { dark: '#CCCCCC', light: '#555555' },
       'text-xweak': { dark: '#BBBBBB', light: '#666666' },
@@ -115,7 +115,7 @@ const theme = deepMerge(grommet, {
   },
   grommet: {
     extend: {
-      overflow: 'hidden',
+      // overflow: 'hidden',
     },
   },
 });

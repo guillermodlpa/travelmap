@@ -52,11 +52,7 @@ const UserMaps: React.FC = () => {
       <UserMenu />
 
       {authStatus === 'authenticated' && (
-        <RelativeBox
-          align="center"
-          height="100%"
-          pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}
-        >
+        <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
           <Parchment contentPad="large">
             <Heading level={2} margin={{ top: '0' }}>
               Welcome, {data?.user.name}
