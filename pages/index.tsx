@@ -62,12 +62,7 @@ const Welcome: React.FC = () => {
             </Paragraph>
           </Box>
 
-          <Box
-            direction={size === 'small' ? 'column' : 'row'}
-            justify="around"
-            gap="large"
-            flex={{ shrink: 0 }}
-          >
+          <Box direction={size === 'small' ? 'column' : 'row'} gap="medium" flex={{ shrink: 0 }}>
             {authStatus === 'authenticated' ? (
               <Box fill>
                 <NextLink href="/maps" passHref>
@@ -75,8 +70,8 @@ const Welcome: React.FC = () => {
                 </NextLink>
               </Box>
             ) : (
-              <>
-                <Box fill>
+              [
+                <Box fill key="log-in-button">
                   <ButtonTextCentered
                     primary
                     size="large"
@@ -86,13 +81,13 @@ const Welcome: React.FC = () => {
                       mockSignIn(undefined, { callbackUrl: '/maps' });
                     }}
                   />
-                </Box>
-                <Box fill>
+                </Box>,
+                <Box fill key="craft-map-button">
                   <NextLink href="/map" passHref>
                     <ButtonTextCentered primary size="large" fill label="Craft your map" />
                   </NextLink>
-                </Box>
-              </>
+                </Box>,
+              ]
             )}
           </Box>
 

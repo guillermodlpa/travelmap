@@ -22,7 +22,7 @@ const ParchmentBackground = styled(Box)`
   left: 0;
   right: 0;
   bottom: 0;
-  box-shadow: ${({ theme }) => theme.global.elevation[theme.dark ? 'dark' : 'light'].small},
+  box-shadow: ${({ theme }) => theme.global.elevation[theme.dark ? 'dark' : 'light'].large},
     0 0 100px ${({ theme }) => theme.global.colors.parchmentInset[theme.dark ? 'dark' : 'light']}
       inset;
   filter: url(#wavy2);
