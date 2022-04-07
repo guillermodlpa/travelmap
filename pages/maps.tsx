@@ -4,6 +4,7 @@ import styled, { useTheme } from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import UserMapList from '../components/MapList/UserMapList';
+import CombinedMapsList from '../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
 import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
 import fixtures from '../fixtures';
@@ -67,10 +68,10 @@ const UserMaps: React.FC = () => {
 
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
               <Heading level={4} margin={{ top: '0' }}>
-                Your Maps
+                Your Map
               </Heading>
 
-              <ErrorBoundary fallback={<Text>Could not fetch your maps.</Text>}>
+              <ErrorBoundary fallback={<Text>Could not fetch maps.</Text>}>
                 <SuspenseNoSsr
                   fallback={
                     <Box animation={{ delay: 2000, type: 'fadeIn' }}>
@@ -79,6 +80,24 @@ const UserMaps: React.FC = () => {
                   }
                 >
                   <UserMapList userId={data?.user.id!} />
+                </SuspenseNoSsr>
+              </ErrorBoundary>
+            </Box>
+
+            <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
+              <Heading level={4} margin={{ top: '0' }}>
+                {`"Together" Maps`}
+              </Heading>
+
+              <ErrorBoundary fallback={<Text>Could not fetch maps.</Text>}>
+                <SuspenseNoSsr
+                  fallback={
+                    <Box animation={{ delay: 2000, type: 'fadeIn' }}>
+                      <Text>Loading...</Text>
+                    </Box>
+                  }
+                >
+                  <CombinedMapsList userId={data?.user.id!} />
                 </SuspenseNoSsr>
               </ErrorBoundary>
             </Box>

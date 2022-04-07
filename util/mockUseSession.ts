@@ -1,4 +1,5 @@
 import { IncomingMessage } from 'http';
+import { useEffect, useState } from 'react';
 import fixtures from '../fixtures';
 
 type SessionData =
@@ -18,20 +19,28 @@ type SessionStatus = 'loading' | 'authenticated' | 'unauthenticated';
 // https://next-auth.js.org/getting-started/client
 export const useMockSession = (
   options: { required?: boolean } = {}
-): { data: SessionData; status: SessionStatus } => {
-  if (typeof window === 'undefined') {
-    return { data: undefined, status: 'loading' };
-  }
+): { data: SessionData | null; status: SessionStatus } => {
+  const [sessionData, setSessionData] = useState<{
+    data: SessionData | null;
+    status: SessionStatus;
+  }>({ data: null, status: 'loading' });
 
-  const encodedMockSessionData = window.localStorage.getItem('mockSessionData');
-  if (!encodedMockSessionData) {
-    if (options.required) {
-      // takes to sign up page.
+  useEffect(() => {
+    if (!window.localStorage) {
+      return;
     }
-    return { data: null, status: 'unauthenticated' };
-  }
-  const mockSessionData = JSON.parse(encodedMockSessionData);
-  return { data: mockSessionData, status: 'authenticated' };
+    const encodedMockSessionData = window.localStorage.getItem('mockSessionData');
+    if (!encodedMockSessionData) {
+      if (options.required) {
+        // takes to sign up page.
+      }
+      setSessionData({ data: null, status: 'unauthenticated' });
+      return;
+    }
+    const mockSessionData = JSON.parse(encodedMockSessionData);
+    setSessionData({ data: mockSessionData, status: 'authenticated' });
+  }, []);
+  return sessionData;
 };
 
 export const getMockSession = ({ req }: { req: unknown }): Promise<SessionData> => {

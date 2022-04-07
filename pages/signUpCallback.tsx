@@ -31,17 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       expires: new Date(),
     };
 
-    // let's add the travelmap
-    const travelMapId = `${Math.round(Math.random() * 10000)}`;
-    fixtures.travelMaps.push({
-      id: travelMapId,
-      countries: Array.isArray(countries) ? countries : [],
-      slug: slugifyName(newUser.name),
-    });
-    fixtures.userTravelMaps.push({
-      userId: newUser.id,
-      travelMapId,
-    });
+    // would create DB entities here
 
     return {
       redirect: {

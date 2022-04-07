@@ -7,7 +7,8 @@ import { Box, CheckBox, Text } from 'grommet';
 const CountrySearch: React.FC<{
   onCountrySelected: (countryAlpha3: string) => void;
   selectedCountries: string[];
-}> = ({ onCountrySelected, selectedCountries }) => {
+  disabled?: boolean;
+}> = ({ onCountrySelected, selectedCountries, disabled = false }) => {
   const options = useMemo(
     () =>
       simplifiedWorldAdministrativeBoundaries
@@ -32,6 +33,7 @@ const CountrySearch: React.FC<{
       emptySearchMessage="No results"
       a11yTitle="Select countries"
       multiple
+      disabled={disabled}
       closeOnChange={false}
       onChange={({ option }) => {
         onCountrySelected(option.value);

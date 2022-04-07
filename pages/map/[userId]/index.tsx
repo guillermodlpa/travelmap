@@ -17,14 +17,16 @@ import fixtures from '../../../fixtures';
 import { createRef } from 'react';
 import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
 import getTravelMapNameForUsers from '../../../util/getTravelMapName';
+import { getTravelMapFromUser } from '../../../util/getTravelMapFunctions';
+import { useMockSession } from '../../../util/mockUseSession';
+import getTravelMapName from '../../../util/getTravelMapName';
 
 const ViewMapPage: React.FC<{
   travelMap: TravelMap;
-  users: User[];
-  isLoggedInUser: boolean;
-  userLoggedIn: boolean;
-}> = ({ travelMap, users, isLoggedInUser, userLoggedIn }) => {
+}> = ({ travelMap }) => {
   const legendRef = createRef<HTMLDivElement>();
+
+  const { status, data } = useMockSession();
 
   return (
     <>
@@ -34,7 +36,7 @@ const ViewMapPage: React.FC<{
 
       <UserMenu />
 
-      {!userLoggedIn && (
+      {status === 'unauthenticated' && (
         <InfoNotification
           icon={null}
           relativeRef={legendRef}
@@ -50,18 +52,22 @@ const ViewMapPage: React.FC<{
 
       <Legend ref={legendRef}>
         <LegendTitle
-          avatarContent="GP"
-          avatarSrc={undefined}
-          headingText={getTravelMapNameForUsers(users)}
+          heading={getTravelMapName(travelMap)}
+          avatars={travelMap.users.map((user) => ({
+            id: user.id,
+            name: user.name,
+          }))}
         />
 
         <LegendBody>
-          <LegendCountryList countries={travelMap.countries} />
+          {travelMap.users.map((user) => (
+            <LegendCountryList key={user.id} countries={user.visitedCountries} />
+          ))}
         </LegendBody>
 
         <LegendActions>
-          {isLoggedInUser && (
-            <NextLink href={`/map/${travelMap.id}/edit`} passHref>
+          {status === 'authenticated' && travelMap.pathEdit && (
+            <NextLink href={travelMap.pathEdit} passHref>
               <Button label="Edit" />
             </NextLink>
           )}
@@ -74,27 +80,22 @@ const ViewMapPage: React.FC<{
 export default ViewMapPage;
 
 export const getServerSideProps: GetServerSideProps<
-  { travelMap: TravelMap; users: User[] },
-  { map: string }
+  { travelMap: TravelMap },
+  { userId: string }
 > = async (context) => {
-  const mapSlug = context.params?.map;
-  if (!mapSlug) {
+  const userId = context.params?.userId;
+  if (!userId) {
     return { notFound: true };
   }
-  const travelMap = fixtures.travelMaps.find(({ slug }) => slug === mapSlug);
-  if (!travelMap) {
+  const user = fixtures.users.find((user) => user.id === userId);
+  if (!user) {
     return { notFound: true };
   }
-  const users = fixtures.userTravelMaps
-    .filter(({ travelMapId }) => travelMapId === travelMap.id)
-    .map(({ userId }) => fixtures.users.find(({ id }) => id === userId))
-    .map((user) => user as User);
+  const travelMap = getTravelMapFromUser(user);
+
   return {
     props: {
       travelMap,
-      users,
-      isLoggedInUser: mapSlug === 'guillermodlpa' ? true : false,
-      userLoggedIn: mapSlug === 'guillermodlpa' ? true : false,
     },
   };
 };

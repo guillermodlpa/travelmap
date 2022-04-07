@@ -1,20 +1,31 @@
-import useSWR, { Fetcher } from 'swr';
+import useSWR from 'swr';
+import getFetcher from '../../util/fetcher';
 import MapList from './MapList';
 
-const fetcher: Fetcher<Array<{ travelMap: TravelMap; users: User[] }>, string> = (url) =>
-  fetch(url).then((r) => r.json());
+const fetcher = getFetcher<TravelMap>();
+
 const useUserMaps = (userId: string) => {
-  const { data, error } = useSWR(`/api/user/${userId}/maps`, fetcher, { suspense: true });
+  const { data, error } = useSWR(`/api/user/${userId}/map`, fetcher, { suspense: true });
+  console.log({ data, error });
   return {
-    mapList: data || [],
-    isLoading: !error && !data,
+    map: data,
+    isLoading: !error && data != null,
     isError: error,
   };
 };
 
 const UserMapList: React.FC<{ userId: string }> = ({ userId }) => {
-  const { mapList } = useUserMaps(userId);
-  return <MapList mapList={mapList} showEditButton />;
+  const { map } = useUserMaps(userId);
+  return <MapList mapList={map ? [map] : []} showEditButton />;
 };
 
-export default UserMapList;
+const withUserIdRequired = (Component: React.FC<{ userId: string }>) => {
+  const WithUserIdRequired: React.FC<{ userId: string }> = ({ userId, ...props }) => {
+    if (!userId) {
+      return <>Error</>;
+    }
+    return <Component userId={userId} {...props} />;
+  };
+  return WithUserIdRequired;
+};
+export default withUserIdRequired(UserMapList);

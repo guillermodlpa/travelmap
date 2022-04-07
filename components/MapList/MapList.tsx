@@ -1,19 +1,23 @@
-import { Button, List, Box, Avatar, Text, ResponsiveContext } from 'grommet';
+import { Button, Box, Avatar, Text, ResponsiveContext } from 'grommet';
 import NextLink from 'next/link';
 import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
 
 const MapList: React.FC<{
   showEditButton: boolean;
-  mapList: Array<{ travelMap: TravelMap; users: User[] }>;
+  mapList: TravelMap[];
 }> = ({ mapList, showEditButton }) => {
   const size = useContext(ResponsiveContext);
-  console.log('size', size);
+
+  if (!mapList) {
+    return null;
+  }
+
   return (
     <Box as="ul" pad="0" margin="0" role="list">
-      {mapList.map((item, index) => (
+      {mapList.map((travelMap, index) => (
         <Box
-          key={item.travelMap.id}
+          key={`${travelMap.type}--${travelMap.id}`}
           pad="small"
           gap="small"
           as="li"
@@ -23,31 +27,31 @@ const MapList: React.FC<{
         >
           <Box direction="row" gap="small" align="center" flex="grow">
             <Box direction="row" flex={{ shrink: 0 }}>
-              {item.users.map((user, index) => (
+              {travelMap.users.map((user, index) => (
                 <Avatar
                   key={user.id}
                   background="parchment"
                   border={{ color: 'brand', size: 'small' }}
                   margin={{ left: `-${24 * index}px` }}
-                  style={{ zIndex: item.users.length - index }}
+                  style={{ zIndex: travelMap.users.length - index }}
                 >
                   {user.name.substring(0, 1)}
                 </Avatar>
               ))}
             </Box>
             <Box flex={{ grow: 1, shrink: 1 }}>
-              <Text>{getTravelMapNameForUsers(item.users)}</Text>
+              <Text>{getTravelMapNameForUsers(travelMap)}</Text>
             </Box>
           </Box>
 
-          <Box key={`action-${item}`} direction="row" gap="small" align="center" justify="end">
-            {showEditButton && (
-              <NextLink href={`/map/${item.travelMap.id}/edit`} passHref>
+          <Box key={`action-${travelMap}`} direction="row" gap="small" align="center" justify="end">
+            {showEditButton && travelMap.pathEdit && (
+              <NextLink href={travelMap.pathEdit} passHref>
                 <Button label="Edit" />
               </NextLink>
             )}
 
-            <NextLink href={`/map/${item.travelMap.slug}`} passHref>
+            <NextLink href={travelMap.pathView} passHref>
               <Button label="View" />
             </NextLink>
           </Box>

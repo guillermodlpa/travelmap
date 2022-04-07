@@ -57,7 +57,7 @@ const NewMapPage: React.FC = () => {
       />
 
       <Legend ref={legendRef}>
-        <LegendTitle avatarContent="" avatarSrc={undefined} headingText={`Your Travelmap`} />
+        <LegendTitle heading="Your Travelmap" avatars={undefined} />
 
         <LegendBody>
           <LegendCountryList countries={countries} />

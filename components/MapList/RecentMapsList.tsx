@@ -1,10 +1,11 @@
-import useSWR, { Fetcher } from 'swr';
+import useSWR from 'swr';
+import getFetcher from '../../util/fetcher';
 import MapList from './MapList';
 
-const fetcher: Fetcher<Array<{ travelMap: TravelMap; users: User[] }>, string> = (url) =>
-  fetch(url).then((r) => r.json());
+const fetcher = getFetcher<TravelMap[]>();
+
 const useRecentMapList = () => {
-  const { data, error } = useSWR('/api/maps', fetcher, { suspense: true });
+  const { data, error } = useSWR('/api/recent-maps', fetcher, { suspense: true });
   return {
     mapList: data || [],
     isLoading: !error && !data,
