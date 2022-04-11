@@ -19,9 +19,14 @@ const ThemeModeToggle: React.FC = () => {
         onClick={() => {
           setMode((m) => (m === 'light' ? 'dark' : 'light'));
         }}
-      >
-        {mode === 'dark' ? <Sun /> : <Moon />}
-      </Button>
+        icon={
+          mode === 'dark' ? (
+            <Sun aria-label="Use light color theme" color="text" />
+          ) : (
+            <Moon aria-label="Use dark color theme" color="text" />
+          )
+        }
+      />
     </FloatingBox>
   );
 };

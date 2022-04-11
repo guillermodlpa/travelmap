@@ -32,7 +32,7 @@ const UserMenu: React.FC = () => {
           },
         ]}
         dropProps={{ align: { top: 'bottom', right: 'right' } }}
-        icon={<MenuIcon color="brand" size="medium" />}
+        icon={<MenuIcon color="text" size="medium" />}
       />
     </MenuContainer>
   );
