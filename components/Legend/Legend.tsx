@@ -11,7 +11,7 @@ const LegendContainer = styled(Box)<BoxExtendedProps & { $size: ResponsiveViewpo
   left: ${({ $size }) => ($size === 'small' ? '0' : 'auto')};
 `;
 
-const Legend = forwardRef<HTMLDivElement, PropsWithChildren<{}>>(({ children }, ref) => {
+const Legend = forwardRef<HTMLElement, PropsWithChildren<{}>>(({ children }, ref) => {
   const size = useContext(ResponsiveContext) as ResponsiveViewportSize;
   return (
     <LegendContainer
@@ -21,7 +21,7 @@ const Legend = forwardRef<HTMLDivElement, PropsWithChildren<{}>>(({ children }, 
         max: size === 'small' ? '100%' : '50%',
       }}
       $size={size}
-      ref={ref}
+      ref={ref as React.ForwardedRef<HTMLDivElement>}
     >
       <Parchment contentPad={{ horizontal: 'medium', vertical: 'small' }}>{children}</Parchment>
     </LegendContainer>

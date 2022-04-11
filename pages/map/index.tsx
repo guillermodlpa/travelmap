@@ -2,7 +2,7 @@
  * New map page
  */
 import { createRef, useState } from 'react';
-import { Button } from 'grommet';
+import { Button, Text } from 'grommet';
 import StaticMap from '../../components/Maps/StaticMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
@@ -10,8 +10,6 @@ import LegendBody from '../../components/Legend/LegendBody';
 import LegendCountryList from '../../components/Legend/LegendCountryList';
 import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
-import { InfoNotification } from '../../components/Info';
-import { CircleInformation } from 'grommet-icons';
 import { mockSignIn } from '../../util/mockUseSession';
 import Nav from '../../components/Nav';
 
@@ -39,7 +37,7 @@ const NewMapPage: React.FC = () => {
     );
   };
 
-  const legendRef = createRef<HTMLDivElement>();
+  const legendRef = createRef<HTMLElement>();
 
   return (
     <>
@@ -47,17 +45,16 @@ const NewMapPage: React.FC = () => {
 
       <Nav />
 
-      <InfoNotification
-        relativeRef={legendRef}
-        icon={<CircleInformation a11yTitle="Information" />}
-        message={`Choose the countries you have visited below and save`}
-      />
-
       <Legend ref={legendRef}>
         <LegendTitle heading="Your Travelmap" avatars={undefined} />
 
         <LegendBody>
-          <LegendCountryList countries={countries} />
+          {countries.length === 0 ? (
+            <Text color="text-weak">Choose the countries you have visited below and save.</Text>
+          ) : (
+            <LegendCountryList countries={countries} />
+          )}
+
           <CountrySearch selectedCountries={countries} onCountrySelected={toggleCountry} />
 
           <LegendActions>

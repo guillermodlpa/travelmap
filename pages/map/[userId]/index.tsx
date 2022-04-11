@@ -32,20 +32,6 @@ const ViewMapPage: React.FC<{
 
       <Nav />
 
-      {status === 'unauthenticated' && (
-        <InfoNotification
-          icon={null}
-          relativeRef={legendRef}
-          delay={3000}
-          message={`Do you want to have a travelmap?`}
-          actions={
-            <NextLink href="/map" passHref>
-              <Button label="Craft your map" />
-            </NextLink>
-          }
-        />
-      )}
-
       <Legend ref={legendRef}>
         <LegendTitle
           heading={getTravelMapName(travelMap)}
