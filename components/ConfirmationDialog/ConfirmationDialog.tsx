@@ -19,7 +19,14 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     return <></>;
   }
   return (
-    <Layer background="popup" position="center" onClickOutside={onCancel} onEsc={onCancel}>
+    <Layer
+      background="popup"
+      position="center"
+      onClickOutside={onCancel}
+      onEsc={onCancel}
+      responsive={false}
+      margin="large"
+    >
       <Box pad="medium" gap="small" width="medium">
         <Heading level={3} margin="none">
           Confirm
