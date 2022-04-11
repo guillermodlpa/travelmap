@@ -15,7 +15,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({ heading, avatars = [defaultAv
       {avatars.map(({ id, name }, index) => (
         <Avatar
           key={id}
-          border={{ color: 'white', size: 'small' }}
+          border={{ color: 'brand', size: 'small' }}
           margin={{ left: `-${24 * index}px` }}
           style={{ zIndex: avatars.length - index }}
           // src={avatarSrc}
@@ -24,7 +24,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({ heading, avatars = [defaultAv
         </Avatar>
       ))}
     </Box>
-    <Box border={{ color: 'white', size: 'small', side: 'bottom' }} flex>
+    <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex>
       <Heading level={1} size="small">
         {heading || NBSP_CHAR}
       </Heading>
