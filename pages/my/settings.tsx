@@ -1,16 +1,27 @@
-import { Avatar, Box, Button, CheckBox, Heading, ResponsiveContext, Text } from 'grommet';
-import { Suspense, useContext, useEffect } from 'react';
+import {
+  Avatar,
+  Box,
+  Button,
+  CheckBox,
+  FormField,
+  Heading,
+  ResponsiveContext,
+  Text,
+  TextInput,
+} from 'grommet';
+import { Suspense, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
 import StaticMap from '../../components/Maps/StaticMap';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import { useMockSession } from '../../util/mockUseSession';
+import { mockSignOut, useMockSession } from '../../util/mockUseSession';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import Parchment from '../../components/Parchment';
 import Nav from '../../components/Nav';
 import { Previous } from 'grommet-icons';
+import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
 
 const RelativeBox = styled(Box)`
   position: relative;
@@ -39,6 +50,15 @@ const UserSettings: React.FC = () => {
   }, [authStatus]);
 
   const size = useContext(ResponsiveContext);
+
+  const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(true);
+  const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(true);
+  const [displayName, setDisplayName] = useState<string>('Guillermo');
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+
+  useLayoutEffect(() => {
+    setHasChanges(true);
+  }, [notifyOnCombinedMaps, notifyOnAppUpdates, displayName]);
 
   return (
     <>
@@ -75,12 +95,20 @@ const UserSettings: React.FC = () => {
                 </Heading>
 
                 <CheckBox
-                  checked={true}
+                  checked={notifyOnCombinedMaps}
                   label="When somebody makes a combined map with me"
-                  onChange={(event) => {}}
+                  onChange={(event) => {
+                    setNotifyOnCombinedMap(event.target.checked);
+                  }}
                 />
 
-                <CheckBox checked={true} label="Updates about Travelmap" onChange={(event) => {}} />
+                <CheckBox
+                  checked={notifyOnAppUpdates}
+                  label="Updates about Travelmap"
+                  onChange={(event) => {
+                    setNotifyOnAppUpdates(event.target.checked);
+                  }}
+                />
               </Box>
 
               <Box
@@ -90,11 +118,38 @@ const UserSettings: React.FC = () => {
                 gap="medium"
               >
                 <Heading level={4} margin={'0'}>
-                  Account
+                  User
                 </Heading>
 
-                <Button label="Delete Account" color="border" />
+                <FormField
+                  label="Display name"
+                  htmlFor="display-name-input" /* @todo: replace for React 18's useId */
+                  required
+                >
+                  <TextInput
+                    value={displayName}
+                    id="display-name-input"
+                    onChange={(event) => {
+                      setDisplayName(event.target.value);
+                    }}
+                  />
+                </FormField>
+
+                <Text>Auth provider: Google</Text>
               </Box>
+            </Box>
+
+            <Box>
+              <Button
+                alignSelf="center"
+                label="Save"
+                disabled={!hasChanges}
+                onClick={() => {
+                  setTimeout(() => {
+                    setHasChanges(false);
+                  }, 500);
+                }}
+              />
             </Box>
 
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
@@ -113,6 +168,36 @@ const UserSettings: React.FC = () => {
                   <CombinedMapsList userId={data?.user.id!} allowDelete={true} />
                 </SuspenseNoSsr>
               </ErrorBoundary>
+            </Box>
+
+            <Box
+              margin={{ vertical: 'large' }}
+              flex={{ shrink: 0 }}
+              width={size === 'small' ? 'auto' : '50%'}
+              gap="medium"
+              alignSelf="end"
+            >
+              <Heading level={4} margin={'0'}>
+                Account
+              </Heading>
+
+              <WrappingDialogConfirmation
+                onConfirm={() => {
+                  alert('deleted');
+                  mockSignOut({ callbackUrl: '/' });
+                }}
+                confirmButtonLabel="Delete account"
+                confirmMessage="Are you sure that you want to delete your account and data?"
+              >
+                {(handleClick) => (
+                  <Button
+                    label="Delete Account"
+                    color="border"
+                    alignSelf="end"
+                    onClick={handleClick}
+                  />
+                )}
+              </WrappingDialogConfirmation>
             </Box>
           </Parchment>
         </RelativeBox>

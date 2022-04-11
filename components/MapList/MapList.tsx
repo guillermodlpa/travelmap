@@ -2,12 +2,25 @@ import { Button, Box, Avatar, Text, ResponsiveContext } from 'grommet';
 import NextLink from 'next/link';
 import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
+import WrappingDialogConfirmation from '../ConfirmationDialog/WrappingDialogConfirmation';
 
-const MapList: React.FC<{
+const getOtherUserNames = (users: User[], userId: string | undefined): string[] =>
+  users.filter((user) => user.id !== userId).map((user) => user.name);
+
+const joinUserNames = (userNames: string[]) =>
+  userNames.reduce(
+    (memo, userName, index) =>
+      `${memo}${index === 0 ? '' : index === userNames.length - 1 ? ' & ' : ', '}${userName}`,
+    ''
+  );
+
+type MapListProps = {
   allowEdit: boolean;
-  allowDelete: boolean;
   mapList: TravelMap[];
-}> = ({ mapList, allowEdit, allowDelete }) => {
+  userId?: string;
+} & ({ allowDelete: false } | { allowDelete: true; userId: string });
+
+const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, userId }) => {
   const size = useContext(ResponsiveContext);
 
   if (!mapList) {
@@ -52,7 +65,19 @@ const MapList: React.FC<{
               </NextLink>
             )}
 
-            {allowDelete && travelMap.pathEdit && <Button label="Delete" color="border" />}
+            {allowDelete && travelMap.pathEdit && (
+              <WrappingDialogConfirmation
+                onConfirm={() => {
+                  alert('deleted');
+                }}
+                confirmButtonLabel="Delete Map"
+                confirmMessage={`Are you sure you want to delete your map together with ${joinUserNames(
+                  getOtherUserNames(travelMap.users, userId)
+                )}? This will make the map disappear for them too.`}
+              >
+                {(handleClick) => <Button label="Delete" color="border" onClick={handleClick} />}
+              </WrappingDialogConfirmation>
+            )}
 
             <NextLink href={travelMap.pathView} passHref>
               <Button label="View" />
