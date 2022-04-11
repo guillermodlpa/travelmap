@@ -35,7 +35,7 @@ const Nav: React.FC = () => {
       animation="fadeIn"
     >
       {status === 'authenticated' && (
-        <NextLink passHref href="/maps">
+        <NextLink passHref href="/my/maps">
           <NavButton a11yTitle="My Maps" icon={<MapLocation color="text" />} />
         </NextLink>
       )}
@@ -49,7 +49,9 @@ const Nav: React.FC = () => {
       <ThemeModeToggle />
 
       {status === 'authenticated' && (
-        <NavButton a11yTitle="Settings" icon={<SettingsOption color="text" />} />
+        <NextLink passHref href="/my/settings">
+          <NavButton a11yTitle="Settings" icon={<SettingsOption color="text" />} />
+        </NextLink>
       )}
 
       {status === 'authenticated' && (

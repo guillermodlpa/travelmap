@@ -13,9 +13,12 @@ const useUserMaps = (userId: string) => {
   };
 };
 
-const CombinedMapsList: React.FC<{ userId: string }> = ({ userId }) => {
+const CombinedMapsList: React.FC<{ userId: string; allowDelete: boolean }> = ({
+  userId,
+  allowDelete,
+}) => {
   const { mapList } = useUserMaps(userId);
-  return <MapList mapList={mapList} showEditButton />;
+  return <MapList mapList={mapList} allowEdit={false} allowDelete={allowDelete} />;
 };
 
 export default CombinedMapsList;

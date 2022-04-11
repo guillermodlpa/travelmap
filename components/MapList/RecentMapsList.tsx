@@ -15,7 +15,7 @@ const useRecentMapList = () => {
 
 const RecentMapsList: React.FC = () => {
   const { mapList } = useRecentMapList();
-  return <MapList mapList={mapList} showEditButton={false} />;
+  return <MapList mapList={mapList} allowEdit={false} allowDelete={false} />;
 };
 
 export default RecentMapsList;

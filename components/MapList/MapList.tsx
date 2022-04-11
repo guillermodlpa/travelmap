@@ -4,9 +4,10 @@ import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
 
 const MapList: React.FC<{
-  showEditButton: boolean;
+  allowEdit: boolean;
+  allowDelete: boolean;
   mapList: TravelMap[];
-}> = ({ mapList, showEditButton }) => {
+}> = ({ mapList, allowEdit, allowDelete }) => {
   const size = useContext(ResponsiveContext);
 
   if (!mapList) {
@@ -45,11 +46,13 @@ const MapList: React.FC<{
           </Box>
 
           <Box key={`action-${travelMap}`} direction="row" gap="small" align="center" justify="end">
-            {showEditButton && travelMap.pathEdit && (
+            {allowEdit && travelMap.pathEdit && (
               <NextLink href={travelMap.pathEdit} passHref>
                 <Button label="Edit" />
               </NextLink>
             )}
+
+            {allowDelete && travelMap.pathEdit && <Button label="Delete" color="border" />}
 
             <NextLink href={travelMap.pathView} passHref>
               <Button label="View" />

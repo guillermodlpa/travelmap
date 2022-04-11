@@ -62,7 +62,7 @@ const Welcome: React.FC = () => {
           <Box direction={size === 'small' ? 'column' : 'row'} gap="medium" flex={{ shrink: 0 }}>
             {authStatus === 'authenticated' ? (
               <Box fill>
-                <NextLink href="/maps" passHref>
+                <NextLink href="/my/maps" passHref>
                   <ButtonTextCentered primary size="large" fill label="View Your Maps" />
                 </NextLink>
               </Box>
@@ -75,7 +75,7 @@ const Welcome: React.FC = () => {
                     fill
                     label="Log in"
                     onClick={() => {
-                      mockSignIn(undefined, { callbackUrl: '/maps' });
+                      mockSignIn(undefined, { callbackUrl: '/my/maps' });
                     }}
                   />
                 </Box>,

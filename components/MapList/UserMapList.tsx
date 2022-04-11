@@ -16,7 +16,7 @@ const useUserMaps = (userId: string) => {
 
 const UserMapList: React.FC<{ userId: string }> = ({ userId }) => {
   const { map } = useUserMaps(userId);
-  return <MapList mapList={map ? [map] : []} showEditButton />;
+  return <MapList mapList={map ? [map] : []} allowEdit allowDelete={false} />;
 };
 
 const withUserIdRequired = (Component: React.FC<{ userId: string }>) => {

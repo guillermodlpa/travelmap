@@ -1,16 +1,16 @@
 import { Avatar, Box, Heading, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
-import StaticMap from '../components/Maps/StaticMap';
-import withNoSsr from '../components/NoSsr/withNoSsr';
-import UserMapList from '../components/MapList/UserMapList';
-import CombinedMapsList from '../components/MapList/CombinedMapsList';
-import ErrorBoundary from '../components/ErrorBoundary';
-import fixtures from '../fixtures';
-import { useMockSession } from '../util/mockUseSession';
+import StaticMap from '../../components/Maps/StaticMap';
+import withNoSsr from '../../components/NoSsr/withNoSsr';
+import UserMapList from '../../components/MapList/UserMapList';
+import CombinedMapsList from '../../components/MapList/CombinedMapsList';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import fixtures from '../../fixtures';
+import { useMockSession } from '../../util/mockUseSession';
 import { useRouter } from 'next/router';
-import Parchment from '../components/Parchment';
-import Nav from '../components/Nav';
+import Parchment from '../../components/Parchment';
+import Nav from '../../components/Nav';
 
 const RelativeBox = styled(Box)`
   position: relative;
@@ -94,7 +94,7 @@ const UserMaps: React.FC = () => {
                     </Box>
                   }
                 >
-                  <CombinedMapsList userId={data?.user.id!} />
+                  <CombinedMapsList userId={data?.user.id!} allowDelete={false} />
                 </SuspenseNoSsr>
               </ErrorBoundary>
             </Box>
