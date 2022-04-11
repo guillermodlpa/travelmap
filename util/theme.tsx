@@ -6,13 +6,13 @@ import { css } from 'styled-components';
 const theme = deepMerge(grommet, {
   global: {
     font: {
-      family: "'Roboto', sans-serif",
+      family: "'Barlow', sans-serif",
       size: '18px',
       height: '20px',
     },
     colors: {
-      brand: { light: 'rgb(219, 98, 9)', dark: 'rgb(217, 94, 4)' },
-      parchment: { light: '#FCF5E5', dark: '#532E21' },
+      brand: { light: '#C61E12', dark: '#C61E12' },
+      parchment: { light: '#FCF5E5', dark: '#25252c' },
       parchmentInset: { light: '#8f5922', dark: '#000' },
       popup: { light: 'rgb(238, 209, 175)', dark: 'rgb(49, 31, 11)' },
       info: '#FFCA58',
@@ -50,7 +50,7 @@ const theme = deepMerge(grommet, {
   },
   heading: {
     font: {
-      family: "'Rye', sans-serif",
+      family: "'Merienda', cursive",
     },
     extend: { '-webkit-font-smoothing': 'auto' },
     level: {

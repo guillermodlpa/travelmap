@@ -40,7 +40,7 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
           <link
             href={
-              'https://fonts.googleapis.com/css2?family=Roboto:wght@300&family=Rye&display=swap'
+              'https://fonts.googleapis.com/css2?family=Barlow&family=Merienda:wght@700&display=swap'
             }
             rel="stylesheet"
           />
