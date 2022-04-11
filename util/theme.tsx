@@ -11,7 +11,7 @@ const theme = deepMerge(grommet, {
       height: '20px',
     },
     colors: {
-      brand: { light: '#C61E12', dark: '#C61E12' },
+      brand: { light: '#112f6a', dark: '#91b0ee' },
       parchment: { light: '#FCF5E5', dark: '#25252c' },
       parchmentInset: { light: '#8f5922', dark: '#000' },
       popup: { light: 'rgb(238, 209, 175)', dark: '#101013' },
