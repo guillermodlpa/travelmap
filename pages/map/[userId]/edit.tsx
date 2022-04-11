@@ -2,7 +2,6 @@
  * Edit map page
  */
 import { useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR, { Fetcher } from 'swr';
 
@@ -14,11 +13,9 @@ import LegendBody from '../../../components/Legend/LegendBody';
 import LegendCountryList from '../../../components/Legend/LegendCountryList';
 import CountrySearch from '../../../components/CountrySearch';
 import LegendActions from '../../../components/Legend/LegendActions';
-import UserMenu from '../../../components/UserMenu';
-import fixtures from '../../../fixtures';
-import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
 import { useTheme } from 'styled-components';
 import getTravelMapName from '../../../util/getTravelMapName';
+import Nav from '../../../components/Nav';
 
 const fetcher: Fetcher<TravelMap, string> = (url) => fetch(url).then((r) => r.json());
 
@@ -58,9 +55,7 @@ const EditMapPage: React.FC = () => {
     <>
       <StaticMap height="100vh" id="background-map" />
 
-      <ThemeModeToggle />
-
-      <UserMenu />
+      <Nav />
 
       <Legend>
         <LegendTitle

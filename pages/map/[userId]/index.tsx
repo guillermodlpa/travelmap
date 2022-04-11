@@ -11,15 +11,13 @@ import LegendActions from '../../../components/Legend/LegendActions';
 import { Button } from 'grommet';
 import NextLink from 'next/link';
 import { GetServerSideProps } from 'next';
-import UserMenu from '../../../components/UserMenu';
 import { InfoNotification } from '../../../components/Info';
 import fixtures from '../../../fixtures';
 import { createRef } from 'react';
-import ThemeModeToggle from '../../../components/ThemeMode/ThemeModeToggle';
-import getTravelMapNameForUsers from '../../../util/getTravelMapName';
 import { getTravelMapFromUser } from '../../../util/getTravelMapFunctions';
 import { useMockSession } from '../../../util/mockUseSession';
 import getTravelMapName from '../../../util/getTravelMapName';
+import Nav from '../../../components/Nav';
 
 const ViewMapPage: React.FC<{
   travelMap: TravelMap;
@@ -32,9 +30,7 @@ const ViewMapPage: React.FC<{
     <>
       <StaticMap height="100vh" id="background-map" />
 
-      <ThemeModeToggle />
-
-      <UserMenu />
+      <Nav />
 
       {status === 'unauthenticated' && (
         <InfoNotification
@@ -66,11 +62,14 @@ const ViewMapPage: React.FC<{
         </LegendBody>
 
         <LegendActions>
-          {status === 'authenticated' && travelMap.pathEdit && (
-            <NextLink href={travelMap.pathEdit} passHref>
-              <Button label="Edit" />
-            </NextLink>
-          )}
+          {travelMap.type === 'user' &&
+            status === 'authenticated' &&
+            travelMap.pathEdit &&
+            data?.user.id === travelMap.users[0].id && (
+              <NextLink href={travelMap.pathEdit} passHref>
+                <Button label="Edit" />
+              </NextLink>
+            )}
         </LegendActions>
       </Legend>
     </>

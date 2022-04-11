@@ -12,9 +12,8 @@ import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
 import { InfoNotification } from '../../components/Info';
 import { CircleInformation } from 'grommet-icons';
-import ThemeModeToggle from '../../components/ThemeMode/ThemeModeToggle';
-import UserMenu from '../../components/UserMenu';
 import { mockSignIn } from '../../util/mockUseSession';
+import Nav from '../../components/Nav';
 
 const NewMapPage: React.FC = () => {
   const [countries, setCountries] = useState<string[]>([]);
@@ -46,9 +45,7 @@ const NewMapPage: React.FC = () => {
     <>
       <StaticMap height="100vh" id="background-map" />
 
-      <ThemeModeToggle />
-
-      <UserMenu />
+      <Nav />
 
       <InfoNotification
         relativeRef={legendRef}

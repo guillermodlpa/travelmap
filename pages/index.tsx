@@ -6,10 +6,9 @@ import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/MapList/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
 import { mockSignIn, useMockSession } from '../util/mockUseSession';
-import UserMenu from '../components/UserMenu';
 import Parchment from '../components/Parchment';
+import Nav from '../components/Nav';
 
 const ButtonTextCentered = styled(Button)`
   text-align: center;
@@ -41,9 +40,7 @@ const Welcome: React.FC = () => {
         <StaticMap height="100vh" id="background-map" />
       </FullScreenBackground>
 
-      <ThemeModeToggle />
-
-      <UserMenu />
+      <Nav />
 
       <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
         <Parchment contentPad="large">

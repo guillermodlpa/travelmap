@@ -6,12 +6,11 @@ import withNoSsr from '../components/NoSsr/withNoSsr';
 import UserMapList from '../components/MapList/UserMapList';
 import CombinedMapsList from '../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import ThemeModeToggle from '../components/ThemeMode/ThemeModeToggle';
 import fixtures from '../fixtures';
-import UserMenu from '../components/UserMenu';
 import { useMockSession } from '../util/mockUseSession';
 import { useRouter } from 'next/router';
 import Parchment from '../components/Parchment';
+import Nav from '../components/Nav';
 
 const RelativeBox = styled(Box)`
   position: relative;
@@ -48,9 +47,7 @@ const UserMaps: React.FC = () => {
         <StaticMap height="100vh" id="background-map" />
       </FullScreenBackground>
 
-      <ThemeModeToggle />
-
-      <UserMenu />
+      <Nav />
 
       {authStatus === 'authenticated' && (
         <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>

@@ -1,5 +1,4 @@
 import { Box, BoxExtendedProps, ResponsiveContext } from 'grommet';
-import { EdgeSizeType } from 'grommet/utils';
 import { useContext, forwardRef, PropsWithChildren } from 'react';
 import styled from 'styled-components';
 import Parchment from '../Parchment';
