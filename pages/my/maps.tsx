@@ -1,4 +1,4 @@
-import { Avatar, Box, Heading, Text } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
 import styled, { useTheme } from 'styled-components';
 import StaticMap from '../../components/Maps/StaticMap';
@@ -53,9 +53,6 @@ const UserMaps: React.FC = () => {
         <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
           <Parchment contentPad="large">
             <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
-              <Avatar border={{ color: 'white', size: 'small' }} size="medium">
-                Gp
-              </Avatar>
               <Box flex>
                 <Heading level={2} margin={'0'}>
                   Welcome, {data?.user.name}

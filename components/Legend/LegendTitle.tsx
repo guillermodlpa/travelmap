@@ -15,6 +15,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({ heading, avatars = [defaultAv
       {avatars.map(({ id, name }, index) => (
         <Avatar
           key={id}
+          background="parchment"
           border={{ color: 'brand', size: 'small' }}
           margin={{ left: `-${24 * index}px` }}
           style={{ zIndex: avatars.length - index }}
