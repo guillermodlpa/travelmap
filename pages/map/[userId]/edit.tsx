@@ -13,7 +13,6 @@ import LegendBody from '../../../components/Legend/LegendBody';
 import LegendCountryList from '../../../components/Legend/LegendCountryList';
 import CountrySearch from '../../../components/CountrySearch';
 import LegendActions from '../../../components/Legend/LegendActions';
-import { useTheme } from 'styled-components';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
 
@@ -48,8 +47,6 @@ const EditMapPage: React.FC = () => {
       router.push(travelMap?.pathView);
     }
   };
-
-  console.log(useTheme());
 
   return (
     <>

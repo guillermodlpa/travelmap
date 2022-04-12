@@ -10,6 +10,7 @@ const ThemeModeToggle: React.FC = () => {
       onClick={() => {
         setMode((m) => (m === 'light' ? 'dark' : 'light'));
       }}
+      tip={mode === 'dark' ? 'Use light color theme' : 'Use dark color theme'}
       icon={
         mode === 'dark' ? (
           <Sun aria-label="Use light color theme" color="text" />

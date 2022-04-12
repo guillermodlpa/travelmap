@@ -1,10 +1,19 @@
 import type { AppProps } from 'next/app';
 import { Grommet } from 'grommet';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
 import { ThemeModeContextProvider } from '../components/ThemeMode/ThemeModeContext';
+import { useTheme } from 'styled-components';
+
+const ThemeDebugger: React.FC = () => {
+  const theme = useTheme();
+  useEffect(() => {
+    console.log('[development] theme', theme);
+  }, [theme]);
+  return null;
+};
 
 /**
  * @see {@link https://nextjs.org/docs/advanced-features/custom-app}
@@ -33,6 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeModeContextProvider value={{ mode, setMode }}>
           <ViewportSizeListener onSize={setSize} />
           <Component {...pageProps} />
+          {process.env.NODE_ENV === 'development' && <ThemeDebugger />}
         </ThemeModeContextProvider>
       </Grommet>
     </>

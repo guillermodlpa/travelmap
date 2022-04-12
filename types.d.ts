@@ -26,6 +26,7 @@ type TravelMap = {
     id: string;
     name: string;
     visitedCountries: string[];
+    pathView: string;
   }>;
   pathView: string;
   pathEdit?: string;

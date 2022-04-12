@@ -1,20 +1,16 @@
 import { Box, Heading, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import StaticMap from '../../components/Maps/StaticMap';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import UserMapList from '../../components/MapList/UserMapList';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import fixtures from '../../fixtures';
 import { useMockSession } from '../../util/mockUseSession';
 import { useRouter } from 'next/router';
 import Parchment from '../../components/Parchment';
 import Nav from '../../components/Nav';
-
-const RelativeBox = styled(Box)`
-  position: relative;
-`;
+import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 
 const FullScreenBackground = styled.div`
   position: fixed;
@@ -27,9 +23,6 @@ const FullScreenBackground = styled.div`
 const SuspenseNoSsr = withNoSsr(Suspense);
 
 const UserMaps: React.FC = () => {
-  console.log('theme', useTheme());
-  console.log('fixtures', fixtures);
-
   const { data, status: authStatus } = useMockSession({
     required: true,
   });
@@ -50,7 +43,7 @@ const UserMaps: React.FC = () => {
       <Nav />
 
       {authStatus === 'authenticated' && (
-        <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
+        <PrincipalParchmentContainer>
           <Parchment contentPad="large">
             <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
               <Box flex>
@@ -96,7 +89,7 @@ const UserMaps: React.FC = () => {
               </ErrorBoundary>
             </Box>
           </Parchment>
-        </RelativeBox>
+        </PrincipalParchmentContainer>
       )}
     </>
   );

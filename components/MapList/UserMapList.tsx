@@ -6,7 +6,6 @@ const fetcher = getFetcher<TravelMap>();
 
 const useUserMaps = (userId: string) => {
   const { data, error } = useSWR(`/api/user/${userId}/map`, fetcher, { suspense: true });
-  console.log({ data, error });
   return {
     map: data,
     isLoading: !error && data != null,

@@ -11,6 +11,7 @@ export const getTravelMapFromUser = (user: UserDatabaseEntity): TravelMap => {
         id: user.id,
         name: user.name,
         visitedCountries: user.visitedCountries,
+        pathView: `/map/${user.id}`,
       },
     ],
   };
@@ -30,6 +31,7 @@ export const getTravelMapFromCombinedMap = (combinedMap: CombinedMapDatabaseEnti
         id: user.id,
         name: user.name,
         visitedCountries: user.visitedCountries,
+        pathView: `/map/${user.id}`,
       })),
   };
 };

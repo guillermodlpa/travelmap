@@ -1,7 +1,7 @@
 import { Box, Button, Heading, Paragraph, ResponsiveContext, Text } from 'grommet';
 import { useContext, Suspense } from 'react';
 import NextLink from 'next/link';
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import StaticMap from '../components/Maps/StaticMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/MapList/RecentMapsList';
@@ -9,13 +9,10 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import { mockSignIn, useMockSession } from '../util/mockUseSession';
 import Parchment from '../components/Parchment';
 import Nav from '../components/Nav';
+import PrincipalParchmentContainer from '../components/Parchment/PrincipalParchmentContainer';
 
 const ButtonTextCentered = styled(Button)`
   text-align: center;
-`;
-
-const RelativeBox = styled(Box)`
-  position: relative;
 `;
 
 const FullScreenBackground = styled.div`
@@ -29,7 +26,6 @@ const FullScreenBackground = styled.div`
 const SuspenseNoSsr = withNoSsr(Suspense);
 
 const Welcome: React.FC = () => {
-  console.log(useTheme());
   const size = useContext(ResponsiveContext);
 
   const { status: authStatus } = useMockSession();
@@ -42,7 +38,7 @@ const Welcome: React.FC = () => {
 
       <Nav />
 
-      <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
+      <PrincipalParchmentContainer>
         <Parchment contentPad="large">
           <Heading level={2} margin={{ top: '0' }}>
             Welcome, traveler
@@ -106,7 +102,7 @@ const Welcome: React.FC = () => {
             </ErrorBoundary>
           </Box>
         </Parchment>
-      </RelativeBox>
+      </PrincipalParchmentContainer>
     </>
   );
 };

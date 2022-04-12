@@ -10,7 +10,7 @@ interface LegendTitleProps {
 const defaultAvatar = { id: '_', name: '' };
 
 const LegendTitle: React.FC<LegendTitleProps> = ({ heading, avatars = [defaultAvatar] }) => (
-  <Box direction="row" margin={{ bottom: 'medium' }} align="end" gap="small" wrap>
+  <Box direction="row" align="end" gap="small" wrap>
     <Box direction="row" flex={{ shrink: 0 }}>
       {avatars.map(({ id, name }, index) => (
         <Avatar

@@ -1,4 +1,4 @@
-import { Button, Box, Avatar, Text, ResponsiveContext } from 'grommet';
+import { Button, Box, Avatar, Text, ResponsiveContext, Anchor } from 'grommet';
 import NextLink from 'next/link';
 import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
@@ -61,9 +61,13 @@ const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, user
           <Box key={`action-${travelMap}`} direction="row" gap="small" align="center" justify="end">
             {allowEdit && travelMap.pathEdit && (
               <NextLink href={travelMap.pathEdit} passHref>
-                <Button label="Edit" />
+                <Anchor>Edit</Anchor>
               </NextLink>
             )}
+
+            <NextLink href={travelMap.pathView} passHref>
+              <Anchor>View</Anchor>
+            </NextLink>
 
             {allowDelete && travelMap.pathEdit && (
               <WrappingDialogConfirmation
@@ -78,10 +82,6 @@ const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, user
                 {(handleClick) => <Button label="Delete" color="border" onClick={handleClick} />}
               </WrappingDialogConfirmation>
             )}
-
-            <NextLink href={travelMap.pathView} passHref>
-              <Button label="View" />
-            </NextLink>
           </Box>
         </Box>
       ))}

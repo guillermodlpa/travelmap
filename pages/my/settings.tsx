@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   CheckBox,
@@ -22,10 +21,7 @@ import Parchment from '../../components/Parchment';
 import Nav from '../../components/Nav';
 import { Previous } from 'grommet-icons';
 import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
-
-const RelativeBox = styled(Box)`
-  position: relative;
-`;
+import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 
 const FullScreenBackground = styled.div`
   position: fixed;
@@ -69,7 +65,7 @@ const UserSettings: React.FC = () => {
       <Nav />
 
       {authStatus === 'authenticated' && (
-        <RelativeBox align="center" pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}>
+        <PrincipalParchmentContainer>
           <Parchment contentPad="large">
             <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
               <NextLink passHref href="/my/maps">
@@ -200,7 +196,7 @@ const UserSettings: React.FC = () => {
               </WrappingDialogConfirmation>
             </Box>
           </Parchment>
-        </RelativeBox>
+        </PrincipalParchmentContainer>
       )}
     </>
   );
