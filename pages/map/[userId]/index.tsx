@@ -12,16 +12,18 @@ import { Anchor, Avatar, Box, Button, Text } from 'grommet';
 import NextLink from 'next/link';
 import { GetServerSideProps } from 'next';
 import fixtures from '../../../fixtures';
-import { createRef } from 'react';
+import { createRef, useEffect, useState } from 'react';
 import { getTravelMapFromUser } from '../../../util/getTravelMapFunctions';
 import { useMockSession } from '../../../util/mockUseSession';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
+import { FormClose } from 'grommet-icons';
+import useUserCombinedMaps from '../../../hooks/useUserCombinedMaps';
 
 const ViewMapPage: React.FC<{
   travelMap: TravelMap;
 }> = ({ travelMap }) => {
-  const togetherMapRef = createRef<HTMLDivElement>();
+  const legendRef = createRef<HTMLDivElement>();
 
   const { status, data } = useMockSession();
 
@@ -31,13 +33,44 @@ const ViewMapPage: React.FC<{
     status === 'authenticated' &&
     data?.user.id === travelMap.users[0].id;
 
+  const [togetherMapPromptDimmissed, dismissTogetherMapPrompt] = useState<boolean>(false);
+  const validTogetherMapPromptScenario =
+    travelMap.type === 'user' &&
+    (status === 'authenticated' || status === 'unauthenticated') &&
+    data?.user.id !== travelMap.users[0].id;
+  const { mapList } = useUserCombinedMaps(
+    validTogetherMapPromptScenario ? data!.user.id : null,
+    travelMap.users[0].id
+  );
+  const confirmedUserDoesntHaveTogetherMaps = mapList && mapList.length === 0;
+
   return (
     <>
       <StaticMap height="100vh" id="background-map" />
 
       <Nav />
 
-      <Legend target={togetherMapRef}>
+      {confirmedUserDoesntHaveTogetherMaps && !togetherMapPromptDimmissed && (
+        <Legend target={legendRef}>
+          <LegendBody>
+            <Box direction="row">
+              <Text>{`Do you want to create a map of both you and ${travelMap.users[0].name}'s visited countries?`}</Text>
+              <Button
+                plain
+                icon={<FormClose />}
+                onClick={() => {
+                  dismissTogetherMapPrompt(true);
+                }}
+              />
+            </Box>
+          </LegendBody>
+          <LegendActions>
+            <Button label="Create Travelmap Together" />
+          </LegendActions>
+        </Legend>
+      )}
+
+      <Legend ref={legendRef}>
         <LegendTitle
           heading={getTravelMapName(travelMap)}
           avatars={
@@ -86,31 +119,7 @@ const ViewMapPage: React.FC<{
             </Box>
           ))}
         </LegendBody>
-
-        {/* <LegendActions>
-          {travelMap.type === 'user' &&
-            status === 'authenticated' &&
-            travelMap.pathEdit &&
-            data?.user.id === travelMap.users[0].id && (
-              <NextLink href={travelMap.pathEdit} passHref>
-                <Button label="Edit" />
-              </NextLink>
-            )}
-        </LegendActions> */}
       </Legend>
-
-      {travelMap.type === 'user' &&
-        (status === 'authenticated' || status === 'unauthenticated') &&
-        data?.user.id !== travelMap.users[0].id && (
-          <Legend ref={togetherMapRef}>
-            <LegendBody>
-              <Text>{`Do you want to create a map of both you and ${travelMap.users[0].name}'s visited countries?`}</Text>
-            </LegendBody>
-            <LegendActions>
-              <Button label="Create Travelmap Together" />
-            </LegendActions>
-          </Legend>
-        )}
     </>
   );
 };

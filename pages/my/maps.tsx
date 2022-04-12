@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from 'grommet';
+import { Box, Heading, Paragraph, Text } from 'grommet';
 import { Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import StaticMap from '../../components/Maps/StaticMap';
@@ -87,6 +87,10 @@ const UserMaps: React.FC = () => {
                   <CombinedMapsList userId={data?.user.id!} allowDelete={false} />
                 </SuspenseNoSsr>
               </ErrorBoundary>
+
+              <Paragraph fill size="small">
+                Find Travelmaps of your friends to create maps together
+              </Paragraph>
             </Box>
           </Parchment>
         </PrincipalParchmentContainer>
