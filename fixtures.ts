@@ -9,7 +9,7 @@ const users: LoggedInUser[] = [
   {
     id: '123asdasd',
     name: 'Romane L',
-    visitedCountries: ['MYS'],
+    visitedCountries: ['MYS', 'ESP'],
     email: 'roro@gmail.com',
     created: new Date(),
   },

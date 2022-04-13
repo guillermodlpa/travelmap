@@ -2,7 +2,7 @@ import { Box, Button, Heading, Paragraph, ResponsiveContext, Text } from 'gromme
 import { useContext, Suspense } from 'react';
 import NextLink from 'next/link';
 import styled from 'styled-components';
-import StaticMap from '../components/Maps/StaticMap';
+import HighlightedCountriesMap from '../components/Maps/HighlightedCountriesMap';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/MapList/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -33,7 +33,7 @@ const Welcome: React.FC = () => {
   return (
     <>
       <FullScreenBackground>
-        <StaticMap height="100vh" id="background-map" interactive={false} />
+        <HighlightedCountriesMap height="100vh" id="background-map" interactive={false} />
       </FullScreenBackground>
 
       <Nav />

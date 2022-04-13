@@ -2,7 +2,7 @@
  * View map page
  */
 
-import StaticMap from '../../../components/Maps/StaticMap';
+import HighlightedCountriesMap from '../../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../../components/Legend/Legend';
 import LegendTitle from '../../../components/Legend/LegendTitle';
 import LegendBody from '../../../components/Legend/LegendBody';
@@ -45,10 +45,12 @@ const ViewMapPage: React.FC<{
 
   return (
     <>
-      <StaticMap
+      <HighlightedCountriesMap
         height="100vh"
         id="background-map"
-        highlightedCountries={travelMap.users.map((user) => user.visitedCountries)}
+        highlightedCountries={
+          travelMap.users.map((user) => user.visitedCountries) as [string[], string[]]
+        }
         interactive={true}
       />
 

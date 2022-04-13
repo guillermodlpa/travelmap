@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import useSWR, { Fetcher } from 'swr';
 
 import { Button } from 'grommet';
-import StaticMap from '../../../components/Maps/StaticMap';
+import HighlightedCountriesMap from '../../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../../components/Legend/Legend';
 import LegendTitle from '../../../components/Legend/LegendTitle';
 import LegendBody from '../../../components/Legend/LegendBody';
@@ -50,7 +50,7 @@ const EditMapPage: React.FC = () => {
 
   return (
     <>
-      <StaticMap
+      <HighlightedCountriesMap
         height="100vh"
         id="background-map"
         highlightedCountries={[countries]}

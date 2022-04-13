@@ -3,7 +3,7 @@
  */
 import { createRef, useState } from 'react';
 import { Button, Text } from 'grommet';
-import StaticMap from '../../components/Maps/StaticMap';
+import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
@@ -41,7 +41,7 @@ const NewMapPage: React.FC = () => {
 
   return (
     <>
-      <StaticMap
+      <HighlightedCountriesMap
         height="100vh"
         id="background-map"
         highlightedCountries={[countries]}

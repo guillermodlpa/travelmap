@@ -10,7 +10,7 @@ import {
 } from 'grommet';
 import { Suspense, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import styled from 'styled-components';
-import StaticMap from '../../components/Maps/StaticMap';
+import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../../components/ErrorBoundary';
@@ -59,7 +59,7 @@ const UserSettings: React.FC = () => {
   return (
     <>
       <FullScreenBackground>
-        <StaticMap height="100vh" id="background-map" interactive={false} />
+        <HighlightedCountriesMap height="100vh" id="background-map" interactive={false} />
       </FullScreenBackground>
 
       <Nav />
