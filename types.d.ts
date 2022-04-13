@@ -38,3 +38,7 @@ type ErrorResponse = {
 
 //   /map/:userId - Show Guillermo's map
 //   /mmap/:combinedMapId - Show a combined map
+
+type NextPageWithLayout = NextPage & {
+  getLayout: (page: ReactElement) => ReactNode;
+};

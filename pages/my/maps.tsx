@@ -1,7 +1,6 @@
 import { Box, Heading, Paragraph, Text } from 'grommet';
-import { Suspense, useEffect } from 'react';
+import { ReactElement, Suspense, useEffect } from 'react';
 import styled from 'styled-components';
-import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import UserMapList from '../../components/MapList/UserMapList';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
@@ -9,20 +8,12 @@ import ErrorBoundary from '../../components/ErrorBoundary';
 import { useMockSession } from '../../util/mockUseSession';
 import { useRouter } from 'next/router';
 import Parchment from '../../components/Parchment';
-import Nav from '../../components/Nav';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
-
-const FullScreenBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
+import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
-const UserMaps: React.FC = () => {
+const UserMaps: NextPageWithLayout = () => {
   const { data, status: authStatus } = useMockSession({
     required: true,
   });
@@ -36,12 +27,6 @@ const UserMaps: React.FC = () => {
 
   return (
     <>
-      <FullScreenBackground>
-        <HighlightedCountriesMap height="100vh" id="background-map" interactive={false} />
-      </FullScreenBackground>
-
-      <Nav />
-
       {authStatus === 'authenticated' && (
         <PrincipalParchmentContainer width="xlarge">
           <Parchment contentPad="large">
@@ -97,6 +82,10 @@ const UserMaps: React.FC = () => {
       )}
     </>
   );
+};
+
+UserMaps.getLayout = function getLayout(page: ReactElement) {
+  return <StaticMapBackgroundLayout>{page}</StaticMapBackgroundLayout>;
 };
 
 export default UserMaps;

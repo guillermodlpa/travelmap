@@ -8,9 +8,7 @@ import {
   Text,
   TextInput,
 } from 'grommet';
-import { Suspense, useContext, useEffect, useLayoutEffect, useState } from 'react';
-import styled from 'styled-components';
-import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
+import { ReactElement, Suspense, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../../components/ErrorBoundary';
@@ -18,22 +16,14 @@ import { mockSignOut, useMockSession } from '../../util/mockUseSession';
 import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import Parchment from '../../components/Parchment';
-import Nav from '../../components/Nav';
 import { Previous } from 'grommet-icons';
 import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
-
-const FullScreenBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
+import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
-const UserSettings: React.FC = () => {
+const UserSettings: NextPageWithLayout = () => {
   const { data, status: authStatus } = useMockSession({
     required: true,
   });
@@ -58,12 +48,6 @@ const UserSettings: React.FC = () => {
 
   return (
     <>
-      <FullScreenBackground>
-        <HighlightedCountriesMap height="100vh" id="background-map" interactive={false} />
-      </FullScreenBackground>
-
-      <Nav />
-
       {authStatus === 'authenticated' && (
         <PrincipalParchmentContainer>
           <Parchment contentPad="large">
@@ -200,6 +184,10 @@ const UserSettings: React.FC = () => {
       )}
     </>
   );
+};
+
+UserSettings.getLayout = function getLayout(page: ReactElement) {
+  return <StaticMapBackgroundLayout>{page}</StaticMapBackgroundLayout>;
 };
 
 export default UserSettings;

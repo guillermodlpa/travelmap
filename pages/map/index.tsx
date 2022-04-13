@@ -12,8 +12,9 @@ import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
 import { mockSignIn } from '../../util/mockUseSession';
 import Nav from '../../components/Nav';
+import { NextPage } from 'next';
 
-const NewMapPage: React.FC = () => {
+const NewMapPage: NextPage = () => {
   const [countries, setCountries] = useState<string[]>([]);
   const toggleCountry = (country: string) =>
     setCountries((countries) =>
@@ -46,6 +47,8 @@ const NewMapPage: React.FC = () => {
         id="background-map"
         highlightedCountries={[countries]}
         interactive
+        applyMapMotion
+        animateCamera
       />
 
       <Nav />

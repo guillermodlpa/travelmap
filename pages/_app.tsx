@@ -1,11 +1,12 @@
 import type { AppProps } from 'next/app';
 import { Grommet } from 'grommet';
-import { useEffect, useState } from 'react';
+import { ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
 import { ThemeModeContextProvider } from '../components/ThemeModeContext';
 import { useTheme } from 'styled-components';
+import { NextPage } from 'next';
 
 const ThemeDebugger: React.FC = () => {
   const theme = useTheme();
@@ -15,12 +16,25 @@ const ThemeDebugger: React.FC = () => {
   return null;
 };
 
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
 /**
  * @see {@link https://nextjs.org/docs/advanced-features/custom-app}
  */
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [mode, setMode] = useState<'light' | 'dark'>('light');
   const [, setSize] = useState<ResponsiveViewportSize>();
+
+  const themeContextValue = useMemo(() => ({ mode, setMode }), [mode, setMode]);
+
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <>
@@ -39,9 +53,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         }
       `}</style>
       <Grommet theme={theme} full themeMode={mode}>
-        <ThemeModeContextProvider value={{ mode, setMode }}>
+        <ThemeModeContextProvider value={themeContextValue}>
           <ViewportSizeListener onSize={setSize} />
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
           {process.env.NODE_ENV === 'development' && <ThemeDebugger />}
         </ThemeModeContextProvider>
       </Grommet>

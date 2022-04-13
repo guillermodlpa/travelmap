@@ -15,10 +15,11 @@ import CountrySearch from '../../../components/CountrySearch';
 import LegendActions from '../../../components/Legend/LegendActions';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
+import { NextPage } from 'next';
 
 const fetcher: Fetcher<TravelMap, string> = (url) => fetch(url).then((r) => r.json());
 
-const EditMapPage: React.FC = () => {
+const EditMapPage: NextPage = () => {
   const router = useRouter();
   const { userId } = router.query;
 
@@ -55,6 +56,8 @@ const EditMapPage: React.FC = () => {
         id="background-map"
         highlightedCountries={[countries]}
         interactive
+        applyMapMotion={false}
+        animateCamera={false}
       />
 
       <Nav />

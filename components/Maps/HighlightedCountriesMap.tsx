@@ -7,21 +7,11 @@ import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 import styled, { useTheme } from 'styled-components';
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
+import mapStyles from './mapStyles';
 
-const MAP_STYLES = {
-  dark: {
-    backgroundColor: '#1c1b1e',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl195e9ja002f14o09biv9ntq?optimize=true',
-  },
-  light: {
-    backgroundColor: '#cfb19b',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl1953d18005r14o33cb7z60t?optimize=true',
-  },
-};
-
-const MapboxContainer = styled(Box)`
+const MapboxContainer = styled(Box)<{ $animate: boolean }>`
   & .mapboxgl-canvas {
-    animation-name: map-canvas-movement;
+    animation-name: ${({ $animate }) => ($animate ? 'map-canvas-movement' : 'none')};
     animation-duration: 30s;
     animation-iteration-count: infinite;
   }
@@ -85,7 +75,7 @@ function arrayIntersect<T>(array1: T[], array2: T[]): T[] {
 
 type Bounds = [number, number, number, number];
 
-const zoomMapToCountries = (map: mapboxgl.Map, countries: string[]) => {
+const zoomMapToCountries = (map: mapboxgl.Map, countries: string[], animate: boolean) => {
   if (countries.length === 0) {
     return;
   }
@@ -103,7 +93,7 @@ const zoomMapToCountries = (map: mapboxgl.Map, countries: string[]) => {
 
   map.fitBounds(overarchingBounds, {
     padding: { top: 50, bottom: 250, left: 50, right: 50 },
-    duration: 5000,
+    duration: animate ? 5000 : 0,
   });
 };
 
@@ -111,10 +101,19 @@ const HighlightedCountriesMap: React.FC<{
   height?: HeightType;
   id: string;
   interactive: boolean;
+  applyMapMotion: boolean;
+  animateCamera: boolean;
   highlightedCountries?: [string[]] | [string[], string[]];
-}> = ({ height = '100%', id, interactive, highlightedCountries = [[], []] }) => {
+}> = ({
+  height = '100%',
+  id,
+  interactive,
+  applyMapMotion = false,
+  animateCamera = true,
+  highlightedCountries = [[], []],
+}) => {
   const { mode } = useThemeMode();
-  const { backgroundColor, mapboxStyle } = MAP_STYLES[mode];
+  const { backgroundColor, mapboxStyle } = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
 
   const theme = useTheme();
@@ -137,6 +136,8 @@ const HighlightedCountriesMap: React.FC<{
         interactive,
       });
 
+      zoomMapToCountries(map, highlightedCountries.flat(), false);
+
       map.on('load', (event) => {
         const thisMap = event.target;
         // include the information of country boundaries
@@ -154,7 +155,6 @@ const HighlightedCountriesMap: React.FC<{
         addLayerToMap(thisMap, LAYER_USER_OVERLAP, colorOverlap);
 
         updateMapHighlightedCountries(thisMap, highlightedCountries);
-        zoomMapToCountries(thisMap, highlightedCountries.flat());
       });
 
       mapRef.current = map;
@@ -174,11 +174,18 @@ const HighlightedCountriesMap: React.FC<{
   useEffect(() => {
     if (mapRef.current?.loaded()) {
       updateMapHighlightedCountries(mapRef.current, highlightedCountries);
-      zoomMapToCountries(mapRef.current, highlightedCountries.flat());
+      zoomMapToCountries(mapRef.current, highlightedCountries.flat(), animateCamera);
     }
   }, [highlightedCountries]);
 
-  return <MapboxContainer id={id} height={height} background={backgroundColor} />;
+  return (
+    <MapboxContainer
+      id={id}
+      height={height}
+      background={backgroundColor}
+      $animate={applyMapMotion}
+    />
+  );
 };
 
 export default withNoSsr(HighlightedCountriesMap);

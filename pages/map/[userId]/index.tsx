@@ -7,19 +7,18 @@ import Legend from '../../../components/Legend/Legend';
 import LegendTitle from '../../../components/Legend/LegendTitle';
 import LegendBody from '../../../components/Legend/LegendBody';
 import LegendCountryList from '../../../components/Legend/LegendCountryList';
-import LegendActions from '../../../components/Legend/LegendActions';
-import { Anchor, Avatar, Box, Button, Text } from 'grommet';
+import { Anchor, Avatar, Box, Text } from 'grommet';
 import NextLink from 'next/link';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import fixtures from '../../../fixtures';
-import { createRef, useEffect, useState } from 'react';
+import { createRef } from 'react';
 import { getTravelMapFromUser } from '../../../util/getTravelMapFunctions';
 import { useMockSession } from '../../../util/mockUseSession';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
 import useUserCombinedMaps from '../../../hooks/useUserCombinedMaps';
 
-const ViewMapPage: React.FC<{
+const ViewMapPage: NextPage<{
   travelMap: TravelMap;
 }> = ({ travelMap }) => {
   const legendRef = createRef<HTMLDivElement>();
@@ -52,6 +51,8 @@ const ViewMapPage: React.FC<{
           travelMap.users.map((user) => user.visitedCountries) as [string[], string[]]
         }
         interactive={true}
+        applyMapMotion
+        animateCamera
       />
 
       <Nav />
