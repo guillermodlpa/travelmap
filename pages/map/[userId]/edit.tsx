@@ -72,12 +72,7 @@ const EditMapPage: React.FC = () => {
           />
 
           <LegendActions>
-            <Button
-              primary
-              label="Save"
-              disabled={loading || countries.length === 0}
-              onClick={onSave}
-            />
+            <Button label="Save" disabled={loading || countries.length === 0} onClick={onSave} />
           </LegendActions>
         </LegendBody>
       </Legend>

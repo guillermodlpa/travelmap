@@ -1,16 +1,23 @@
 import { Box, Button, ButtonExtendedProps, Nav as GrommetNav } from 'grommet';
-import { Home, Logout, MapLocation, SettingsOption } from 'grommet-icons';
+import { Globe, Logout, MapLocation, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
 import { mockSignOut, useMockSession } from '../../util/mockUseSession';
 import Parchment from '../Parchment';
-import ThemeModeToggle from '../ThemeMode/ThemeModeToggle';
+import useColorThemeToggle from './useColorThemeToggle';
 
-const FloatingBox = styled(GrommetNav)`
+const NavFloatingBox = styled(GrommetNav)`
   position: absolute;
   top: 0;
   right: 0;
+  z-index: 1;
+`;
+
+const HomeLogoFloatingBox = styled(Box)`
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 1;
 `;
 
@@ -21,6 +28,11 @@ const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11
 );
 NavButton.displayName = 'NavButton';
 
+const ThemeModeToggleNavButton = () => {
+  const { icon, tip, onClick } = useColorThemeToggle();
+  return <NavButton a11yTitle={tip} icon={icon} tip={tip} onClick={onClick} />;
+};
+
 const Nav: React.FC = () => {
   const { status } = useMockSession();
 
@@ -29,46 +41,54 @@ const Nav: React.FC = () => {
   }
 
   return (
-    <FloatingBox animation="fadeIn">
-      <Parchment contentPad={{ horizontal: 'medium', vertical: 'small' }} insetShadowSize="xsmall">
-        <Box direction="row" gap="xsmall">
-          {status === 'authenticated' && (
-            <NextLink passHref href="/my/maps">
-              <NavButton a11yTitle="My Maps" icon={<MapLocation color="text" />} tip="My Maps" />
-            </NextLink>
-          )}
-
-          {status === 'unauthenticated' && (
-            <NextLink passHref href="/">
-              <NavButton a11yTitle="Home" icon={<Home color="text" />} tip="Home" />
-            </NextLink>
-          )}
-
-          <ThemeModeToggle />
-
-          {status === 'authenticated' && (
-            <NextLink passHref href="/my/settings">
-              <NavButton
-                a11yTitle="Settings"
-                icon={<SettingsOption color="text" />}
-                tip="Settings"
-              />
-            </NextLink>
-          )}
-
-          {status === 'authenticated' && (
+    <>
+      <HomeLogoFloatingBox>
+        <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
+          <NextLink passHref href="/">
             <NavButton
-              a11yTitle="Log Out"
-              tip="Log Out"
-              icon={<Logout color="text" />}
-              onClick={() => {
-                mockSignOut({ callbackUrl: '/' });
-              }}
+              a11yTitle="TravelMap Landing Page"
+              icon={<Globe color="text" />}
+              tip="TravelMap Landing Page"
             />
-          )}
-        </Box>
-      </Parchment>
-    </FloatingBox>
+          </NextLink>
+        </Parchment>
+      </HomeLogoFloatingBox>
+
+      <NavFloatingBox animation="fadeIn">
+        <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
+          <Box direction="row" gap="xsmall">
+            {status === 'authenticated' && (
+              <NextLink passHref href="/my/maps">
+                <NavButton a11yTitle="My Maps" icon={<MapLocation color="text" />} tip="My Maps" />
+              </NextLink>
+            )}
+
+            <ThemeModeToggleNavButton />
+
+            {status === 'authenticated' && (
+              <NextLink passHref href="/my/settings">
+                <NavButton
+                  a11yTitle="Settings"
+                  icon={<SettingsOption color="text" />}
+                  tip="Settings"
+                />
+              </NextLink>
+            )}
+
+            {status === 'authenticated' && (
+              <NavButton
+                a11yTitle="Log Out"
+                tip="Log Out"
+                icon={<Logout color="text" />}
+                onClick={() => {
+                  mockSignOut({ callbackUrl: '/' });
+                }}
+              />
+            )}
+          </Box>
+        </Parchment>
+      </NavFloatingBox>
+    </>
   );
 };
 

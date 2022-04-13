@@ -23,14 +23,12 @@ const getRecentTravelMaps = async (
 
   // @todo: return recent maps
 
-  const response = [
-    getTravelMapFromUser(fixtures.users[0]),
-    getTravelMapFromUser(fixtures.users[1]),
-    getTravelMapFromCombinedMap(fixtures.combinedMaps[0]),
-    getTravelMapFromCombinedMap(fixtures.combinedMaps[1]),
-    getTravelMapFromCombinedMap(fixtures.combinedMaps[2]),
+  const allMaps = [
+    ...fixtures.users.map((user) => getTravelMapFromUser(user)),
+    ...fixtures.combinedMaps.map((combinedMap) => getTravelMapFromCombinedMap(combinedMap)),
   ];
-
+  const response = allMaps.slice(0, 5);
+  response.sort(() => 0.5 - Math.random()); // shuffle
   res.status(200).json(response);
 };
 

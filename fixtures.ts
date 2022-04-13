@@ -37,7 +37,7 @@ const combinedMaps = [
   },
   {
     id: 'u192312bnaa_1',
-    userIds: [users[0].id, users[2].id, users[3].id],
+    userIds: [users[0].id, users[2].id],
     created: new Date(),
   },
   {

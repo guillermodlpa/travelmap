@@ -4,7 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
 import withNoSsr from '../NoSsr/withNoSsr';
 import { HeightType } from 'grommet/utils';
-import { useThemeMode } from '../ThemeMode/ThemeModeContext';
+import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 
 const MAP_STYLES = {
   dark: {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
-import { ThemeModeContextProvider } from '../components/ThemeMode/ThemeModeContext';
+import { ThemeModeContextProvider } from '../components/ThemeModeContext';
 import { useTheme } from 'styled-components';
 
 const ThemeDebugger: React.FC = () => {

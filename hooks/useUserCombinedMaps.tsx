@@ -13,7 +13,7 @@ const getUrl = (userId: string | null, otherUserId?: string | undefined): string
 };
 
 const useUserCombinedMaps = (userId: string | null, otherUserId?: string | undefined) => {
-  const { data, error } = useSWR(getUrl(userId, otherUserId), fetcher, { suspense: true });
+  const { data, error } = useSWR(getUrl(userId, otherUserId), fetcher);
   return {
     mapList: !error ? data : undefined,
     loading: !error && data == null,

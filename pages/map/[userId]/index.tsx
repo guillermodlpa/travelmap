@@ -17,7 +17,6 @@ import { getTravelMapFromUser } from '../../../util/getTravelMapFunctions';
 import { useMockSession } from '../../../util/mockUseSession';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
-import { FormClose } from 'grommet-icons';
 import useUserCombinedMaps from '../../../hooks/useUserCombinedMaps';
 
 const ViewMapPage: React.FC<{
@@ -33,42 +32,22 @@ const ViewMapPage: React.FC<{
     status === 'authenticated' &&
     data?.user.id === travelMap.users[0].id;
 
-  const [togetherMapPromptDimmissed, dismissTogetherMapPrompt] = useState<boolean>(false);
-  const validTogetherMapPromptScenario =
+  const shouldFetchCombinedMaps =
     travelMap.type === 'user' &&
-    (status === 'authenticated' || status === 'unauthenticated') &&
+    status === 'authenticated' &&
     data?.user.id !== travelMap.users[0].id;
-  const { mapList } = useUserCombinedMaps(
-    validTogetherMapPromptScenario ? data!.user.id : null,
+  const { mapList: togetherMapList } = useUserCombinedMaps(
+    shouldFetchCombinedMaps ? data!.user.id : null,
     travelMap.users[0].id
   );
-  const confirmedUserDoesntHaveTogetherMaps = mapList && mapList.length === 0;
+  const confirmedUserDoesntHaveTogetherMaps = togetherMapList && togetherMapList.length === 0;
+  const confirmedUserHasTogeherMaps = togetherMapList && togetherMapList.length > 0;
 
   return (
     <>
       <StaticMap height="100vh" id="background-map" />
 
       <Nav />
-
-      {confirmedUserDoesntHaveTogetherMaps && !togetherMapPromptDimmissed && (
-        <Legend target={legendRef}>
-          <LegendBody>
-            <Box direction="row">
-              <Text>{`Do you want to create a map of both you and ${travelMap.users[0].name}'s visited countries?`}</Text>
-              <Button
-                plain
-                icon={<FormClose />}
-                onClick={() => {
-                  dismissTogetherMapPrompt(true);
-                }}
-              />
-            </Box>
-          </LegendBody>
-          <LegendActions>
-            <Button label="Create Travelmap Together" />
-          </LegendActions>
-        </Legend>
-      )}
 
       <Legend ref={legendRef}>
         <LegendTitle
@@ -98,14 +77,7 @@ const ViewMapPage: React.FC<{
               <LegendCountryList
                 prefix={travelMap.users.length > 1 ? `${user.name}: ` : undefined}
                 sufix={
-                  userCanEditThisMap ? (
-                    <>
-                      {'. '}
-                      <NextLink href={travelMap.pathEdit!} passHref>
-                        <Anchor>Edit</Anchor>
-                      </NextLink>
-                    </>
-                  ) : travelMap.users.length > 1 ? (
+                  travelMap.users.length > 1 ? (
                     <>
                       {'. '}
                       <NextLink href={user.pathView} passHref>
@@ -118,6 +90,24 @@ const ViewMapPage: React.FC<{
               />
             </Box>
           ))}
+
+          <Text textAlign="end">
+            {status === 'unauthenticated' ? (
+              <Anchor>Log In</Anchor>
+            ) : userCanEditThisMap ? (
+              <NextLink href={travelMap.pathEdit!} passHref>
+                <Anchor>Edit</Anchor>
+              </NextLink>
+            ) : confirmedUserDoesntHaveTogetherMaps ? (
+              <NextLink href={travelMap.pathEdit!} passHref>
+                <Anchor>Create Together Map</Anchor>
+              </NextLink>
+            ) : confirmedUserHasTogeherMaps ? (
+              <NextLink href={travelMap.pathEdit!} passHref>
+                <Anchor>View Together Map</Anchor>
+              </NextLink>
+            ) : undefined}
+          </Text>
         </LegendBody>
       </Legend>
     </>
