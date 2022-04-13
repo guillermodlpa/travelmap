@@ -28,7 +28,7 @@ const SuspenseNoSsr = withNoSsr(Suspense);
 const Welcome: React.FC = () => {
   const size = useContext(ResponsiveContext);
 
-  const { status: authStatus } = useMockSession();
+  const { status: authStatus, data } = useMockSession();
 
   return (
     <>
@@ -41,7 +41,7 @@ const Welcome: React.FC = () => {
       <PrincipalParchmentContainer>
         <Parchment contentPad="large">
           <Heading level={2} margin={{ top: '0' }}>
-            Welcome, traveler
+            {`Welcome, ${data?.user.name ?? 'traveler'}`}
           </Heading>
 
           <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
@@ -59,7 +59,7 @@ const Welcome: React.FC = () => {
             {authStatus === 'authenticated' ? (
               <Box fill>
                 <NextLink href="/my/maps" passHref>
-                  <ButtonTextCentered primary size="large" fill label="View Your Maps" />
+                  <ButtonTextCentered primary size="large" fill label="View My Maps" />
                 </NextLink>
               </Box>
             ) : (

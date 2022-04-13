@@ -43,7 +43,7 @@ const UserMaps: React.FC = () => {
       <Nav />
 
       {authStatus === 'authenticated' && (
-        <PrincipalParchmentContainer>
+        <PrincipalParchmentContainer width="xlarge">
           <Parchment contentPad="large">
             <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
               <Box flex>
