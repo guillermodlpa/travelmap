@@ -45,7 +45,12 @@ const ViewMapPage: React.FC<{
 
   return (
     <>
-      <StaticMap height="100vh" id="background-map" />
+      <StaticMap
+        height="100vh"
+        id="background-map"
+        highlightedCountries={travelMap.users.map((user) => user.visitedCountries)}
+        interactive={true}
+      />
 
       <Nav />
 

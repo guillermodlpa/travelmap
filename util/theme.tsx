@@ -140,5 +140,10 @@ const theme = deepMerge(grommet, {
   },
 });
 
-export type CustomTheme = typeof theme;
+type ThemeType = typeof theme;
+
+declare module 'styled-components' {
+  export interface DefaultTheme extends ThemeType {}
+}
+
 export default theme;

@@ -2,7 +2,7 @@ const users: LoggedInUser[] = [
   {
     id: 'bausdhasd',
     name: 'Guillermo',
-    visitedCountries: ['ESP', 'BLZ', 'MAR', 'MYS'],
+    visitedCountries: ['ESP', 'BLZ', 'MAR'],
     email: 'g.puente.allott@gmail.com',
     created: new Date(),
   },

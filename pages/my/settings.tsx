@@ -59,7 +59,7 @@ const UserSettings: React.FC = () => {
   return (
     <>
       <FullScreenBackground>
-        <StaticMap height="100vh" id="background-map" />
+        <StaticMap height="100vh" id="background-map" interactive={false} />
       </FullScreenBackground>
 
       <Nav />

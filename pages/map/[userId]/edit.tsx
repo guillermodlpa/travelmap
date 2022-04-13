@@ -50,7 +50,12 @@ const EditMapPage: React.FC = () => {
 
   return (
     <>
-      <StaticMap height="100vh" id="background-map" />
+      <StaticMap
+        height="100vh"
+        id="background-map"
+        highlightedCountries={[countries]}
+        interactive
+      />
 
       <Nav />
 
