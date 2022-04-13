@@ -5,19 +5,38 @@ import { Box } from 'grommet';
 import withNoSsr from '../NoSsr/withNoSsr';
 import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 
 const MAP_STYLES = {
   dark: {
-    backgroundColor: '#78543a',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl195e9ja002f14o09biv9ntq',
+    backgroundColor: '#1c1b1e',
+    mapboxStyle: 'mapbox://styles/gpuenteallott/cl195e9ja002f14o09biv9ntq?optimize=true',
   },
   light: {
     backgroundColor: '#cfb19b',
-    mapboxStyle: 'mapbox://styles/gpuenteallott/cl1953d18005r14o33cb7z60t',
+    mapboxStyle: 'mapbox://styles/gpuenteallott/cl1953d18005r14o33cb7z60t?optimize=true',
   },
 };
+
+const MapboxContainer = styled(Box)`
+  & .mapboxgl-canvas {
+    animation-name: map-canvas-movement;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+  }
+  @keyframes map-canvas-movement {
+    0% {
+      transform: scale(100%);
+    }
+    50% {
+      transform: scale(104%);
+    }
+    100% {
+      transform: scale(100%);
+    }
+  }
+`;
 
 // There has to be a layer in the map named like this above the map style layers
 const MAPBOX_STUDIO_LAYER_ANCHOR = 'country lines';
@@ -159,7 +178,7 @@ const HighlightedCountriesMap: React.FC<{
     }
   }, [highlightedCountries]);
 
-  return <Box id={id} height={height} background={backgroundColor} />;
+  return <MapboxContainer id={id} height={height} background={backgroundColor} />;
 };
 
 export default withNoSsr(HighlightedCountriesMap);
