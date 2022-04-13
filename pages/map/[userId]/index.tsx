@@ -99,11 +99,11 @@ const ViewMapPage: React.FC<{
                 <Anchor>Edit</Anchor>
               </NextLink>
             ) : confirmedUserDoesntHaveTogetherMaps ? (
-              <NextLink href={travelMap.pathEdit!} passHref>
+              <NextLink href={'#todo'} passHref>
                 <Anchor>Create Together Map</Anchor>
               </NextLink>
             ) : confirmedUserHasTogeherMaps ? (
-              <NextLink href={travelMap.pathEdit!} passHref>
+              <NextLink href={togetherMapList[0].pathView} passHref>
                 <Anchor>View Together Map</Anchor>
               </NextLink>
             ) : undefined}
