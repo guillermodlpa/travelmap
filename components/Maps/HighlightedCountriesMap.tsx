@@ -6,6 +6,7 @@ import withNoSsr from '../NoSsr/withNoSsr';
 import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 import { useTheme } from 'styled-components';
+import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 
 const MAP_STYLES = {
   dark: {
@@ -43,7 +44,7 @@ const LAYER_USER_OVERLAP = 'highlighted-countries-overlap';
 
 const updateMapHighlightedCountries = (
   map: mapboxgl.Map,
-  highlightedCountries: [string[], string[]?]
+  highlightedCountries: [string[]] | [string[], string[]]
 ) => {
   const countriesUser1 = arrayExclude(highlightedCountries[0] || [], highlightedCountries[1] || []);
   const countriesUser2 = arrayExclude(highlightedCountries[1] || [], highlightedCountries[0] || []);
@@ -63,11 +64,35 @@ function arrayIntersect<T>(array1: T[], array2: T[]): T[] {
   return (array1 || []).filter((value) => (array2 || []).includes(value));
 }
 
+type Bounds = [number, number, number, number];
+
+const zoomMapToCountries = (map: mapboxgl.Map, countries: string[]) => {
+  if (countries.length === 0) {
+    return;
+  }
+  const filteredBoundaries = simplifiedWorldAdministrativeBoundaries
+    .filter(({ iso3 }) => iso3 && countries.includes(iso3))
+    .filter(({ bounds }) => bounds != undefined);
+  const bounds = filteredBoundaries.map(({ bounds }) => bounds) as Bounds[];
+
+  const overarchingBounds: Bounds = [
+    Math.min(...bounds.map((bound) => bound[0])),
+    Math.min(...bounds.map((bound) => bound[1])),
+    Math.max(...bounds.map((bound) => bound[2])),
+    Math.max(...bounds.map((bound) => bound[3])),
+  ];
+
+  map.fitBounds(overarchingBounds, {
+    padding: { top: 50, bottom: 250, left: 50, right: 50 },
+    duration: 5000,
+  });
+};
+
 const HighlightedCountriesMap: React.FC<{
   height?: HeightType;
   id: string;
   interactive: boolean;
-  highlightedCountries?: [string[], string[]?];
+  highlightedCountries?: [string[]] | [string[], string[]];
 }> = ({ height = '100%', id, interactive, highlightedCountries = [[], []] }) => {
   const { mode } = useThemeMode();
   const { backgroundColor, mapboxStyle } = MAP_STYLES[mode];
@@ -110,6 +135,7 @@ const HighlightedCountriesMap: React.FC<{
         addLayerToMap(thisMap, LAYER_USER_OVERLAP, colorOverlap);
 
         updateMapHighlightedCountries(thisMap, highlightedCountries);
+        zoomMapToCountries(thisMap, highlightedCountries.flat());
       });
 
       mapRef.current = map;
@@ -129,6 +155,7 @@ const HighlightedCountriesMap: React.FC<{
   useEffect(() => {
     if (mapRef.current?.loaded()) {
       updateMapHighlightedCountries(mapRef.current, highlightedCountries);
+      zoomMapToCountries(mapRef.current, highlightedCountries.flat());
     }
   }, [highlightedCountries]);
 
