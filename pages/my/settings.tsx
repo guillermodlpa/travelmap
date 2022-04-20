@@ -20,6 +20,7 @@ import { Previous } from 'grommet-icons';
 import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
+import HeadWithDefaults from '../../components/HeadWithDefaults';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
@@ -48,6 +49,8 @@ const UserSettings: NextPageWithLayout = () => {
 
   return (
     <>
+      <HeadWithDefaults title="Travelmap - Settings" />
+
       {authStatus === 'authenticated' && (
         <PrincipalParchmentContainer>
           <Parchment contentPad="large">

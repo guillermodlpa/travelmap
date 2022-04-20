@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
+import HeadWithDefaults from '../../components/HeadWithDefaults';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
@@ -27,6 +28,8 @@ const UserMaps: NextPageWithLayout = () => {
 
   return (
     <>
+      <HeadWithDefaults title="Travelmap - My Maps" />
+
       {authStatus === 'authenticated' && (
         <PrincipalParchmentContainer width="xlarge">
           <Parchment contentPad="large">
