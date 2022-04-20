@@ -17,6 +17,7 @@ import { useMockSession } from '../../../util/mockUseSession';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
 import useUserCombinedMaps from '../../../hooks/useUserCombinedMaps';
+import HeadWithDefaults from '../../../components/HeadWithDefaults';
 
 const ViewMapPage: NextPage<{
   travelMap: TravelMap;
@@ -44,6 +45,8 @@ const ViewMapPage: NextPage<{
 
   return (
     <>
+      <HeadWithDefaults title={`${getTravelMapName(travelMap)}`} />
+
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"

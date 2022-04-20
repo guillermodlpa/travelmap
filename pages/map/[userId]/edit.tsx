@@ -16,6 +16,7 @@ import LegendActions from '../../../components/Legend/LegendActions';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
 import { NextPage } from 'next';
+import HeadWithDefaults from '../../../components/HeadWithDefaults';
 
 const fetcher: Fetcher<TravelMap, string> = (url) => fetch(url).then((r) => r.json());
 
@@ -51,6 +52,8 @@ const EditMapPage: NextPage = () => {
 
   return (
     <>
+      <HeadWithDefaults title="Travelmap - Edit Map" />
+
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"

@@ -13,6 +13,7 @@ import LegendActions from '../../components/Legend/LegendActions';
 import { mockSignIn } from '../../util/mockUseSession';
 import Nav from '../../components/Nav';
 import { NextPage } from 'next';
+import HeadWithDefaults from '../../components/HeadWithDefaults';
 
 const NewMapPage: NextPage = () => {
   const [countries, setCountries] = useState<string[]>([]);
@@ -42,6 +43,8 @@ const NewMapPage: NextPage = () => {
 
   return (
     <>
+      <HeadWithDefaults title="Travelmap - New Map" />
+
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"
