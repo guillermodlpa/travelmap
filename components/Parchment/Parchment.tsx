@@ -42,7 +42,7 @@ const ParchmentBackground = styled(Box)<{
 `;
 
 const Parchment: React.FC<{
-  contentPad: PadType;
+  contentPad?: PadType;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }> = ({ children, contentPad, insetShadowSize = 'large' }) => {
   const content = createRef<HTMLDivElement>();

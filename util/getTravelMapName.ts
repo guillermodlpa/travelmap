@@ -1,10 +1,21 @@
 const NBSP_CHAR = '\u00A0';
 
-const getTravelMapName = (travelMap: TravelMap): string =>
-  travelMap.users.length === 1
-    ? `${travelMap.users[0].name}'s Travelmap`
-    : `Travelmap of ${travelMap.users
-        .map(({ name }) => name.replace(/\s/g, NBSP_CHAR))
-        .join(', ')}`;
+const getTravelMapName = (
+  travelMap: ClientIndividualTravelMap | ClientCombinedTravelMap
+): string => {
+  if (travelMap.type === 'individual') {
+    return `${travelMap.userDisplayName}'s Travelmap`;
+  }
+
+  const nameString = travelMap.individualTravelMaps
+    .map((individualTravelMap) => individualTravelMap.userDisplayName.replace(/\s/g, NBSP_CHAR))
+    .reduce(
+      (memo, name, index, { length }) =>
+        `${memo}${index === 0 ? '' : index < length - 1 ? ', ' : ' and '}${name}`,
+      ''
+    );
+
+  return `Travelmap of ${nameString}`;
+};
 
 export default getTravelMapName;

@@ -3,16 +3,20 @@ import { Box, Button, Heading, Layer, Text } from 'grommet';
 export type ConfirmationDialogProps = {
   open: boolean;
   onCancel: (event: React.SyntheticEvent) => void;
-  onConfirm: (event: React.SyntheticEvent) => void;
+  onRequestClose: (event?: React.SyntheticEvent) => void;
+  onConfirm: (event: React.SyntheticEvent, requestClose: () => void) => void;
   confirmButtonLabel: string;
+  confirmButtonDisabled?: boolean;
   confirmMessage: string;
 };
 
 const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   open,
   onCancel,
+  onRequestClose,
   onConfirm,
   confirmButtonLabel,
+  confirmButtonDisabled = false,
   confirmMessage,
 }) => {
   if (!open) {
@@ -22,8 +26,8 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     <Layer
       background="popup"
       position="center"
-      onClickOutside={onCancel}
-      onEsc={onCancel}
+      onClickOutside={onRequestClose}
+      onEsc={onRequestClose}
       responsive={false}
       margin="large"
     >
@@ -41,7 +45,13 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           pad={{ top: 'medium', bottom: 'small' }}
         >
           <Button label="Cancel" onClick={onCancel} />
-          <Button label={confirmButtonLabel} onClick={onConfirm} primary color="status-critical" />
+          <Button
+            label={confirmButtonLabel}
+            onClick={(event) => onConfirm(event, onRequestClose)}
+            disabled={confirmButtonDisabled}
+            primary
+            color="status-critical"
+          />
         </Box>
       </Box>
     </Layer>

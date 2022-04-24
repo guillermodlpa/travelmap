@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import getFetcher from '../../util/fetcher';
 import MapList from './MapList';
 
-const fetcher = getFetcher<TravelMap[]>();
+const fetcher = getFetcher<Array<ClientIndividualTravelMap | ClientCombinedTravelMap>>();
 
 const useRecentMapList = () => {
   const { data, error } = useSWR('/api/recent-maps', fetcher, { suspense: true });
@@ -15,7 +15,7 @@ const useRecentMapList = () => {
 
 const RecentMapsList: React.FC = () => {
   const { mapList } = useRecentMapList();
-  return <MapList mapList={mapList} allowEdit={false} allowDelete={false} />;
+  return <MapList mapList={mapList} allowEdit={false} />;
 };
 
 export default RecentMapsList;

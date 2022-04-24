@@ -1,9 +1,10 @@
+import { useUser } from '@auth0/nextjs-auth0';
 import { Box, Button, ButtonExtendedProps, Nav as GrommetNav } from 'grommet';
 import { Globe, Logout, MapLocation, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
-import { mockSignOut, useMockSession } from '../../util/mockUseSession';
+import { PATH_LOG_OUT } from '../../util/paths';
 import Parchment from '../Parchment';
 import useColorThemeToggle from './useColorThemeToggle';
 
@@ -11,14 +12,14 @@ const NavFloatingBox = styled(GrommetNav)`
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const HomeLogoFloatingBox = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11yTitle: string }>(
@@ -34,9 +35,8 @@ const ThemeModeToggleNavButton = () => {
 };
 
 const Nav: React.FC = () => {
-  const { status } = useMockSession();
-
-  if (status === 'loading') {
+  const { user, isLoading, error } = useUser();
+  if (isLoading) {
     return <></>;
   }
 
@@ -57,7 +57,7 @@ const Nav: React.FC = () => {
       <NavFloatingBox animation="fadeIn">
         <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
           <Box direction="row" gap="xsmall">
-            {status === 'authenticated' && (
+            {Boolean(user) && (
               <NextLink passHref href="/my/maps">
                 <NavButton a11yTitle="My Maps" icon={<MapLocation color="text" />} tip="My Maps" />
               </NextLink>
@@ -65,7 +65,7 @@ const Nav: React.FC = () => {
 
             <ThemeModeToggleNavButton />
 
-            {status === 'authenticated' && (
+            {Boolean(user) && (
               <NextLink passHref href="/my/settings">
                 <NavButton
                   a11yTitle="Settings"
@@ -75,14 +75,12 @@ const Nav: React.FC = () => {
               </NextLink>
             )}
 
-            {status === 'authenticated' && (
+            {Boolean(user) && (
               <NavButton
                 a11yTitle="Log Out"
                 tip="Log Out"
                 icon={<Logout color="text" />}
-                onClick={() => {
-                  mockSignOut({ callbackUrl: '/' });
-                }}
+                href={PATH_LOG_OUT}
               />
             )}
           </Box>

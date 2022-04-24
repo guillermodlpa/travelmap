@@ -1,0 +1,122 @@
+import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { PrismaClient, User } from '@prisma/client';
+import { ManagementClient } from 'auth0';
+import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
+
+type ErrorResponse = { error: string };
+
+// GET /api/user
+const handleGet = async (req: NextApiRequest, res: NextApiResponse<User | ErrorResponse>) => {
+  const session = getSession(req, res);
+  if (session == undefined) {
+    return res.status(500).json({ error: 'Internal error' });
+  }
+  const prisma = new PrismaClient();
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user[CUSTOM_CLAIM_APP_USER_ID],
+    },
+  });
+
+  if (user) {
+    return res.status(200).json(user);
+  } else {
+    return res.status(404).json({ error: 'Not found' });
+  }
+};
+
+// PATCH /api/user
+const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | ErrorResponse>) => {
+  const session = getSession(req, res);
+  if (session == undefined) {
+    return res.status(500).json({ error: 'Internal error' });
+  }
+  const prisma = new PrismaClient();
+  const user = await prisma.user.findUnique({
+    where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
+  });
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  const { displayName, notifyOnCombinedMaps, notifyOnAppUpdates } = req.body;
+
+  // @todo: add validation! Joi!
+  // @todo: trim displayName
+  const updatedUser = await prisma.user.update({
+    where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
+    data: {
+      displayName,
+      notifyOnCombinedMaps,
+      notifyOnAppUpdates,
+    },
+  });
+
+  return res.status(200).json(updatedUser);
+};
+
+const createAuth0ManagementClient = (): ManagementClient => {
+  if (
+    !process.env.AUTH0_MTM_BACKEND_DOMAIN ||
+    !process.env.AUTH0_MTM_BACKEND_CLIENT_ID ||
+    !process.env.AUTH0_MTM_BACKEND_CLIENT_SECRET
+  ) {
+    throw Error('Missing environment variables');
+  }
+  return new ManagementClient({
+    domain: process.env.AUTH0_MTM_BACKEND_DOMAIN,
+    clientId: process.env.AUTH0_MTM_BACKEND_CLIENT_ID,
+    clientSecret: process.env.AUTH0_MTM_BACKEND_CLIENT_SECRET,
+    scope: 'delete:users',
+  });
+};
+
+// DELETE /api/user
+const handleDelete = async (req: NextApiRequest, res: NextApiResponse<{} | ErrorResponse>) => {
+  const session = getSession(req, res);
+  if (session == undefined) {
+    return res.status(500).json({ error: 'Internal error' });
+  }
+  const prisma = new PrismaClient();
+  const userId = session.user[CUSTOM_CLAIM_APP_USER_ID];
+
+  // Delete all their maps
+  await prisma.individualTravelMap.deleteMany({
+    where: { userId },
+  });
+  await prisma.combinedTravelMap.deleteMany({
+    where: {
+      // Find combinedTravelMaps that one of their related users is the user we're deleting
+      users: { some: { id: userId } },
+    },
+  });
+
+  // Delete user record
+  await prisma.user
+    .delete({
+      where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
+    })
+    .catch((error) => {
+      // log the error, but let the execution go through.
+    });
+
+  // Auth0 deletion
+  const management = createAuth0ManagementClient();
+  await management.deleteUser({ id: session.user.sub });
+
+  return res.status(200).json({});
+};
+
+export default withApiAuthRequired(async (req: NextApiRequest, res: NextApiResponse) => {
+  const handlers: {
+    [method: string]: (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
+  } = {
+    GET: handleGet,
+    PATCH: handlePatch,
+    DELETE: handleDelete,
+  };
+  return req.method && handlers[req.method]
+    ? handlers[req.method](req, res)
+    : res.status(405).json({ error: 'Method not allowed' });
+});

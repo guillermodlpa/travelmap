@@ -1,42 +1,41 @@
 import { Box, Heading, Paragraph, Text } from 'grommet';
 import { ReactElement, Suspense, useEffect } from 'react';
-import styled from 'styled-components';
 import withNoSsr from '../../components/NoSsr/withNoSsr';
 import UserMapList from '../../components/MapList/UserMapList';
 import CombinedMapsList from '../../components/MapList/CombinedMapsList';
 import ErrorBoundary from '../../components/ErrorBoundary';
-import { useMockSession } from '../../util/mockUseSession';
-import { useRouter } from 'next/router';
 import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
+import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import type { NextPage } from 'next';
+import useMyUser from '../../hooks/useMyUser';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
-const UserMaps: NextPageWithLayout = () => {
-  const { data, status: authStatus } = useMockSession({
-    required: true,
-  });
+const UserMaps: NextPage = () => {
+  const { user: auth0User } = useUser();
+  const { data: myUser, error: errorWithMyUser } = useMyUser();
 
-  const router = useRouter();
+  const errorLoadingUserRecord = Boolean(errorWithMyUser);
   useEffect(() => {
-    if (authStatus === 'unauthenticated') {
-      router.push('/');
+    if (errorLoadingUserRecord) {
+      alert('Error loading user record');
     }
-  }, [authStatus]);
+  }, [errorLoadingUserRecord]);
 
   return (
     <>
       <HeadWithDefaults title="Travelmap - My Maps" />
 
-      {authStatus === 'authenticated' && (
+      {Boolean(auth0User) && (
         <PrincipalParchmentContainer width="xlarge">
           <Parchment contentPad="large">
             <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
               <Box flex>
                 <Heading level={2} margin={'0'}>
-                  Welcome, {data?.user.name}
+                  {myUser?.displayName ? `Welcome ${myUser?.displayName}` : 'Welcome'}
                 </Heading>
               </Box>
             </Box>
@@ -54,7 +53,7 @@ const UserMaps: NextPageWithLayout = () => {
                     </Box>
                   }
                 >
-                  <UserMapList userId={data?.user.id!} />
+                  <UserMapList />
                 </SuspenseNoSsr>
               </ErrorBoundary>
             </Box>
@@ -72,12 +71,12 @@ const UserMaps: NextPageWithLayout = () => {
                     </Box>
                   }
                 >
-                  <CombinedMapsList userId={data?.user.id!} allowDelete={false} />
+                  <CombinedMapsList />
                 </SuspenseNoSsr>
               </ErrorBoundary>
 
               <Paragraph fill size="small">
-                Find Travelmaps of your friends to create maps together
+                {`Open the Travelmaps of your friends, and click on Create "Together" Map to combine them.`}
               </Paragraph>
             </Box>
           </Parchment>
@@ -87,8 +86,10 @@ const UserMaps: NextPageWithLayout = () => {
   );
 };
 
-UserMaps.getLayout = function getLayout(page: ReactElement) {
+const UserMapsWithPageAuthRequired: NextPageWithLayout = withPageAuthRequired(UserMaps);
+
+UserMapsWithPageAuthRequired.getLayout = function getLayout(page: ReactElement) {
   return <StaticMapBackgroundLayout>{page}</StaticMapBackgroundLayout>;
 };
 
-export default UserMaps;
+export default UserMapsWithPageAuthRequired;

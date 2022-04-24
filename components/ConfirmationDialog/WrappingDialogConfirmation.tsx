@@ -6,7 +6,8 @@ type WrappingDialogConfirmationRenderProps = {
 };
 
 const WrappingDialogConfirmation: React.FC<
-  Omit<ConfirmationDialogProps, 'open' | 'onCancel'> & WrappingDialogConfirmationRenderProps
+  Omit<ConfirmationDialogProps, 'open' | 'onCancel' | 'onRequestClose'> &
+    WrappingDialogConfirmationRenderProps
 > = ({ children, ...props }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -21,6 +22,9 @@ const WrappingDialogConfirmation: React.FC<
         {...props}
         open={dialogOpen}
         onCancel={() => {
+          setDialogOpen(false);
+        }}
+        onRequestClose={() => {
           setDialogOpen(false);
         }}
       />

@@ -1,35 +1,66 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import fixtures from '../../fixtures';
+import { PrismaClient } from '@prisma/client';
 import {
-  getTravelMapFromCombinedMap,
-  getTravelMapFromUser,
-} from '../../util/getTravelMapFunctions';
+  formatApiCombinedTravelMapResponse,
+  formatApiIndividualTravelMapResponse,
+} from '../../util/formatApiResponse';
 
-function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+type ErrorResponse = { error: string };
 
-const getRecentTravelMaps = async (
+const handleGet = async (
   req: NextApiRequest,
-  res: NextApiResponse<TravelMap[] | ErrorResponse>
+  res: NextApiResponse<Array<ClientIndividualTravelMap | ClientCombinedTravelMap> | ErrorResponse>
 ) => {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  const prisma = new PrismaClient();
 
-  await sleep(1000);
+  const individualMapResults = await prisma.individualTravelMap.findMany({
+    orderBy: {
+      created: 'desc',
+    },
+    where: {
+      visitedCountries: { not: [] },
+    },
+    take: 5,
+    include: {
+      user: true,
+    },
+  });
+  const combinedMapResults = await prisma.combinedTravelMap.findMany({
+    orderBy: {
+      created: 'desc',
+    },
+    take: 5,
+    include: {
+      users: {
+        include: {
+          individualTravelMap: true,
+        },
+      },
+    },
+  });
 
-  // @todo: return recent maps
+  const individualTravelMaps: ClientIndividualTravelMap[] = individualMapResults.map(
+    (individualMapResult) =>
+      formatApiIndividualTravelMapResponse(individualMapResult, individualMapResult.user)
+  );
+  const combinedTravelMaps: ClientCombinedTravelMap[] = combinedMapResults.map(
+    (combinedMapResult) => formatApiCombinedTravelMapResponse(combinedMapResult)
+  );
 
-  const allMaps = [
-    ...fixtures.users.map((user) => getTravelMapFromUser(user)),
-    ...fixtures.combinedMaps.map((combinedMap) => getTravelMapFromCombinedMap(combinedMap)),
-  ];
+  const allMaps = [...individualTravelMaps, ...combinedTravelMaps];
+  allMaps.sort((a, b) => (b.created && a.created ? b.created - a.created : 0));
+
   const response = allMaps.slice(0, 5);
-  response.sort(() => 0.5 - Math.random()); // shuffle
   res.status(200).json(response);
 };
 
-export default getRecentTravelMaps;
+export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+  const handlers: {
+    [method: string]: (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
+  } = {
+    GET: handleGet,
+  };
+  return req.method && handlers[req.method]
+    ? handlers[req.method](req, res)
+    : res.status(405).json({ error: 'Method not allowed' });
+}

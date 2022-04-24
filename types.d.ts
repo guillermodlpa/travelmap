@@ -1,44 +1,21 @@
-type User = {
-  id: string;
-  name: string;
-  visitedCountries: string[];
-};
-
-type UserDatabaseEntity = User & {
-  email: string;
-  created: Date;
-};
-
-type LoggedInUser = UserDatabaseEntity;
-
-type CombinedMapDatabaseEntity = {
-  id: string;
-  userIds: string[];
-  created: Date;
-};
+// Web application custom types
 
 type ResponsiveViewportSize = 'small' | 'medium' | 'large';
 
-type TravelMap = {
-  type: 'user' | 'multiple-user';
+type ClientIndividualTravelMap = {
+  type: 'individual';
   id: string;
-  users: Array<{
-    id: string;
-    name: string;
-    visitedCountries: string[];
-    pathView: string;
-  }>;
+  created: number;
   pathView: string;
-  pathEdit?: string;
+  userId: string;
+  userDisplayName: string;
+  visitedCountries: string[];
 };
 
-type ErrorResponse = {
-  error: string;
-};
-
-//   /map/:userId - Show Guillermo's map
-//   /mmap/:combinedMapId - Show a combined map
-
-type NextPageWithLayout = NextPage & {
-  getLayout: (page: ReactElement) => ReactNode;
+type ClientCombinedTravelMap = {
+  type: 'combined';
+  id: string;
+  created: number;
+  pathView: string;
+  individualTravelMaps: ClientIndividualTravelMap[];
 };

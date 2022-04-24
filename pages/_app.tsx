@@ -1,12 +1,13 @@
 import type { AppProps } from 'next/app';
 import { Grommet } from 'grommet';
 import { ReactElement, ReactNode, useEffect, useMemo, useState } from 'react';
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
 import { ThemeModeContextProvider } from '../components/ThemeModeContext';
 import { useTheme } from 'styled-components';
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
 
 const ThemeDebugger: React.FC = () => {
   const theme = useTheme();
@@ -55,7 +56,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Grommet theme={theme} full themeMode={mode}>
         <ThemeModeContextProvider value={themeContextValue}>
           <ViewportSizeListener onSize={setSize} />
-          {getLayout(<Component {...pageProps} />)}
+          <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>
           {process.env.NODE_ENV === 'development' && <ThemeDebugger />}
         </ThemeModeContextProvider>
       </Grommet>

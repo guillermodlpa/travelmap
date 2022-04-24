@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import withNoSsr from '../components/NoSsr/withNoSsr';
 import RecentMapsList from '../components/MapList/RecentMapsList';
 import ErrorBoundary from '../components/ErrorBoundary';
-import { mockSignIn, useMockSession } from '../util/mockUseSession';
 import Parchment from '../components/Parchment';
 import PrincipalParchmentContainer from '../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../components/Layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../components/HeadWithDefaults';
+import { PATH_LOG_IN } from '../util/paths';
+import { useUser } from '@auth0/nextjs-auth0';
 
 const ButtonTextCentered = styled(Button)`
   text-align: center;
@@ -20,7 +21,7 @@ const SuspenseNoSsr = withNoSsr(Suspense);
 const Welcome: NextPageWithLayout = () => {
   const size = useContext(ResponsiveContext);
 
-  const { status: authStatus, data } = useMockSession();
+  const { user: auth0User } = useUser();
 
   return (
     <>
@@ -28,7 +29,7 @@ const Welcome: NextPageWithLayout = () => {
       <PrincipalParchmentContainer>
         <Parchment contentPad="large">
           <Heading level={2} margin={{ top: '0' }}>
-            {`Welcome, ${data?.user.name ?? 'traveler'}`}
+            Welcome to TravelMap
           </Heading>
 
           <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
@@ -43,7 +44,7 @@ const Welcome: NextPageWithLayout = () => {
           </Box>
 
           <Box direction={size === 'small' ? 'column' : 'row'} gap="medium" flex={{ shrink: 0 }}>
-            {authStatus === 'authenticated' ? (
+            {Boolean(auth0User) ? (
               <Box fill>
                 <NextLink href="/my/maps" passHref>
                   <ButtonTextCentered primary size="large" fill label="View My Maps" />
@@ -52,15 +53,7 @@ const Welcome: NextPageWithLayout = () => {
             ) : (
               [
                 <Box fill key="log-in-button">
-                  <ButtonTextCentered
-                    primary
-                    size="large"
-                    fill
-                    label="Log in"
-                    onClick={() => {
-                      mockSignIn(undefined, { callbackUrl: '/my/maps' });
-                    }}
-                  />
+                  <ButtonTextCentered primary size="large" fill label="Log in" href={PATH_LOG_IN} />
                 </Box>,
                 <Box fill key="craft-map-button">
                   <NextLink href="/map" passHref>

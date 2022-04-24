@@ -4,23 +4,21 @@ import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
 import WrappingDialogConfirmation from '../ConfirmationDialog/WrappingDialogConfirmation';
 
-const getOtherUserNames = (users: User[], userId: string | undefined): string[] =>
-  users.filter((user) => user.id !== userId).map((user) => user.name);
-
-const joinUserNames = (userNames: string[]) =>
-  userNames.reduce(
-    (memo, userName, index) =>
-      `${memo}${index === 0 ? '' : index === userNames.length - 1 ? ' & ' : ', '}${userName}`,
-    ''
-  );
-
 type MapListProps = {
   allowEdit: boolean;
-  mapList: TravelMap[];
-  userId?: string;
-} & ({ allowDelete: false } | { allowDelete: true; userId: string });
+  mapList: Array<ClientCombinedTravelMap | ClientIndividualTravelMap>;
+  deleteSettings?: {
+    allowDelete: boolean;
+    getConfirmMessage: (travelmap: ClientIndividualTravelMap | ClientCombinedTravelMap) => string;
+    handleDelete: (id: string) => Promise<void>;
+  };
+};
 
-const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, userId }) => {
+const MapList: React.FC<MapListProps> = ({
+  mapList,
+  allowEdit,
+  deleteSettings = { allowDelete: false, getConfirmMessage: () => '', handleDelete: () => false },
+}) => {
   const size = useContext(ResponsiveContext);
 
   if (!mapList) {
@@ -31,27 +29,34 @@ const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, user
     <Box as="ul" pad="0" margin="0" role="list">
       {mapList.map((travelMap, index) => (
         <Box
-          key={`${travelMap.type}--${travelMap.id}`}
+          key={travelMap.id}
           pad="small"
           gap="small"
           as="li"
+          data-travelmap-id={travelMap.id}
           wrap
           border={{ side: index === 0 ? 'horizontal' : 'bottom', color: 'border', size: '1px' }}
           direction={size === 'small' ? 'column' : 'row'}
         >
           <Box direction="row" gap="small" align="center" flex="grow">
             <Box direction="row" flex={{ shrink: 0 }}>
-              {travelMap.users.map((user, index) => (
-                <Avatar
-                  key={user.id}
-                  background="parchment"
-                  border={{ color: 'brand', size: 'small' }}
-                  margin={{ left: `-${24 * index}px` }}
-                  style={{ zIndex: travelMap.users.length - index }}
-                >
-                  {user.name.substring(0, 1)}
+              {travelMap.type === 'individual' ? (
+                <Avatar background="parchment" border={{ color: 'brand', size: 'small' }}>
+                  {travelMap.userDisplayName.substring(0, 1)}
                 </Avatar>
-              ))}
+              ) : (
+                travelMap.individualTravelMaps.map((individualTravelMap, index, { length }) => (
+                  <Avatar
+                    key={individualTravelMap.userId}
+                    background="parchment"
+                    border={{ color: 'brand', size: 'small' }}
+                    margin={{ left: `-${24 * index}px` }}
+                    style={{ zIndex: length - index }}
+                  >
+                    {individualTravelMap.userDisplayName.substring(0, 1)}
+                  </Avatar>
+                ))
+              )}
             </Box>
             <Box flex={{ grow: 1, shrink: 1 }}>
               <Text>{getTravelMapNameForUsers(travelMap)}</Text>
@@ -59,8 +64,8 @@ const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, user
           </Box>
 
           <Box key={`action-${travelMap}`} direction="row" gap="small" align="center" justify="end">
-            {allowEdit && travelMap.pathEdit && (
-              <NextLink href={travelMap.pathEdit} passHref>
+            {allowEdit && travelMap.type === 'individual' && (
+              <NextLink href={'/map/edit'} passHref>
                 <Anchor>Edit</Anchor>
               </NextLink>
             )}
@@ -69,15 +74,19 @@ const MapList: React.FC<MapListProps> = ({ mapList, allowEdit, allowDelete, user
               <Anchor>View</Anchor>
             </NextLink>
 
-            {allowDelete && travelMap.pathEdit && (
+            {deleteSettings.allowDelete && (
               <WrappingDialogConfirmation
-                onConfirm={() => {
-                  alert('deleted');
+                onConfirm={(event, onRequestClose) => {
+                  deleteSettings
+                    .handleDelete(travelMap.id)
+                    .then(() => onRequestClose())
+                    .catch((error) => {
+                      console.error(error);
+                      alert('error');
+                    });
                 }}
                 confirmButtonLabel="Delete Map"
-                confirmMessage={`Are you sure you want to delete your map together with ${joinUserNames(
-                  getOtherUserNames(travelMap.users, userId)
-                )}? This will make the map disappear for them too.`}
+                confirmMessage={deleteSettings.getConfirmMessage(travelMap)}
               >
                 {(handleClick) => <Button label="Delete" color="border" onClick={handleClick} />}
               </WrappingDialogConfirmation>

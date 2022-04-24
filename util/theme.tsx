@@ -20,8 +20,8 @@ const theme = deepMerge(grommet, {
       control: 'brand',
       focus: 'brand',
       border: {
-        dark: 'rgba(255, 255, 255, 0.66)',
-        light: 'rgba(0, 0, 0, 0.66)',
+        dark: 'rgba(255, 255, 255, 0.33)',
+        light: 'rgba(0, 0, 0, 0.33)',
       },
       placeholder: 'text',
       text: { dark: '#FCF5E5', light: '#0f0f0f' },
@@ -59,7 +59,10 @@ const theme = deepMerge(grommet, {
     font: {
       family: "'Merienda', cursive",
     },
-    extend: { '-webkit-font-smoothing': 'auto' },
+    extend: {
+      '-webkit-font-smoothing': 'auto',
+      'word-break': 'break-word',
+    },
     level: {
       1: {
         small: {
