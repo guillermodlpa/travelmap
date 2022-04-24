@@ -29,7 +29,7 @@ const Welcome: NextPageWithLayout = () => {
       <PrincipalParchmentContainer>
         <Parchment contentPad="large">
           <Heading level={2} margin={{ top: '0' }}>
-            Welcome to TravelMap
+            Welcome to Travelmap
           </Heading>
 
           <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
@@ -43,24 +43,24 @@ const Welcome: NextPageWithLayout = () => {
             </Paragraph>
           </Box>
 
-          <Box direction={size === 'small' ? 'column' : 'row'} gap="medium" flex={{ shrink: 0 }}>
+          <Box
+            direction={size === 'small' ? 'column' : 'row'}
+            gap="medium"
+            flex={{ shrink: 0 }}
+            justify="center"
+            align="center"
+          >
             {Boolean(auth0User) ? (
-              <Box fill>
-                <NextLink href="/my/maps" passHref>
-                  <ButtonTextCentered primary size="large" fill label="View My Maps" />
-                </NextLink>
-              </Box>
+              <NextLink href="/my/maps" passHref>
+                <ButtonTextCentered primary size="large" label="~ View My Maps ~" />
+              </NextLink>
             ) : (
-              [
-                <Box fill key="log-in-button">
-                  <ButtonTextCentered primary size="large" fill label="Log in" href={PATH_LOG_IN} />
-                </Box>,
-                <Box fill key="craft-map-button">
-                  <NextLink href="/map" passHref>
-                    <ButtonTextCentered primary size="large" fill label="Craft your map" />
-                  </NextLink>
-                </Box>,
-              ]
+              <ButtonTextCentered
+                primary
+                size="large"
+                label="~ Make a Travelmap ~"
+                href={PATH_LOG_IN}
+              />
             )}
           </Box>
 

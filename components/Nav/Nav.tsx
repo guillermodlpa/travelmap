@@ -46,9 +46,9 @@ const Nav: React.FC = () => {
         <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
           <NextLink passHref href="/">
             <NavButton
-              a11yTitle="TravelMap Landing Page"
+              a11yTitle="Travelmap Landing Page"
               icon={<Globe color="text" />}
-              tip="TravelMap Landing Page"
+              tip="Travelmap Landing Page"
             />
           </NextLink>
         </Parchment>
