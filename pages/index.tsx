@@ -9,7 +9,7 @@ import Parchment from '../components/Parchment';
 import PrincipalParchmentContainer from '../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../components/Layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../components/HeadWithDefaults';
-import { PATH_LOG_IN } from '../util/paths';
+import { PATH_SIGN_UP, PATH_LOG_IN } from '../util/paths';
 import { useUser } from '@auth0/nextjs-auth0';
 
 const ButtonTextCentered = styled(Button)`
@@ -52,15 +52,25 @@ const Welcome: NextPageWithLayout = () => {
           >
             {Boolean(auth0User) ? (
               <NextLink href="/my/maps" passHref>
-                <ButtonTextCentered primary size="large" label="~ View My Maps ~" />
+                <ButtonTextCentered primary size="large" label="View My Maps" />
               </NextLink>
             ) : (
-              <ButtonTextCentered
-                primary
-                size="large"
-                label="~ Make a Travelmap ~"
-                href={PATH_LOG_IN}
-              />
+              [
+                <ButtonTextCentered
+                  key="login"
+                  secondary
+                  size="large"
+                  label="Log in"
+                  href={PATH_LOG_IN}
+                />,
+                <ButtonTextCentered
+                  key="signup"
+                  primary
+                  size="large"
+                  label="Create your Travelmap"
+                  href={PATH_SIGN_UP}
+                />,
+              ]
             )}
           </Box>
 

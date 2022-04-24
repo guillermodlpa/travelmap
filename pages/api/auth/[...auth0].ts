@@ -10,8 +10,15 @@ import { handleAuth, handleLogin, handleLogout } from '@auth0/nextjs-auth0';
 
 export default handleAuth({
   async login(req, res) {
+    // We read the query, as it could be /api/auth/login?screen_hint=signup
+    const screenHint =
+      typeof req.query.screen_hint === 'string' ? req.query.screen_hint : undefined;
+
     await handleLogin(req, res, {
       returnTo: '/my/maps', // URL to take users after authenticated
+      authorizationParams: {
+        screen_hint: screenHint,
+      },
     });
   },
   async logout(req, res) {
