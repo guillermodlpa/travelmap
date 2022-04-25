@@ -1,22 +1,23 @@
 /**
  * Edit map page
  */
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWRImmutable, { Fetcher } from 'swr';
 
-import { Box, Button, FormField, Heading, Layer, TextInput } from 'grommet';
+import { Box, Button, FormField, Layer, TextInput, Paragraph } from 'grommet';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import LegendCountryList from '../../components/Legend/LegendCountryList';
 import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
 import Nav from '../../components/Nav';
 import type { NextPage } from 'next';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
+import getCountryName from '../../util/getCountryName';
 
 const EditDisplayNameDialog: React.FC<{
   open: boolean;
@@ -100,11 +101,13 @@ const EditMapPage: NextPage = () => {
   }, [travelMap?.visitedCountries]);
 
   const toggleCountry = (country: string) =>
-    setCountries((countries) =>
-      countries.includes(country)
+    setCountries((countries) => {
+      const newCountries = countries.includes(country)
         ? countries.filter((c) => c !== country)
-        : countries.concat(country)
-    );
+        : countries.concat(country);
+      newCountries.sort();
+      return newCountries;
+    });
 
   const [editDisplayNameDialogOpen, setEditDisplayNameDialogOpen] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>('');
@@ -157,13 +160,26 @@ const EditMapPage: NextPage = () => {
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"
-        highlightedCountries={[countries]}
+        highlightedCountries={[
+          {
+            id: 'editing',
+            countries: countries,
+            color: 'status-ok',
+          },
+        ]}
         interactive
         applyMapMotion={false}
         animateCamera={false}
       />
 
       <Nav />
+
+      <EditDisplayNameDialog
+        open={editDisplayNameDialogOpen}
+        onClose={() => setEditDisplayNameDialogOpen(false)}
+        displayName={displayName}
+        onDisplayNameChange={(newDisplayName) => setDisplayName(newDisplayName)}
+      />
 
       <Legend>
         <LegendTitle
@@ -173,15 +189,26 @@ const EditMapPage: NextPage = () => {
           onClickEditNameButton={() => setEditDisplayNameDialogOpen(true)}
         />
 
-        <EditDisplayNameDialog
-          open={editDisplayNameDialogOpen}
-          onClose={() => setEditDisplayNameDialogOpen(false)}
-          displayName={displayName}
-          onDisplayNameChange={(newDisplayName) => setDisplayName(newDisplayName)}
-        />
-
         <LegendBody>
-          <LegendCountryList countries={countries} />
+          <Paragraph margin={{ top: 'none' }}>
+            Find the country in the map and click on it to add it.
+          </Paragraph>
+
+          <LegendColorIndicators
+            forceExpanded
+            data={[
+              {
+                id: 'edit-map',
+                color: 'status-ok',
+                label: 'Visited countries',
+                subItems: countries.map((country) => ({
+                  id: country,
+                  label: getCountryName(country) || '',
+                })),
+              },
+            ]}
+          />
+
           <CountrySearch
             selectedCountries={countries}
             onCountrySelected={toggleCountry}

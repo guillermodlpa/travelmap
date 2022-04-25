@@ -1,7 +1,7 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
+import { getPrismaClient } from '../../../util/prisma';
 
 type ErrorResponse = { error: string };
 
@@ -17,7 +17,7 @@ const handleDelete = async (req: NextApiRequest, res: NextApiResponse<{} | Error
     return res.status(400).json({ error: 'Invalid id supplied' });
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const combinedTravelMap = await prisma.combinedTravelMap.findUnique({
     where: { id },
     include: { users: true },

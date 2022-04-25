@@ -53,25 +53,12 @@ const LAYER_USER_OVERLAP = 'highlighted-countries-overlap';
 
 const updateMapHighlightedCountries = (
   map: mapboxgl.Map,
-  highlightedCountries: [string[]] | [string[], string[]]
+  highlightedCountries: Array<{ id: string; countries: string[]; color: string }>
 ) => {
-  const countriesUser1 = arrayExclude(highlightedCountries[0] || [], highlightedCountries[1] || []);
-  const countriesUser2 = arrayExclude(highlightedCountries[1] || [], highlightedCountries[0] || []);
-  const countriesOverlap = arrayIntersect(
-    highlightedCountries[0] || [],
-    highlightedCountries[1] || []
-  );
-  map.setFilter(LAYER_USER_1, ['in', 'iso_3166_1_alpha_3', ...countriesUser1]);
-  map.setFilter(LAYER_USER_2, ['in', 'iso_3166_1_alpha_3', ...countriesUser2]);
-  map.setFilter(LAYER_USER_OVERLAP, ['in', 'iso_3166_1_alpha_3', ...countriesOverlap]);
+  highlightedCountries.forEach((descriptor) => {
+    map.setFilter(descriptor.id, ['in', 'iso_3166_1_alpha_3', ...descriptor.countries]);
+  });
 };
-
-function arrayExclude<T>(array1: T[], array2: T[]): T[] {
-  return (array1 || []).filter((value) => !(array2 || []).includes(value));
-}
-function arrayIntersect<T>(array1: T[], array2: T[]): T[] {
-  return (array1 || []).filter((value) => (array2 || []).includes(value));
-}
 
 type Bounds = [number, number, number, number];
 
@@ -103,14 +90,14 @@ const HighlightedCountriesMap: React.FC<{
   interactive: boolean;
   applyMapMotion: boolean;
   animateCamera: boolean;
-  highlightedCountries?: [string[]] | [string[], string[]];
+  highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
 }> = ({
   height = '100%',
   id,
   interactive,
   applyMapMotion = false,
   animateCamera = true,
-  highlightedCountries = [[], []],
+  highlightedCountries = [],
 }) => {
   const { mode } = useThemeMode();
   const { backgroundColor, mapboxStyle } = mapStyles[mode];
@@ -136,7 +123,8 @@ const HighlightedCountriesMap: React.FC<{
         interactive,
       });
 
-      zoomMapToCountries(map, highlightedCountries.flat(), false);
+      const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
+      zoomMapToCountries(map, allCountries, false);
 
       map.on('load', (event) => {
         const thisMap = event.target;
@@ -146,13 +134,10 @@ const HighlightedCountriesMap: React.FC<{
           url: 'mapbox://mapbox.country-boundaries-v1',
         });
 
-        const colorUser1 = theme.global.colors['status-ok'] as string;
-        const colorUser2 = theme.global.colors['status-critical'] as string;
-        const colorOverlap = theme.global.colors['status-warning'] as string;
-
-        addLayerToMap(thisMap, LAYER_USER_1, colorUser1);
-        addLayerToMap(thisMap, LAYER_USER_2, colorUser2);
-        addLayerToMap(thisMap, LAYER_USER_OVERLAP, colorOverlap);
+        highlightedCountries.forEach((descriptor) => {
+          const color = (theme.global.colors[descriptor.color] as string) || descriptor.color;
+          addLayerToMap(thisMap, descriptor.id, color);
+        });
 
         updateMapHighlightedCountries(thisMap, highlightedCountries);
       });
@@ -174,7 +159,8 @@ const HighlightedCountriesMap: React.FC<{
   useEffect(() => {
     if (mapRef.current?.loaded()) {
       updateMapHighlightedCountries(mapRef.current, highlightedCountries);
-      zoomMapToCountries(mapRef.current, highlightedCountries.flat(), animateCamera);
+      const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
+      zoomMapToCountries(mapRef.current, allCountries, animateCamera);
     }
   }, [highlightedCountries]);
 

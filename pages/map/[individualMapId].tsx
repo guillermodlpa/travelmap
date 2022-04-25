@@ -6,9 +6,7 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import LegendCountryList from '../../components/Legend/LegendCountryList';
 import { Anchor, Box, Button, Text, Layer, Heading } from 'grommet';
-import { PrismaClient } from '@prisma/client';
 import NextLink from 'next/link';
 import type { GetServerSideProps, NextPage } from 'next';
 import { createRef, useState } from 'react';
@@ -21,6 +19,9 @@ import { useUser } from '@auth0/nextjs-auth0';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
 import { useRouter } from 'next/router';
 import { formatApiIndividualTravelMapResponse } from '../../util/formatApiResponse';
+import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
+import { getPrismaClient } from '../../util/prisma';
+import getCountryName from '../../util/getCountryName';
 
 const CreateTogetherMapDialog: React.FC<{
   open: boolean;
@@ -121,7 +122,13 @@ const ViewIndividualMapPage: NextPage<{
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"
-        highlightedCountries={[travelMap.visitedCountries]}
+        highlightedCountries={[
+          {
+            id: `individual-${travelMap.id}`,
+            countries: travelMap.visitedCountries,
+            color: 'status-ok',
+          },
+        ]}
         interactive={true}
         applyMapMotion
         animateCamera
@@ -145,19 +152,32 @@ const ViewIndividualMapPage: NextPage<{
         />
 
         <LegendBody>
-          <LegendCountryList countries={travelMap.visitedCountries} />
+          <LegendColorIndicators
+            data={[
+              {
+                id: `individual-${travelMap.id}`,
+                color: 'status-ok',
+                label: 'Visited countries',
+                subItems: travelMap.visitedCountries.map((country) => ({
+                  id: country,
+                  label: getCountryName(country) || '',
+                })),
+              },
+            ]}
+          />
 
           <Text textAlign="end">
             {!Boolean(auth0User) && !isLoading ? (
               <NextLink href={PATH_LOG_IN} passHref>
-                <Anchor>Log In</Anchor>
+                <Anchor size="small">Log In</Anchor>
               </NextLink>
             ) : userCanEditThisMap ? (
               <NextLink href={`/map/edit`} passHref>
-                <Anchor>Edit</Anchor>
+                <Anchor size="small">Edit</Anchor>
               </NextLink>
             ) : confirmedUserDoesntHaveTogetherMaps ? (
               <Button
+                size="small"
                 label="Create Together Map"
                 plain
                 color="brand"
@@ -165,7 +185,7 @@ const ViewIndividualMapPage: NextPage<{
               />
             ) : confirmedUserHasTogeherMaps ? (
               <NextLink href={togetherMapList[0].pathView} passHref>
-                <Anchor>View Together Map</Anchor>
+                <Anchor size="small">View Map Together</Anchor>
               </NextLink>
             ) : undefined}
           </Text>
@@ -187,7 +207,7 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true };
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const individualTravelMap = await prisma.individualTravelMap.findFirst({
     where: { id: individualMapId },
     include: { user: true },

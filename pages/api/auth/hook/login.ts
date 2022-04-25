@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
+import { getPrismaClient } from '../../../../util/prisma';
 
 const hasInitialMap = (prisma: PrismaClient, userId: string) =>
   Boolean(
@@ -37,7 +38,7 @@ const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ error: 'No sub provided' });
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
 
   // Check if we had any user with this same sub. If we did, we can assume it's
   // the same user and they already registered, but for some reason, their app user ID didn't  save in Auth0

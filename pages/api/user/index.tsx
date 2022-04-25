@@ -1,8 +1,9 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { ManagementClient } from 'auth0';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
+import { getPrismaClient } from '../../../util/prisma';
 
 type ErrorResponse = { error: string };
 
@@ -12,7 +13,7 @@ const handleGet = async (req: NextApiRequest, res: NextApiResponse<User | ErrorR
   if (session == undefined) {
     return res.status(500).json({ error: 'Internal error' });
   }
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const user = await prisma.user.findUnique({
     where: {
       id: session.user[CUSTOM_CLAIM_APP_USER_ID],
@@ -32,7 +33,7 @@ const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | Erro
   if (session == undefined) {
     return res.status(500).json({ error: 'Internal error' });
   }
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const user = await prisma.user.findUnique({
     where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
   });
@@ -78,7 +79,7 @@ const handleDelete = async (req: NextApiRequest, res: NextApiResponse<{} | Error
   if (session == undefined) {
     return res.status(500).json({ error: 'Internal error' });
   }
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const userId = session.user[CUSTOM_CLAIM_APP_USER_ID];
 
   // Delete all their maps

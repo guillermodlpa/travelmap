@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import {
   formatApiCombinedTravelMapResponse,
   formatApiIndividualTravelMapResponse,
 } from '../../util/formatApiResponse';
+import { getPrismaClient } from '../../util/prisma';
 
 type ErrorResponse = { error: string };
 
@@ -11,7 +11,7 @@ const handleGet = async (
   req: NextApiRequest,
   res: NextApiResponse<Array<ClientIndividualTravelMap | ClientCombinedTravelMap> | ErrorResponse>
 ) => {
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
 
   const individualMapResults = await prisma.individualTravelMap.findMany({
     orderBy: {

@@ -39,7 +39,8 @@ const UserMaps: NextPage = () => {
                 </Heading>
               </Box>
             </Box>
-
+            TODO: either redirect the new user to the edit map page, or add here an onboarding
+            prompt
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
               <Heading level={4} margin={{ top: '0' }}>
                 Your Map
@@ -57,7 +58,6 @@ const UserMaps: NextPage = () => {
                 </SuspenseNoSsr>
               </ErrorBoundary>
             </Box>
-
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
               <Heading level={4} margin={{ top: '0' }}>
                 {`"Together" Maps`}

@@ -1,8 +1,8 @@
 import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
 import { formatApiCombinedTravelMapResponse } from '../../../util/formatApiResponse';
+import { getPrismaClient } from '../../../util/prisma';
 
 type ErrorResponse = { error: string };
 
@@ -21,7 +21,7 @@ const handlePost = async (
     return res.status(400).json({ error: 'Invalid otherUserId supplied' });
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const otherUser = await prisma.user.findUnique({
     where: { id: otherUserId },
   });
@@ -65,7 +65,7 @@ const handleGet = async (
     return res.status(400).json({ error: 'Invalid otherUserId supplied' });
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const user = await prisma.user.findUnique({
     where: {
       auth0Sub: session.user.sub,

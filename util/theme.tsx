@@ -65,6 +65,10 @@ const theme = deepMerge(grommet, {
     },
     level: {
       1: {
+        xsmall: {
+          size: '20px',
+          height: '24px',
+        },
         small: {
           size: '24px',
           height: '28px',

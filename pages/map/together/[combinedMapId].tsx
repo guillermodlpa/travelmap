@@ -6,25 +6,49 @@ import HighlightedCountriesMap from '../../../components/Maps/HighlightedCountri
 import Legend from '../../../components/Legend/Legend';
 import LegendTitle from '../../../components/Legend/LegendTitle';
 import LegendBody from '../../../components/Legend/LegendBody';
-import LegendCountryList from '../../../components/Legend/LegendCountryList';
-import { Anchor, Avatar, Box, Text } from 'grommet';
-import { PrismaClient } from '@prisma/client';
-import NextLink from 'next/link';
 import type { GetServerSideProps, NextPage } from 'next';
 import { createRef } from 'react';
 import getTravelMapName from '../../../util/getTravelMapName';
 import Nav from '../../../components/Nav';
 import HeadWithDefaults from '../../../components/HeadWithDefaults';
-import { PATH_LOG_IN } from '../../../util/paths';
-import { useUser } from '@auth0/nextjs-auth0';
 import { formatApiCombinedTravelMapResponse } from '../../../util/formatApiResponse';
+import LegendColorIndicators from '../../../components/Legend/LegendColorIndicators';
+import getCountryName from '../../../util/getCountryName';
+import { getPrismaClient } from '../../../util/prisma';
+
+function arrayExclude<T>(array1: T[], array2: T[]): T[] {
+  return (array1 || []).filter((value) => !(array2 || []).includes(value));
+}
+function arrayIntersect<T>(array1: T[], array2: T[]): T[] {
+  return (array1 || []).filter((value) => (array2 || []).includes(value));
+}
+function getNonOverlappingListsOfCountries(
+  travelMap1: ClientIndividualTravelMap,
+  travelMap2: ClientIndividualTravelMap
+) {
+  const exclusiveList1 = arrayExclude(travelMap1.visitedCountries, travelMap2.visitedCountries);
+  const exclusiveList2 = arrayExclude(travelMap2.visitedCountries, travelMap1.visitedCountries);
+  const overlapList = arrayIntersect(travelMap1.visitedCountries, travelMap2.visitedCountries);
+  return [
+    {
+      id: `overlap-${travelMap1.id}-${travelMap2.id}`,
+      countries: overlapList,
+      color: 'status-warning',
+    },
+    { id: `exclusive-${travelMap1.id}`, countries: exclusiveList1, color: 'status-ok' },
+    { id: `exclusive-${travelMap2.id}`, countries: exclusiveList2, color: 'status-critical' },
+  ];
+}
 
 const ViewCombinedMapPage: NextPage<{
   travelMap: ClientCombinedTravelMap;
 }> = ({ travelMap }) => {
   const legendRef = createRef<HTMLDivElement>();
 
-  const { user, isLoading } = useUser();
+  const highlightedCountriesDescriptors = getNonOverlappingListsOfCountries(
+    travelMap.individualTravelMaps[0],
+    travelMap.individualTravelMaps[1]
+  );
 
   return (
     <>
@@ -33,11 +57,7 @@ const ViewCombinedMapPage: NextPage<{
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"
-        highlightedCountries={
-          travelMap.individualTravelMaps.map(
-            (individualTravelMap) => individualTravelMap.visitedCountries
-          ) as [string[], string[]]
-        }
+        highlightedCountries={highlightedCountriesDescriptors}
         interactive={true}
         applyMapMotion
         animateCamera
@@ -46,43 +66,54 @@ const ViewCombinedMapPage: NextPage<{
       <Nav />
 
       <Legend ref={legendRef}>
-        <LegendTitle heading={getTravelMapName(travelMap)} avatars={[]} />
+        <LegendTitle
+          heading={getTravelMapName(travelMap)}
+          avatars={[
+            {
+              id: travelMap.individualTravelMaps[0].userId,
+              name: travelMap.individualTravelMaps[0].userDisplayName,
+              href: travelMap.individualTravelMaps[0].pathView,
+            },
+            {
+              id: travelMap.individualTravelMaps[1].userId,
+              name: travelMap.individualTravelMaps[1].userDisplayName,
+              href: travelMap.individualTravelMaps[1].pathView,
+            },
+          ]}
+        />
 
         <LegendBody>
-          {travelMap.individualTravelMaps.map((individualTravelMap) => (
-            <Box direction="row" gap="small" align="center" key={individualTravelMap.id}>
-              <Box flex={{ shrink: 0 }}>
-                <Avatar
-                  size="small"
-                  background="parchment"
-                  border={{ color: 'brand', size: 'small' }}
-                  // src={avatarSrc}
-                >
-                  {individualTravelMap.userDisplayName.substring(0, 1)}
-                </Avatar>
-              </Box>
-              <LegendCountryList
-                prefix={`${individualTravelMap.userDisplayName}: `}
-                sufix={
-                  <>
-                    {'. '}
-                    <NextLink href={individualTravelMap.pathView} passHref>
-                      <Anchor>View</Anchor>
-                    </NextLink>
-                  </>
-                }
-                countries={individualTravelMap.visitedCountries}
-              />
-            </Box>
-          ))}
-
-          <Text textAlign="end">
-            {!Boolean(user) && !isLoading ? (
-              <NextLink href={PATH_LOG_IN} passHref>
-                <Anchor>Log In</Anchor>
-              </NextLink>
-            ) : undefined}
-          </Text>
+          <LegendColorIndicators
+            data={[
+              {
+                id: 'both',
+                color: 'status-warning',
+                label: `Visited countries by both`,
+                subItems: highlightedCountriesDescriptors[0].countries.map((country) => ({
+                  id: country,
+                  label: getCountryName(country) || '',
+                })),
+              },
+              {
+                id: `combined-${travelMap.individualTravelMaps[0].id}`,
+                color: 'status-ok',
+                label: `${travelMap.individualTravelMaps[0].userDisplayName} visited countries`,
+                subItems: highlightedCountriesDescriptors[1].countries.map((country) => ({
+                  id: country,
+                  label: getCountryName(country) || '',
+                })),
+              },
+              {
+                id: `combined-${travelMap.individualTravelMaps[1].id}`,
+                color: 'status-critical',
+                label: `${travelMap.individualTravelMaps[1].userDisplayName} visited countries`,
+                subItems: highlightedCountriesDescriptors[2].countries.map((country) => ({
+                  id: country,
+                  label: getCountryName(country) || '',
+                })),
+              },
+            ]}
+          />
         </LegendBody>
       </Legend>
     </>
@@ -101,7 +132,7 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true };
   }
 
-  const prisma = new PrismaClient();
+  const prisma = getPrismaClient();
   const combinedTravelMapResult = await prisma.combinedTravelMap.findFirst({
     where: {
       id: combinedMapId,
