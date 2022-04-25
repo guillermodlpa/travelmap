@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
@@ -45,11 +45,8 @@ const addLayerToMap = (map: mapboxgl.Map, id: string, color: string) => {
     },
     MAPBOX_STUDIO_LAYER_ANCHOR
   );
+  map.setFilter(id, ['in', 'iso_3166_1_alpha_3']); // none selected initially
 };
-
-const LAYER_USER_1 = 'highlighted-countries-1';
-const LAYER_USER_2 = 'highlighted-countries-2';
-const LAYER_USER_OVERLAP = 'highlighted-countries-overlap';
 
 const updateMapHighlightedCountries = (
   map: mapboxgl.Map,
@@ -84,6 +81,77 @@ const zoomMapToCountries = (map: mapboxgl.Map, countries: string[], animate: boo
   });
 };
 
+const addCountryHoverInteractivity = (
+  map: mapboxgl.Map,
+  fillColor: string,
+  onCountryClicked: (code: string) => void
+) => {
+  // add a transparent layer of countries. We use it when interacting with the map to know which country it is
+  map.addLayer(
+    {
+      id: 'country-fills',
+      type: 'fill',
+      source: 'countryBoundariesV1',
+      'source-layer': 'country_boundaries',
+      layout: {},
+      paint: {
+        'fill-color': '#fff',
+        'fill-opacity': 0, // @todo: make this 0
+      },
+    },
+    MAPBOX_STUDIO_LAYER_ANCHOR
+  );
+
+  // add a layer of countries, in which only one filtered country is visible. We'll configure that
+  // filter when hovering over the map
+  map.addLayer(
+    {
+      id: 'country-fills-hover',
+      type: 'fill',
+      source: 'countryBoundariesV1',
+      'source-layer': 'country_boundaries',
+      layout: {},
+      paint: {
+        'fill-color': fillColor,
+        'fill-opacity': 0.5,
+      },
+      filter: ['==', 'name', ''],
+    },
+    'country-fills'
+  );
+
+  // When the user moves their mouse over the page, we look for features
+  // at the mouse position (e.point) and within the states layer (countries-fill).
+  // If a feature is found, then we'll update the filter in the state-fills-hover
+  // layer to only show that state, thus making a hover effect.
+  map.on('mousemove', (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+    const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+    if (features.length) {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
+    } else {
+      map.setFilter('country-fills-hover', ['==', 'name', '']);
+      map.getCanvas().style.cursor = '';
+    }
+  });
+
+  // Reset the country-fills-hover layer's filter when the mouse leaves the map
+  map.on('mouseout', () => {
+    map.getCanvas().style.cursor = 'auto';
+    map.setFilter('country-fills-hover', ['==', 'name', '']);
+  });
+
+  map.on('click', (event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+    const features = map.queryRenderedFeatures(event.point, {
+      layers: ['country-fills'],
+    });
+    const country = features && features.length ? features[0].properties?.iso_3166_1_alpha_3 : null;
+    if (country) {
+      onCountryClicked(country);
+    }
+  });
+};
+
 const HighlightedCountriesMap: React.FC<{
   height?: HeightType;
   id: string;
@@ -91,6 +159,8 @@ const HighlightedCountriesMap: React.FC<{
   applyMapMotion: boolean;
   animateCamera: boolean;
   highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
+  countriesInteractive: boolean;
+  onCountrySelected?: (code: string) => void;
 }> = ({
   height = '100%',
   id,
@@ -98,6 +168,8 @@ const HighlightedCountriesMap: React.FC<{
   applyMapMotion = false,
   animateCamera = true,
   highlightedCountries = [],
+  countriesInteractive,
+  onCountrySelected = () => {},
 }) => {
   const { mode } = useThemeMode();
   const { backgroundColor, mapboxStyle } = mapStyles[mode];
@@ -121,10 +193,8 @@ const HighlightedCountriesMap: React.FC<{
         zoom: 1,
         localFontFamily: "'Roboto', sans-serif",
         interactive,
+        doubleClickZoom: false,
       });
-
-      const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
-      zoomMapToCountries(map, allCountries, false);
 
       map.on('load', (event) => {
         const thisMap = event.target;
@@ -139,14 +209,19 @@ const HighlightedCountriesMap: React.FC<{
           addLayerToMap(thisMap, descriptor.id, color);
         });
 
-        updateMapHighlightedCountries(thisMap, highlightedCountries);
+        if (countriesInteractive) {
+          addCountryHoverInteractivity(
+            thisMap,
+            theme.global.colors.border[theme.dark ? 'dark' : 'light'],
+            onCountrySelected
+          );
+        }
       });
 
       mapRef.current = map;
 
       return () => {
         if (mapRef.current) {
-          // setMapLoaded(false);
           mapRef.current.remove();
           mapRef.current = undefined;
         }
@@ -154,15 +229,36 @@ const HighlightedCountriesMap: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [mapboxStyle, id, interactive, theme]);
+  }, [mapboxStyle, id]);
 
   useEffect(() => {
-    if (mapRef.current?.loaded()) {
-      updateMapHighlightedCountries(mapRef.current, highlightedCountries);
-      const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
-      zoomMapToCountries(mapRef.current, allCountries, animateCamera);
+    if (mapRef.current) {
+      try {
+        updateMapHighlightedCountries(mapRef.current, highlightedCountries);
+      } catch (error: unknown) {
+        // Often, the map style isn't ready. We then wait for it to be iddle.
+        // This results in faster UI than checking first if we can perform the action with .loaded()
+        if (error instanceof Error && error.message === 'Style is not done loading') {
+          mapRef.current.once('idle', (event: mapboxgl.MapboxEvent) => {
+            updateMapHighlightedCountries(event.target, highlightedCountries);
+          });
+        }
+      }
     }
   }, [highlightedCountries]);
+
+  const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
+  useEffect(() => {
+    const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
+    if (!countriesLoaded && allCountries.length > 0) {
+      setCountriesLoaded(true);
+      if (mapRef.current) {
+        zoomMapToCountries(mapRef.current, allCountries, animateCamera);
+      } else {
+        console.warn(`Couldn't zoom to countries because ref is undefined`);
+      }
+    }
+  }, [countriesLoaded, highlightedCountries]);
 
   return (
     <MapboxContainer

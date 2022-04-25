@@ -147,7 +147,7 @@ const theme = deepMerge(grommet, {
   },
 });
 
-type ThemeType = typeof theme;
+type ThemeType = typeof theme & { dark: boolean };
 
 declare module 'styled-components' {
   export interface DefaultTheme extends ThemeType {}

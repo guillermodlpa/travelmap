@@ -13,7 +13,7 @@ import withNoSsr from '../NoSsr/withNoSsr';
  * https://public.opendatasoft.com/explore/dataset/world-administrative-boundaries/export/
  */
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
-import { CustomTheme } from '../../util/theme';
+import { DefaultTheme } from 'styled-components';
 
 const MAP_BACKGROUND_COLOR = 'rgb(101, 196, 236)';
 const INITIAL_MAP_CENTER: [number, number] = [25, 20];
@@ -45,7 +45,7 @@ const Map: React.FC<{
   const [mapLoaded, setMapLoaded] = useState(false);
   const uniqueMapId = useUniqueId('map_');
 
-  const theme = useContext(ThemeContext) as CustomTheme;
+  const theme = useContext(ThemeContext) as DefaultTheme;
 
   useEffect(() => {
     try {
@@ -114,7 +114,7 @@ const Map: React.FC<{
             'source-layer': 'country_boundaries',
             type: 'fill',
             paint: {
-              'fill-color': theme.global.colors.brand || 'black',
+              'fill-color': theme.global.colors.brand.light || 'black',
               'fill-opacity': 0.5,
             },
           },

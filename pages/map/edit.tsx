@@ -10,7 +10,6 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import CountrySearch from '../../components/CountrySearch';
 import LegendActions from '../../components/Legend/LegendActions';
 import Nav from '../../components/Nav';
 import type { NextPage } from 'next';
@@ -170,6 +169,8 @@ const EditMapPage: NextPage = () => {
         interactive
         applyMapMotion={false}
         animateCamera={false}
+        countriesInteractive={true}
+        onCountrySelected={toggleCountry}
       />
 
       <Nav />
@@ -207,12 +208,6 @@ const EditMapPage: NextPage = () => {
                 })),
               },
             ]}
-          />
-
-          <CountrySearch
-            selectedCountries={countries}
-            onCountrySelected={toggleCountry}
-            disabled={loading}
           />
 
           <LegendActions>

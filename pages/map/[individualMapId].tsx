@@ -130,6 +130,7 @@ const ViewIndividualMapPage: NextPage<{
           },
         ]}
         interactive={true}
+        countriesInteractive={false}
         applyMapMotion
         animateCamera
       />

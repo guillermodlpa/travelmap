@@ -59,6 +59,7 @@ const ViewCombinedMapPage: NextPage<{
         id="background-map"
         highlightedCountries={highlightedCountriesDescriptors}
         interactive={true}
+        countriesInteractive={false}
         applyMapMotion
         animateCamera
       />
