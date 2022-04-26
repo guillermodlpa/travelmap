@@ -16,6 +16,9 @@ const ThemeModeInLocalStorage: React.FC = ({ children }) => {
   const { mode, setMode } = useThemeMode();
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return;
+    }
     const localStorageValue = window.localStorage.getItem(KEY) as ThemeMode | null;
     if (localStorageValue) {
       setMode(localStorageValue);
@@ -25,6 +28,9 @@ const ThemeModeInLocalStorage: React.FC = ({ children }) => {
   }, [setMode]);
 
   useEffect(() => {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return;
+    }
     const localStorageValue = window.localStorage.getItem(KEY) as ThemeMode | null;
     if (localStorageValue !== mode) {
       window.localStorage.setItem(KEY, mode);
