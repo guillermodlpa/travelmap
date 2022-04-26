@@ -8,6 +8,7 @@ import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import StaticMapBackgroundLayout from '../../components/Layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
+import OnboardingBanner from '../../components/OnboardingBanner';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextPage } from 'next';
 import useMyUser from '../../hooks/useMyUser';
@@ -39,8 +40,9 @@ const UserMaps: NextPage = () => {
                 </Heading>
               </Box>
             </Box>
-            TODO: either redirect the new user to the edit map page, or add here an onboarding
-            prompt
+
+            <OnboardingBanner />
+
             <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
               <Heading level={4} margin={{ top: '0' }}>
                 Your Map

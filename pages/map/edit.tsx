@@ -213,7 +213,7 @@ const EditMapPage: NextPage = () => {
           <LegendActions>
             <Button
               label={saving ? 'Saving' : 'Save'}
-              disabled={loading || countries.length === 0 || saving}
+              disabled={loading || saving}
               onClick={handleSave}
             />
           </LegendActions>

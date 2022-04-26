@@ -140,6 +140,16 @@ const theme = deepMerge(grommet, {
       },
     },
   },
+  card: {
+    container: {
+      background: 'popup',
+      border: {
+        style: 'double',
+        size: '4px',
+      },
+      elevation: 'none',
+    },
+  },
   grommet: {
     extend: {
       // overflow: 'hidden',
