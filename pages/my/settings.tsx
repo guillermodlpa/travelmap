@@ -217,7 +217,7 @@ const UserSettings: NextPage = () => {
                 >
                   <TextInput
                     value={auth0User?.email || ''}
-                    disabled={!auth0User?.email}
+                    disabled
                     id="email-input"
                     readOnly
                     onChange={(event) => {}}
