@@ -1,5 +1,7 @@
+import { Box, Text } from 'grommet';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import MapList from './MapList';
+import NoResults from './NoResults';
 
 const joinUserNames = (travelMap: ClientCombinedTravelMap | ClientIndividualTravelMap) => {
   if (travelMap.type === 'individual') {
@@ -23,6 +25,10 @@ const CombinedMapsList: React.FC = () => {
     }).then(() => {
       mutate();
     });
+
+  if (mapList && mapList.length === 0) {
+    return <NoResults />;
+  }
 
   return (
     <MapList

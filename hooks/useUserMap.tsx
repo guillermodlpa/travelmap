@@ -4,11 +4,11 @@ import getFetcher from '../util/fetcher';
 const fetcher = getFetcher<ClientIndividualTravelMap>();
 
 const useUserMap = () => {
-  const { data, error } = useSWR(`/api/map`, fetcher, { suspense: true });
+  const { data, error } = useSWR(`/api/map`, fetcher);
   return {
     map: data,
     isLoading: !error && data != null,
-    isError: error,
+    error: error,
   };
 };
 

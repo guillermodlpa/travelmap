@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import getFetcher from '../../util/fetcher';
 import MapList from './MapList';
+import NoResults from './NoResults';
 
 const fetcher = getFetcher<Array<ClientIndividualTravelMap | ClientCombinedTravelMap>>();
 
@@ -9,12 +10,17 @@ const useRecentMapList = () => {
   return {
     mapList: data || [],
     isLoading: !error && !data,
-    isError: error,
+    error,
   };
 };
 
 const RecentMapsList: React.FC = () => {
-  const { mapList } = useRecentMapList();
+  const { mapList, isLoading, error } = useRecentMapList();
+
+  if (!mapList && !isLoading && !error) {
+    return <NoResults />;
+  }
+
   return <MapList mapList={mapList} allowEdit={false} />;
 };
 
