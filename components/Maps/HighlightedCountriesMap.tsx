@@ -174,6 +174,7 @@ const HighlightedCountriesMap: React.FC<{
   const { mode } = useThemeMode();
   const { backgroundColor, mapboxStyle } = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
+  const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
   const theme = useTheme();
 
@@ -182,6 +183,7 @@ const HighlightedCountriesMap: React.FC<{
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = undefined;
+        setMapLoaded(false);
       }
 
       mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_API_ACCESS_TOKEN || '';
@@ -216,6 +218,8 @@ const HighlightedCountriesMap: React.FC<{
             onCountrySelected
           );
         }
+
+        setMapLoaded(true);
       });
 
       mapRef.current = map;
@@ -224,6 +228,7 @@ const HighlightedCountriesMap: React.FC<{
         if (mapRef.current) {
           mapRef.current.remove();
           mapRef.current = undefined;
+          setMapLoaded(false);
         }
       };
     } catch (error) {
@@ -232,7 +237,7 @@ const HighlightedCountriesMap: React.FC<{
   }, [mapboxStyle, id]);
 
   useEffect(() => {
-    if (mapRef.current) {
+    if (mapRef.current && mapLoaded) {
       try {
         updateMapHighlightedCountries(mapRef.current, highlightedCountries);
       } catch (error: unknown) {
@@ -245,7 +250,7 @@ const HighlightedCountriesMap: React.FC<{
         }
       }
     }
-  }, [highlightedCountries]);
+  }, [highlightedCountries, mapLoaded]);
 
   const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
   useEffect(() => {
