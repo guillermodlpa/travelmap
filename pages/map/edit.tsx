@@ -185,7 +185,7 @@ const EditMapPage: NextPage = () => {
       <Legend>
         <LegendTitle
           heading={displayName ? `${displayName}'s Travelmap` : 'Travelmap'}
-          avatars={travelMap ? [{ id: travelMap.userId, name: travelMap.userDisplayName }] : []}
+          avatars={travelMap ? [{ id: travelMap.userId, name: displayName }] : []}
           showEditNameButton
           onClickEditNameButton={() => setEditDisplayNameDialogOpen(true)}
         />
@@ -213,7 +213,7 @@ const EditMapPage: NextPage = () => {
           <LegendActions>
             <Button
               label={saving ? 'Saving' : 'Save'}
-              disabled={loading || saving}
+              disabled={loading || saving || countries.length === 0}
               onClick={handleSave}
             />
           </LegendActions>
