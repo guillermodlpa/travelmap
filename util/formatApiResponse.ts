@@ -11,6 +11,7 @@ export const formatApiIndividualTravelMapResponse = (
     pathView: `/map/${individualTravelMap.id}`,
     userId: individualTravelMap.userId,
     userDisplayName: user.displayName,
+    userPictureUrl: user.pictureUrl,
     visitedCountries: individualTravelMap.visitedCountries as string[],
   };
 };

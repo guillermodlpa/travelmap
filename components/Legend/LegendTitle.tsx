@@ -7,7 +7,7 @@ const NBSP_CHAR = '\u00A0';
 
 interface LegendTitleProps {
   heading: string | undefined;
-  avatars: { id: string; name: string; href?: string }[] | undefined;
+  avatars: { id: string; name: string; href?: string; pictureUrl: string | null }[] | undefined;
   showEditNameButton?: boolean;
   onClickEditNameButton?: (event: SyntheticEvent) => void;
 }
@@ -15,7 +15,7 @@ interface LegendTitleProps {
 const ConditionalLink: React.FC<{ href: string | undefined }> = ({ href, children }) =>
   !href ? <>{children}</> : <NextLink href={href}>{children}</NextLink>;
 
-const defaultAvatar = { id: '_', name: '', href: undefined };
+const defaultAvatar = { id: '_', name: '', pictureUrl: null, href: undefined };
 
 const LegendTitle: React.FC<LegendTitleProps> = ({
   heading,
@@ -25,14 +25,14 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
 }) => (
   <Box direction="row" align="center" gap="small">
     <Box direction="row" flex={{ shrink: 0 }}>
-      {avatars.map(({ id, name, href }, index) => (
+      {avatars.map(({ id, name, pictureUrl, href }, index) => (
         <ConditionalLink href={href} key={id}>
           <Avatar
             background="parchment"
             border={{ color: 'brand', size: 'small' }}
             margin={{ left: `-${24 * index}px` }}
             style={{ zIndex: avatars.length - index }}
-            // src={avatarSrc}
+            src={pictureUrl || undefined}
           >
             {(name || '').substring(0, 1)}
           </Avatar>

@@ -23,7 +23,7 @@ const createInitialMap = (prisma: PrismaClient, userId: string) =>
  * This hook creates a user record in the DB, and returns the user that has the new ID in the database, so that Auth0 can save it as well.
  */
 const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email, sub, displayName, secret } = req.body;
+  const { email, sub, displayName, pictureUrl, secret } = req.body;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -58,6 +58,7 @@ const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         auth0Sub: sub,
         email,
         displayName: displayName || '',
+        pictureUrl: pictureUrl || null,
       },
     })
     .then(async (user) => {
@@ -65,7 +66,8 @@ const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json(user);
     })
     .catch(async (error) => {
-      return res.status(500).json({ error: 'prisma', prismaError: error });
+      console.error(error);
+      return res.status(500).json({ error: 'prisma', prismaError: error.toString() });
     });
 };
 

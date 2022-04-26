@@ -6,7 +6,6 @@ import {
   FormField,
   Heading,
   ResponsiveContext,
-  Text,
   TextInput,
 } from 'grommet';
 import { ReactElement, Suspense, useContext, useEffect, useState } from 'react';
@@ -21,7 +20,6 @@ import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextPage } from 'next';
 import useMyUser from '../../hooks/useMyUser';
-import { useRouter } from 'next/router';
 import { PATH_LOG_OUT } from '../../util/paths';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
@@ -32,6 +30,20 @@ const UserSettings: NextPage = () => {
   const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
   const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>('');
+  const [profilePictureFile, setProfilePictureFile] = useState<File>();
+
+  const [temporaryProfilePictureSrc, setTemporaryProfilePictureSrc] = useState<string>();
+  useEffect(() => {
+    if (!profilePictureFile) {
+      setTemporaryProfilePictureSrc(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(profilePictureFile);
+    setTemporaryProfilePictureSrc(objectUrl);
+    return () => {
+      URL.revokeObjectURL(objectUrl); // free memory
+    };
+  }, [profilePictureFile]);
 
   const { data: myUser, error: myUserError, mutate: mutateMyUser } = useMyUser();
   const isLoadingMyUser = !myUserError && !myUser;
@@ -46,31 +58,42 @@ const UserSettings: NextPage = () => {
   const size = useContext(ResponsiveContext);
 
   const [saving, setSaving] = useState<boolean>(false);
-  const handleSave = () => {
+  const handleSave = async () => {
     setSaving(true);
-    fetch(`/api/user`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        notifyOnCombinedMaps,
-        notifyOnAppUpdates,
-        displayName,
-      }),
-    })
-      .then(() => {
+
+    try {
+      if (profilePictureFile) {
+        const data = new FormData();
+        data.append('file', profilePictureFile);
+        await fetch(`/api/user/picture`, {
+          method: 'POST',
+          body: data,
+        }).then(() => {
+          setProfilePictureFile(undefined);
+        });
+      }
+
+      await fetch(`/api/user`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          notifyOnCombinedMaps,
+          notifyOnAppUpdates,
+          displayName,
+        }),
+      }).then(() => {
         setSaving(false);
         mutateMyUser();
-      })
-      .catch((error) => {
-        setSaving(false);
-        console.error(error);
-        alert('error');
       });
+    } catch (error) {
+      setSaving(false);
+      console.error(error);
+      alert('error');
+    }
   };
 
-  const router = useRouter();
   const [deletingAccount, setDeletingAccount] = useState<boolean>(false);
   const handleDeleteAccount = (): Promise<void> => {
     setDeletingAccount(true);
@@ -128,33 +151,42 @@ const UserSettings: NextPage = () => {
                       User
                     </Heading>
 
-                    <FormField
-                      label="Display name"
-                      htmlFor="display-name-input" /* @todo: replace for React 18's useId */
-                      required
-                    >
-                      <TextInput
-                        value={displayName}
-                        disabled={!Boolean(myUser)}
-                        id="display-name-input"
-                        onChange={(event) => {
-                          setDisplayName(event.target.value);
-                        }}
-                      />
-                    </FormField>
-
-                    <Box direction="row" gap="small">
-                      <Box flex={{ shrink: 0 }}>
-                        <Avatar
-                          size="medium"
-                          background="parchment"
-                          border={{ color: 'brand', size: 'small' }}
-                        >
-                          {(displayName || '').substring(0, 1)}
-                        </Avatar>
+                    <Box direction="row" gap="medium">
+                      <Box flex={{ shrink: 0 }} margin={{ top: 'small' }}>
+                        <label htmlFor="user-picture-file-input" style={{ cursor: 'pointer' }}>
+                          <Avatar
+                            size="large"
+                            background="parchment"
+                            border={{ color: 'brand', size: 'small' }}
+                            src={temporaryProfilePictureSrc || myUser?.pictureUrl || undefined}
+                          >
+                            {(displayName || '').substring(0, 1)}
+                          </Avatar>
+                          <input
+                            type="file"
+                            id="user-picture-file-input"
+                            style={{ display: 'none' }}
+                            onChange={(event) => {
+                              setProfilePictureFile(event?.target?.files?.[0]);
+                            }}
+                          />
+                        </label>
                       </Box>
                       <Box flex={{ grow: 1, shrink: 1 }}>
-                        <Text color="text-weak">{`The avatar picture can't be customized yet`}</Text>
+                        <FormField
+                          label="Display name"
+                          htmlFor="display-name-input" /* @todo: replace for React 18's useId */
+                          required
+                        >
+                          <TextInput
+                            value={displayName}
+                            disabled={!Boolean(myUser)}
+                            id="display-name-input"
+                            onChange={(event) => {
+                              setDisplayName(event.target.value);
+                            }}
+                          />
+                        </FormField>
                       </Box>
                     </Box>
                   </Box>

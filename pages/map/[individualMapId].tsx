@@ -149,7 +149,13 @@ const ViewIndividualMapPage: NextPage<{
       <Legend ref={legendRef}>
         <LegendTitle
           heading={getTravelMapName(travelMap)}
-          avatars={[{ id: travelMap.userId, name: travelMap.userDisplayName }]}
+          avatars={[
+            {
+              id: travelMap.userId,
+              name: travelMap.userDisplayName,
+              pictureUrl: travelMap.userPictureUrl,
+            },
+          ]}
         />
 
         <LegendBody>

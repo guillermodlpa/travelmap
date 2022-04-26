@@ -9,6 +9,7 @@ type ClientIndividualTravelMap = {
   pathView: string;
   userId: string;
   userDisplayName: string;
+  userPictureUrl: string | null;
   visitedCountries: string[];
 };
 

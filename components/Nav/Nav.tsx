@@ -1,9 +1,10 @@
 import { useUser } from '@auth0/nextjs-auth0';
-import { Box, Button, ButtonExtendedProps, Nav as GrommetNav } from 'grommet';
+import { Avatar, Box, Button, ButtonExtendedProps, Nav as GrommetNav } from 'grommet';
 import { Globe, Logout, MapLocation, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
+import useMyUser from '../../hooks/useMyUser';
 import { PATH_LOG_OUT } from '../../util/paths';
 import Parchment from '../Parchment';
 import useColorThemeToggle from './useColorThemeToggle';
@@ -35,7 +36,8 @@ const ThemeModeToggleNavButton = () => {
 };
 
 const Nav: React.FC = () => {
-  const { user, isLoading, error } = useUser();
+  const { user: auth0User, isLoading, error } = useUser();
+  const { data: myUser } = useMyUser();
   if (isLoading) {
     return <></>;
   }
@@ -57,15 +59,29 @@ const Nav: React.FC = () => {
       <NavFloatingBox animation="fadeIn">
         <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
           <Box direction="row" gap="xsmall">
-            {Boolean(user) && (
+            {Boolean(auth0User) && (
               <NextLink passHref href="/my/maps">
-                <NavButton a11yTitle="My Maps" icon={<MapLocation color="text" />} tip="My Maps" />
+                <NavButton
+                  a11yTitle="Your Maps"
+                  icon={
+                    <Avatar
+                      margin="none"
+                      size="xsmall"
+                      background="parchment"
+                      border={{ color: 'brand', size: 'xsmall' }}
+                      src={myUser?.pictureUrl || undefined}
+                    >
+                      {(myUser?.displayName || '').substring(0, 1)}
+                    </Avatar>
+                  }
+                  tip="Your Maps"
+                />
               </NextLink>
             )}
 
             <ThemeModeToggleNavButton />
 
-            {Boolean(user) && (
+            {Boolean(auth0User) && (
               <NextLink passHref href="/my/settings">
                 <NavButton
                   a11yTitle="Settings"
@@ -75,7 +91,7 @@ const Nav: React.FC = () => {
               </NextLink>
             )}
 
-            {Boolean(user) && (
+            {Boolean(auth0User) && (
               <NavButton
                 a11yTitle="Log Out"
                 tip="Log Out"

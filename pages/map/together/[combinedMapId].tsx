@@ -74,11 +74,13 @@ const ViewCombinedMapPage: NextPage<{
               id: travelMap.individualTravelMaps[0].userId,
               name: travelMap.individualTravelMaps[0].userDisplayName,
               href: travelMap.individualTravelMaps[0].pathView,
+              pictureUrl: travelMap.individualTravelMaps[0].userPictureUrl,
             },
             {
               id: travelMap.individualTravelMaps[1].userId,
               name: travelMap.individualTravelMaps[1].userDisplayName,
               href: travelMap.individualTravelMaps[1].pathView,
+              pictureUrl: travelMap.individualTravelMaps[1].userPictureUrl,
             },
           ]}
         />

@@ -185,7 +185,11 @@ const EditMapPage: NextPage = () => {
       <Legend>
         <LegendTitle
           heading={displayName ? `${displayName}'s Travelmap` : 'Travelmap'}
-          avatars={travelMap ? [{ id: travelMap.userId, name: displayName }] : []}
+          avatars={
+            travelMap
+              ? [{ id: travelMap.userId, name: displayName, pictureUrl: travelMap.userPictureUrl }]
+              : []
+          }
           showEditNameButton
           onClickEditNameButton={() => setEditDisplayNameDialogOpen(true)}
         />

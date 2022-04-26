@@ -41,7 +41,11 @@ const MapList: React.FC<MapListProps> = ({
           <Box direction="row" gap="small" align="center" flex="grow">
             <Box direction="row" flex={{ shrink: 0 }}>
               {travelMap.type === 'individual' ? (
-                <Avatar background="parchment" border={{ color: 'brand', size: 'small' }}>
+                <Avatar
+                  background="parchment"
+                  border={{ color: 'brand', size: 'small' }}
+                  src={travelMap.userPictureUrl || undefined}
+                >
                   {travelMap.userDisplayName.substring(0, 1)}
                 </Avatar>
               ) : (
@@ -52,6 +56,7 @@ const MapList: React.FC<MapListProps> = ({
                     border={{ color: 'brand', size: 'small' }}
                     margin={{ left: `-${24 * index}px` }}
                     style={{ zIndex: length - index }}
+                    src={individualTravelMap.userPictureUrl || undefined}
                   >
                     {individualTravelMap.userDisplayName.substring(0, 1)}
                   </Avatar>

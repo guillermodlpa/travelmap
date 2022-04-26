@@ -15,7 +15,7 @@ exports.onExecutePostLogin = async (event, api) => {
 
   // 1. Get the se
   const auth0ActionsHookSecret = event.secrets.AUTH0_ACTIONS_HOOK_SECRET
-  
+
   // 2. skip if we already have done this for the user
   if (event.user.app_metadata.appUserId) {
     // add app_user_id to the token, so in the frontend app, useUser() has it
@@ -29,6 +29,7 @@ exports.onExecutePostLogin = async (event, api) => {
     email: event.user.email,
     sub: event.user.user_id,
     displayName: event.user.given_name || event.user.username || event.user.nickname,
+    pictureUrl: event.user.picture || null,
     secret: auth0ActionsHookSecret,
   })
     .then((response) => {

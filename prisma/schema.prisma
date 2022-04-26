@@ -30,6 +30,7 @@ model User {
     auth0Sub             String                @unique
     email                String?
     displayName          String
+    pictureUrl           String?
     notifyOnCombinedMaps Boolean               @default(true)
     notifyOnAppUpdates   Boolean               @default(true)
     created              DateTime              @default(now())
