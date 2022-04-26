@@ -33,7 +33,7 @@ const handlePost = async (
   const combinedTravelMapResult = await prisma.combinedTravelMap.create({
     data: {
       users: {
-        connect: [{ id: userId }, { id: otherUserId }],
+        connect: otherUserId ? [{ id: userId }, { id: otherUserId }] : [{ id: userId }],
       },
     },
     include: {
