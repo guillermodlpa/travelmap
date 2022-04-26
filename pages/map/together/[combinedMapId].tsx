@@ -45,7 +45,7 @@ const ViewCombinedMapPage: NextPage<{
 }> = ({ travelMap }) => {
   const legendRef = createRef<HTMLDivElement>();
 
-  const highlightedCountriesDescriptors = getNonOverlappingListsOfCountries(
+  const countryListDescriptors = getNonOverlappingListsOfCountries(
     travelMap.individualTravelMaps[0],
     travelMap.individualTravelMaps[1]
   );
@@ -57,7 +57,7 @@ const ViewCombinedMapPage: NextPage<{
       <HighlightedCountriesMap
         height="100vh"
         id="background-map"
-        highlightedCountries={highlightedCountriesDescriptors}
+        highlightedCountries={countryListDescriptors}
         interactive={true}
         countriesInteractive={false}
         applyMapMotion
@@ -89,8 +89,8 @@ const ViewCombinedMapPage: NextPage<{
               {
                 id: 'both',
                 color: 'status-warning',
-                label: `Visited countries by both`,
-                subItems: highlightedCountriesDescriptors[0].countries.map((country) => ({
+                label: `Visited countries by both (${countryListDescriptors[0].countries.length})`,
+                subItems: countryListDescriptors[0].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
                 })),
@@ -98,8 +98,8 @@ const ViewCombinedMapPage: NextPage<{
               {
                 id: `combined-${travelMap.individualTravelMaps[0].id}`,
                 color: 'status-ok',
-                label: `${travelMap.individualTravelMaps[0].userDisplayName} visited countries`,
-                subItems: highlightedCountriesDescriptors[1].countries.map((country) => ({
+                label: `${travelMap.individualTravelMaps[0].userDisplayName} visited countries (${countryListDescriptors[1].countries.length})`,
+                subItems: countryListDescriptors[1].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
                 })),
@@ -107,13 +107,13 @@ const ViewCombinedMapPage: NextPage<{
               {
                 id: `combined-${travelMap.individualTravelMaps[1].id}`,
                 color: 'status-critical',
-                label: `${travelMap.individualTravelMaps[1].userDisplayName} visited countries`,
-                subItems: highlightedCountriesDescriptors[2].countries.map((country) => ({
+                label: `${travelMap.individualTravelMaps[1].userDisplayName} visited countries (${countryListDescriptors[2].countries.length})`,
+                subItems: countryListDescriptors[2].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
                 })),
               },
-            ]}
+            ].filter((item) => item.subItems.length > 0)}
           />
         </LegendBody>
       </Legend>

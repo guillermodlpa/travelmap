@@ -158,7 +158,7 @@ const ViewIndividualMapPage: NextPage<{
               {
                 id: `individual-${travelMap.id}`,
                 color: 'status-ok',
-                label: 'Visited countries',
+                label: `Visited countries (${travelMap.visitedCountries.length})`,
                 subItems: travelMap.visitedCountries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',

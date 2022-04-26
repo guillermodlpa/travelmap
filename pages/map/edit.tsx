@@ -201,7 +201,7 @@ const EditMapPage: NextPage = () => {
               {
                 id: 'edit-map',
                 color: 'status-ok',
-                label: 'Visited countries',
+                label: `Visited countries (${countries.length})`,
                 subItems: countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
