@@ -40,36 +40,20 @@ export default function EditMap() {
     });
 
   const [editDisplayNameDialogOpen, setEditDisplayNameDialogOpen] = useState<boolean>(false);
-  const [displayName, setDisplayName] = useState<string>('');
-  const savedUserName = travelMap?.userDisplayName || '';
-  useEffect(() => {
-    setDisplayName(savedUserName);
-  }, [savedUserName]);
 
   const [saving, setSaving] = useState<boolean>(false);
   const handleSave = () => {
     setSaving(true);
-    Promise.all([
-      fetch(`/api/map`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          visitedCountries: countries,
-        }),
-      }),
-      fetch(`/api/user`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          displayName,
-        }),
-      }),
-    ])
 
+    fetch(`/api/map`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        visitedCountries: countries,
+      }),
+    })
       .then(() => {
         setSaving(false);
         if (travelMap) {
@@ -105,16 +89,22 @@ export default function EditMap() {
       <EditDisplayNameDialog
         open={editDisplayNameDialogOpen}
         onClose={() => setEditDisplayNameDialogOpen(false)}
-        displayName={displayName}
-        onDisplayNameChange={(newDisplayName) => setDisplayName(newDisplayName)}
       />
 
       <Legend>
         <LegendTitle
-          heading={displayName ? `${displayName}'s Travelmap` : 'Travelmap'}
+          heading={
+            travelMap?.userDisplayName ? `${travelMap?.userDisplayName}'s Travelmap` : 'Travelmap'
+          }
           avatars={
             travelMap
-              ? [{ id: travelMap.userId, name: displayName, pictureUrl: travelMap.userPictureUrl }]
+              ? [
+                  {
+                    id: travelMap.userId,
+                    name: travelMap?.userDisplayName,
+                    pictureUrl: travelMap.userPictureUrl,
+                  },
+                ]
               : []
           }
           showEditNameButton

@@ -11,7 +11,7 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import useMyUser from '../../hooks/useMyUser';
 
-export default function UserSettingsForm() {
+export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () => void }) {
   const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
   const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>('');
@@ -71,6 +71,7 @@ export default function UserSettingsForm() {
       }).then(() => {
         setSaving(false);
         mutateMyUser();
+        onSaved();
       });
     } catch (error) {
       setSaving(false);
@@ -87,8 +88,8 @@ export default function UserSettingsForm() {
       >
         <Box
           margin={{ vertical: 'large' }}
-          flex={{ shrink: 0 }}
-          width={size === 'small' ? 'auto' : '50%'}
+          flex={{ grow: size === 'small' ? 0 : 1, shrink: 1 }}
+          // width={size === 'small' ? 'auto' : '50%'}
           gap="medium"
         >
           <Heading level={4} margin={'0'}>
@@ -137,8 +138,8 @@ export default function UserSettingsForm() {
 
         <Box
           margin={{ vertical: 'large' }}
-          flex={{ shrink: 0 }}
-          width={size === 'small' ? 'auto' : '50%'}
+          flex={{ grow: size === 'small' ? 0 : 1, shrink: 1 }}
+          // width={size === 'small' ? 'auto' : '50%'}
           gap="medium"
         >
           <Heading level={4} margin={'0'}>
