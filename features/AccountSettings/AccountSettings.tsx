@@ -1,114 +1,19 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  CheckBox,
-  FormField,
-  Heading,
-  ResponsiveContext,
-  TextInput,
-} from 'grommet';
-import { useContext, useEffect, useState } from 'react';
+import { Box, Button, FormField, Heading, ResponsiveContext, TextInput } from 'grommet';
+import { useContext } from 'react';
 import NextLink from 'next/link';
 import Parchment from '../../components/Parchment';
 import { Previous } from 'grommet-icons';
-import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import { useUser } from '@auth0/nextjs-auth0';
 import useMyUser from '../../hooks/useMyUser';
-import { PATH_LOG_OUT } from '../../util/paths';
+import UserSettingsForm from './UserSettingsForm';
+import DeleteAccountButton from './DeleteAccountButton';
 
 export default function AccountSettings() {
-  const { user: auth0User, isLoading: isLoadingAuth0 } = useUser();
-
-  const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
-  const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
-  const [displayName, setDisplayName] = useState<string>('');
-  const [profilePictureFile, setProfilePictureFile] = useState<File>();
-
-  const [temporaryProfilePictureSrc, setTemporaryProfilePictureSrc] = useState<string>();
-  useEffect(() => {
-    if (!profilePictureFile) {
-      setTemporaryProfilePictureSrc(undefined);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(profilePictureFile);
-    setTemporaryProfilePictureSrc(objectUrl);
-    return () => {
-      URL.revokeObjectURL(objectUrl); // free memory
-    };
-  }, [profilePictureFile]);
-
-  const { data: myUser, error: myUserError, mutate: mutateMyUser } = useMyUser();
-  const isLoadingMyUser = !myUserError && !myUser;
-  useEffect(() => {
-    if (myUser) {
-      setNotifyOnCombinedMap(myUser.notifyOnCombinedMaps);
-      setNotifyOnAppUpdates(myUser.notifyOnAppUpdates);
-      setDisplayName(myUser.displayName);
-    }
-  }, [myUser]);
+  const { user: auth0User } = useUser();
+  const { data: myUser } = useMyUser();
 
   const size = useContext(ResponsiveContext);
-
-  const [saving, setSaving] = useState<boolean>(false);
-  const handleSave = async () => {
-    setSaving(true);
-
-    try {
-      if (profilePictureFile) {
-        const data = new FormData();
-        data.append('file', profilePictureFile);
-        await fetch(`/api/user/picture`, {
-          method: 'POST',
-          body: data,
-        }).then(() => {
-          setProfilePictureFile(undefined);
-        });
-      }
-
-      await fetch(`/api/user`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          notifyOnCombinedMaps,
-          notifyOnAppUpdates,
-          displayName,
-        }),
-      }).then(() => {
-        setSaving(false);
-        mutateMyUser();
-      });
-    } catch (error) {
-      setSaving(false);
-      console.error(error);
-      alert('error');
-    }
-  };
-
-  const [deletingAccount, setDeletingAccount] = useState<boolean>(false);
-  const handleDeleteAccount = (): Promise<void> => {
-    setDeletingAccount(true);
-    return fetch(`/api/user`, {
-      method: 'DELETE',
-    })
-      .then(() => {
-        setTimeout(() => {
-          setDeletingAccount(false);
-          mutateMyUser();
-          if (typeof window !== 'undefined') {
-            window.location.href = PATH_LOG_OUT;
-          }
-        }, 500);
-      })
-      .catch((error) => {
-        setDeletingAccount(false);
-        console.error(error);
-        alert('error');
-      });
-  };
 
   return (
     <PrincipalParchmentContainer>
@@ -126,99 +31,7 @@ export default function AccountSettings() {
             </Box>
           </Box>
 
-          <Box gap="small">
-            <Box
-              direction={size === 'small' ? 'column' : 'row'}
-              gap={size === 'small' ? 'medium' : 'large'}
-            >
-              <Box
-                margin={{ vertical: 'large' }}
-                flex={{ shrink: 0 }}
-                width={size === 'small' ? 'auto' : '50%'}
-                gap="medium"
-              >
-                <Heading level={4} margin={'0'}>
-                  User
-                </Heading>
-
-                <Box direction="row" gap="medium">
-                  <Box flex={{ shrink: 0 }} margin={{ top: 'small' }}>
-                    <label htmlFor="user-picture-file-input" style={{ cursor: 'pointer' }}>
-                      <Avatar
-                        size="large"
-                        background="parchment"
-                        border={{ color: 'brand', size: 'small' }}
-                        src={temporaryProfilePictureSrc || myUser?.pictureUrl || undefined}
-                      >
-                        {(displayName || '').substring(0, 1)}
-                      </Avatar>
-                      <input
-                        type="file"
-                        id="user-picture-file-input"
-                        style={{ display: 'none' }}
-                        onChange={(event) => {
-                          setProfilePictureFile(event?.target?.files?.[0]);
-                        }}
-                      />
-                    </label>
-                  </Box>
-                  <Box flex={{ grow: 1, shrink: 1 }}>
-                    <FormField
-                      label="Display name"
-                      htmlFor="display-name-input" /* @todo: replace for React 18's useId */
-                      required
-                    >
-                      <TextInput
-                        value={displayName}
-                        disabled={!Boolean(myUser)}
-                        id="display-name-input"
-                        onChange={(event) => {
-                          setDisplayName(event.target.value);
-                        }}
-                      />
-                    </FormField>
-                  </Box>
-                </Box>
-              </Box>
-
-              <Box
-                margin={{ vertical: 'large' }}
-                flex={{ shrink: 0 }}
-                width={size === 'small' ? 'auto' : '50%'}
-                gap="medium"
-              >
-                <Heading level={4} margin={'0'}>
-                  Notifications
-                </Heading>
-
-                <CheckBox
-                  checked={notifyOnCombinedMaps}
-                  disabled={!Boolean(myUser)}
-                  label="When somebody makes a combined map with me"
-                  onChange={(event) => {
-                    setNotifyOnCombinedMap(event.target.checked);
-                  }}
-                />
-
-                <CheckBox
-                  checked={notifyOnAppUpdates}
-                  disabled={!Boolean(myUser)}
-                  label="Updates about Travelmap"
-                  onChange={(event) => {
-                    setNotifyOnAppUpdates(event.target.checked);
-                  }}
-                />
-              </Box>
-            </Box>
-            <Box>
-              <Button
-                alignSelf="center"
-                label={saving ? 'Saving' : 'Save'}
-                disabled={isLoadingAuth0 || isLoadingMyUser || saving}
-                onClick={handleSave}
-              />
-            </Box>
-          </Box>
+          <UserSettingsForm />
 
           <Box border={{ color: 'border', size: '1px', side: 'bottom' }} />
 
@@ -246,25 +59,7 @@ export default function AccountSettings() {
               />
             </FormField>
 
-            <WrappingDialogConfirmation
-              onConfirm={(event, requestClose) => {
-                handleDeleteAccount().then(() => {
-                  requestClose();
-                });
-              }}
-              confirmButtonLabel={deletingAccount ? 'Deleting Account' : 'Delete Account'}
-              confirmButtonDisabled={deletingAccount}
-              confirmMessage="Are you sure that you want to delete your account and data?"
-            >
-              {(handleClick) => (
-                <Button
-                  label="Delete Account"
-                  color="border"
-                  alignSelf="end"
-                  onClick={handleClick}
-                />
-              )}
-            </WrappingDialogConfirmation>
+            <DeleteAccountButton />
           </Box>
         </Box>
       </Parchment>
