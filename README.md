@@ -23,6 +23,7 @@ TypeScript, Next.js, React, Auth0, Planetscale, Prisma
   - There are 2 applications configured, each with its variables defined in the environment variables file:
     - Frontend: it's a generic application, the one integrated with Next.js
     - Backend: it's a "Machine to Machine" application, used to interact with the Management API when needed, like when needing to delete a user account.
+- Images: Cloudinary to host and serve the profile pictures
 
 ## Development
 
