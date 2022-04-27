@@ -1,24 +1,26 @@
 import StaticMapBackgroundLayout from '../../layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-import UserSettings from '../../features/UserSettings';
+import AccountSettings from '../../features/AccountSettings';
 
-const UserSettingsPage = () => {
+const AccountSettingsPage = () => {
   return (
     <>
       <HeadWithDefaults title="Travelmap - Settings" />
-      <UserSettings />
+      <AccountSettings />
     </>
   );
 };
 
-type PageWithLayout = typeof UserSettingsPage & {
+type PageWithLayout = typeof AccountSettingsPage & {
   getLayout(page: React.ReactElement): JSX.Element;
 };
-const UserSettingsWithPageAuthRequired = withPageAuthRequired(UserSettingsPage) as PageWithLayout;
+const AccountSettingsWithPageAuthRequired = withPageAuthRequired(
+  AccountSettingsPage
+) as PageWithLayout;
 
-UserSettingsWithPageAuthRequired.getLayout = function getLayout(page: React.ReactElement) {
+AccountSettingsWithPageAuthRequired.getLayout = function getLayout(page: React.ReactElement) {
   return <StaticMapBackgroundLayout>{page}</StaticMapBackgroundLayout>;
 };
 
-export default UserSettingsWithPageAuthRequired;
+export default AccountSettingsWithPageAuthRequired;

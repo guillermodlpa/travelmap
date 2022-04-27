@@ -18,7 +18,7 @@ import { useUser } from '@auth0/nextjs-auth0';
 import useMyUser from '../../hooks/useMyUser';
 import { PATH_LOG_OUT } from '../../util/paths';
 
-export default function UserSettings() {
+export default function AccountSettings() {
   const { user: auth0User, isLoading: isLoadingAuth0 } = useUser();
 
   const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
