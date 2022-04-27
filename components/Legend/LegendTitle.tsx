@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Heading } from 'grommet';
+import { Avatar, Box, Button, Heading, Anchor } from 'grommet';
 import { FormEdit } from 'grommet-icons';
 import { SyntheticEvent } from 'react';
 import NextLink from 'next/link';
@@ -13,7 +13,13 @@ interface LegendTitleProps {
 }
 
 const ConditionalLink: React.FC<{ href: string | undefined }> = ({ href, children }) =>
-  !href ? <>{children}</> : <NextLink href={href}>{children}</NextLink>;
+  !href ? (
+    <>{children}</>
+  ) : (
+    <NextLink href={href} passHref>
+      <Anchor style={{ display: 'block', borderRadius: '100%' }}>{children}</Anchor>
+    </NextLink>
+  );
 
 const defaultAvatar = { id: '_', name: '', pictureUrl: null, href: undefined };
 
@@ -26,17 +32,17 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
   <Box direction="row" align="center" gap="small">
     <Box direction="row" flex={{ shrink: 0 }}>
       {avatars.map(({ id, name, pictureUrl, href }, index) => (
-        <ConditionalLink href={href} key={id}>
-          <Avatar
-            background="parchment"
-            border={{ color: 'brand', size: 'small' }}
-            margin={{ left: `-${24 * index}px` }}
-            style={{ zIndex: avatars.length - index }}
-            src={pictureUrl || undefined}
-          >
-            {(name || '').substring(0, 1)}
-          </Avatar>
-        </ConditionalLink>
+        <div style={{ marginLeft: `-${24 * index}px`, zIndex: avatars.length - index }} key={id}>
+          <ConditionalLink href={href}>
+            <Avatar
+              background="parchment"
+              border={{ color: 'brand', size: 'small' }}
+              src={pictureUrl || undefined}
+            >
+              {(name || '').substring(0, 1)}
+            </Avatar>
+          </ConditionalLink>
+        </div>
       ))}
     </Box>
     <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex={{ shrink: 1, grow: 1 }}>

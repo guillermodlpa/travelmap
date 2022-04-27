@@ -19,15 +19,12 @@ const theme = deepMerge(grommet, {
       'status-ok': '#00C781',
       control: 'brand',
       focus: 'brand',
-      border: {
-        dark: 'rgba(255, 255, 255, 0.33)',
-        light: 'rgba(0, 0, 0, 0.33)',
-      },
+      border: { light: 'rgba(0, 0, 0, 0.33)', dark: 'rgba(255, 255, 255, 0.33)' },
       placeholder: 'text',
-      text: { dark: '#FCF5E5', light: '#0f0f0f' },
-      'text-strong': { dark: '#FFFFFF', light: '#000000' },
-      'text-weak': { dark: '#CCCCCC', light: '#555555' },
-      'text-xweak': { dark: '#BBBBBB', light: '#666666' },
+      text: { light: '#0f0f0f', dark: '#FCF5E5' },
+      'text-strong': { light: '#000000', dark: '#FFFFFF' },
+      'text-weak': { light: '#555555', dark: '#CCCCCC' },
+      'text-xweak': { light: '#666666', dark: '#BBBBBB' },
     },
     elevation: {
       dark: {
@@ -45,6 +42,12 @@ const theme = deepMerge(grommet, {
         small: '0px 2px 4px rgba(0, 0, 0, 0.30)',
         xlarge: '0px 12px 24px rgba(0, 0, 0, 0.30)',
         xsmall: '0px 1px 2px rgba(0, 0, 0, 0.30)',
+      },
+    },
+    focus: {
+      shadow: {
+        color: { light: '#112f6a', dark: '#91b0ee' },
+        size: '3px',
       },
     },
   },

@@ -159,7 +159,7 @@ const HighlightedCountriesMap: React.FC<{
   applyMapMotion: boolean;
   animateCamera: boolean;
   highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
-  countriesInteractive: boolean;
+  countriesCanBeSelected: boolean;
   onCountrySelected?: (code: string) => void;
 }> = ({
   height = '100%',
@@ -168,7 +168,7 @@ const HighlightedCountriesMap: React.FC<{
   applyMapMotion = false,
   animateCamera = true,
   highlightedCountries = [],
-  countriesInteractive,
+  countriesCanBeSelected,
   onCountrySelected = () => {},
 }) => {
   const { mode } = useThemeMode();
@@ -177,6 +177,12 @@ const HighlightedCountriesMap: React.FC<{
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
   const theme = useTheme();
+
+  const interactiveInitialValue = useRef(interactive).current;
+  const countriesCanBeSelectedInitialValue = useRef(countriesCanBeSelected).current;
+  const onCountrySelectedInitialValue = useRef(onCountrySelected).current;
+  const themeInitialValue = useRef(theme).current;
+  const highlightedCountriesInitialValue = useRef(highlightedCountries).current;
 
   useEffect(() => {
     try {
@@ -194,7 +200,7 @@ const HighlightedCountriesMap: React.FC<{
         center: [25, 20],
         zoom: 1,
         localFontFamily: "'Roboto', sans-serif",
-        interactive,
+        interactive: interactiveInitialValue,
         doubleClickZoom: false,
       });
 
@@ -206,16 +212,17 @@ const HighlightedCountriesMap: React.FC<{
           url: 'mapbox://mapbox.country-boundaries-v1',
         });
 
-        highlightedCountries.forEach((descriptor) => {
-          const color = (theme.global.colors[descriptor.color] as string) || descriptor.color;
+        highlightedCountriesInitialValue.forEach((descriptor) => {
+          const color =
+            (themeInitialValue.global.colors[descriptor.color] as string) || descriptor.color;
           addLayerToMap(thisMap, descriptor.id, color);
         });
 
-        if (countriesInteractive) {
+        if (countriesCanBeSelectedInitialValue) {
           addCountryHoverInteractivity(
             thisMap,
-            theme.global.colors.border[theme.dark ? 'dark' : 'light'],
-            onCountrySelected
+            themeInitialValue.global.colors.border[themeInitialValue.dark ? 'dark' : 'light'],
+            onCountrySelectedInitialValue
           );
         }
 
@@ -234,7 +241,15 @@ const HighlightedCountriesMap: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [mapboxStyle, id]);
+  }, [
+    mapboxStyle,
+    id,
+    interactiveInitialValue,
+    countriesCanBeSelectedInitialValue,
+    onCountrySelectedInitialValue,
+    themeInitialValue,
+    highlightedCountriesInitialValue,
+  ]);
 
   useEffect(() => {
     if (mapRef.current && mapLoaded) {
@@ -253,17 +268,18 @@ const HighlightedCountriesMap: React.FC<{
   }, [highlightedCountries, mapLoaded]);
 
   const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
+  const animateCameraInitialValue = useRef(animateCamera).current;
   useEffect(() => {
     const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
     if (!countriesLoaded && allCountries.length > 0) {
       setCountriesLoaded(true);
       if (mapRef.current) {
-        zoomMapToCountries(mapRef.current, allCountries, animateCamera);
+        zoomMapToCountries(mapRef.current, allCountries, animateCameraInitialValue);
       } else {
         console.warn(`Couldn't zoom to countries because ref is undefined`);
       }
     }
-  }, [countriesLoaded, highlightedCountries]);
+  }, [countriesLoaded, highlightedCountries, animateCameraInitialValue]);
 
   return (
     <MapboxContainer

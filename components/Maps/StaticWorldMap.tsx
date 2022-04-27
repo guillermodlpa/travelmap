@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
@@ -7,7 +7,7 @@ import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 import mapStyles from './mapStyles';
 
-const StaticMap: React.FC<{
+const StaticWorldMap: React.FC<{
   height?: HeightType;
   id: string;
 }> = ({ height = '100%', id }) => {
@@ -48,9 +48,9 @@ const StaticMap: React.FC<{
     } catch (error) {
       console.error(error);
     }
-  }, [mapboxStyle]);
+  }, [mapboxStyle, id]);
 
   return <Box id={id} height={height} background={backgroundColor} />;
 };
 
-export default withNoSsr(StaticMap);
+export default withNoSsr(StaticWorldMap);
