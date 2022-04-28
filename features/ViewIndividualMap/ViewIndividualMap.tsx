@@ -96,8 +96,7 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
             ) : confirmedUserDoesntHaveTogetherMaps ? (
               <Button
                 size="small"
-                label="Create Together Map"
-                plain
+                label="Create Map Together"
                 color="brand"
                 onClick={() => setCreateTogetherMapDialogOpen(true)}
               />
