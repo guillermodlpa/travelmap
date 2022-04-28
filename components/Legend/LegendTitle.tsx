@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Heading, Anchor } from 'grommet';
 import { FormEdit } from 'grommet-icons';
 import { SyntheticEvent } from 'react';
 import NextLink from 'next/link';
+import styled from 'styled-components';
 
 const NBSP_CHAR = '\u00A0';
 
@@ -12,12 +13,29 @@ interface LegendTitleProps {
   onClickEditNameButton?: (event: SyntheticEvent) => void;
 }
 
+const AnchorButton = styled(Anchor)`
+  transform: scale(1);
+  transition: transform 0.1s ease-in-out;
+  &:hover,
+  &:focus {
+    transform: scale(1.1);
+  }
+`;
+
+const AvatarContainer = styled.div<{ $position: number }>`
+  z-index: ${({ $position }) => 10 - $position};
+  margin-left: -${({ $position }) => 12 * $position}px;
+  &:hover {
+    z-index: 10;
+  }
+`;
+
 const ConditionalLink: React.FC<{ href: string | undefined }> = ({ href, children }) =>
   !href ? (
     <>{children}</>
   ) : (
     <NextLink href={href} passHref>
-      <Anchor style={{ display: 'block', borderRadius: '100%' }}>{children}</Anchor>
+      <AnchorButton style={{ display: 'block', borderRadius: '100%' }}>{children}</AnchorButton>
     </NextLink>
   );
 
@@ -32,7 +50,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
   <Box direction="row" align="center" gap="small">
     <Box direction="row" flex={{ shrink: 0 }}>
       {avatars.map(({ id, name, pictureUrl, href }, index) => (
-        <div style={{ marginLeft: `-${24 * index}px`, zIndex: avatars.length - index }} key={id}>
+        <AvatarContainer $position={index} key={id}>
           <ConditionalLink href={href}>
             <Avatar
               background="parchment"
@@ -42,7 +60,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
               {(name || '').substring(0, 1)}
             </Avatar>
           </ConditionalLink>
-        </div>
+        </AvatarContainer>
       ))}
     </Box>
     <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex={{ shrink: 1, grow: 1 }}>
@@ -54,9 +72,9 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
       <Box flex={{ shrink: 0 }} alignSelf="center">
         <Button
           icon={<FormEdit color="text" />}
-          plain
-          tip="Edit name"
-          a11yTitle="Edit name"
+          size="medium"
+          tip="Edit name and picture"
+          a11yTitle="Edit name and picture"
           onClick={onClickEditNameButton}
         />
       </Box>
