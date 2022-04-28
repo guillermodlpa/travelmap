@@ -88,6 +88,7 @@ export default function EditMap({
         interactive
         applyMapMotion={false}
         animateCamera={false}
+        zoomCountriesOnLoad={false}
         countriesCanBeSelected={true}
         onCountrySelected={toggleCountry}
       />

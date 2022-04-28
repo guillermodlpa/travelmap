@@ -44,7 +44,8 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
             color: 'status-ok',
           },
         ]}
-        interactive={true}
+        interactive
+        zoomCountriesOnLoad
         countriesCanBeSelected={false}
         applyMapMotion
         animateCamera

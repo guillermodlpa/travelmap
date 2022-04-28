@@ -158,6 +158,7 @@ type HighlighedCountriesMapProps = {
   interactive: boolean;
   applyMapMotion: boolean;
   animateCamera: boolean;
+  zoomCountriesOnLoad: boolean;
   highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
   countriesCanBeSelected: boolean;
   onCountrySelected?: (code: string) => void;
@@ -169,6 +170,7 @@ function HighlightedCountriesMap({
   interactive,
   applyMapMotion = false,
   animateCamera = true,
+  zoomCountriesOnLoad = false,
   highlightedCountries = [],
   countriesCanBeSelected,
   onCountrySelected = () => {},
@@ -271,7 +273,11 @@ function HighlightedCountriesMap({
 
   const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
   const animateCameraInitialValue = useRef(animateCamera).current;
+  const zoomCountriesOnLoadInitialValue = useRef(zoomCountriesOnLoad).current;
   useEffect(() => {
+    if (!zoomCountriesOnLoadInitialValue) {
+      return;
+    }
     const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
     if (!countriesLoaded && allCountries.length > 0) {
       setCountriesLoaded(true);
@@ -281,7 +287,12 @@ function HighlightedCountriesMap({
         console.warn(`Couldn't zoom to countries because ref is undefined`);
       }
     }
-  }, [countriesLoaded, highlightedCountries, animateCameraInitialValue]);
+  }, [
+    countriesLoaded,
+    highlightedCountries,
+    animateCameraInitialValue,
+    zoomCountriesOnLoadInitialValue,
+  ]);
 
   return (
     <MapboxContainer

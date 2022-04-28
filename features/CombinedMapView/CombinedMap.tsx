@@ -61,7 +61,8 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
         height="100vh"
         id="background-map"
         highlightedCountries={countryListDescriptors}
-        interactive={true}
+        zoomCountriesOnLoad
+        interactive
         countriesCanBeSelected={false}
         applyMapMotion
         animateCamera
