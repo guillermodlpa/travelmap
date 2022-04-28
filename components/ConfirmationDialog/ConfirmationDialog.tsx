@@ -10,7 +10,7 @@ export type ConfirmationDialogProps = {
   confirmMessage: string;
 };
 
-const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+export default function ConfirmationDialog({
   open,
   onCancel,
   onRequestClose,
@@ -18,7 +18,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
   confirmButtonLabel,
   confirmButtonDisabled = false,
   confirmMessage,
-}) => {
+}: ConfirmationDialogProps) {
   if (!open) {
     return <></>;
   }
@@ -56,6 +56,4 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       </Box>
     </Layer>
   );
-};
-
-export default ConfirmationDialog;
+}

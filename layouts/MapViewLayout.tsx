@@ -4,7 +4,7 @@ import Nav from '../components/Nav';
  * Using a common component as a layout for multiple NextPages enables
  * to keep the map loaded while navigating across pages that use the same layout
  */
-const MapViewLayout: React.FC = ({ children }) => {
+export default function MapViewLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Nav />
@@ -12,6 +12,4 @@ const MapViewLayout: React.FC = ({ children }) => {
       {children}
     </>
   );
-};
-
-export default MapViewLayout;
+}

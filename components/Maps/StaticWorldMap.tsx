@@ -7,10 +7,7 @@ import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 import mapStyles from './mapStyles';
 
-const StaticWorldMap: React.FC<{
-  height?: HeightType;
-  id: string;
-}> = ({ height = '100%', id }) => {
+function StaticWorldMap({ height = '100%', id }: { height?: HeightType; id: string }) {
   const { mode } = useThemeMode();
   const mapboxStyle = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
@@ -51,6 +48,6 @@ const StaticWorldMap: React.FC<{
   }, [mapboxStyle, id]);
 
   return <Box id={id} height={height} background="map-background" />;
-};
+}
 
 export default withNoSsr(StaticWorldMap);

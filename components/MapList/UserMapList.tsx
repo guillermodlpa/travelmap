@@ -2,7 +2,7 @@ import useUserMap from '../../hooks/useUserMap';
 import MapList from './MapList';
 import NoResults from './NoResults';
 
-const UserMapList: React.FC = () => {
+export default function UserMapList() {
   const { map, loading, error } = useUserMap();
 
   if (!map && !loading && !error) {
@@ -10,6 +10,4 @@ const UserMapList: React.FC = () => {
   }
 
   return <MapList mapList={map ? [map] : []} allowEdit />;
-};
-
-export default UserMapList;
+}

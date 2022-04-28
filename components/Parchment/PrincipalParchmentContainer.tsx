@@ -2,10 +2,13 @@ import { Box, ResponsiveContext } from 'grommet';
 import { WidthType } from 'grommet/utils';
 import { useContext } from 'react';
 
-const PrincipalParchmentContainer: React.FC<{ width?: WidthType }> = ({
+export default function PrincipalParchmentContainer({
   width = 'large',
   children,
-}) => {
+}: {
+  width?: WidthType;
+  children: React.ReactNode;
+}) {
   const size = useContext(ResponsiveContext);
   return (
     <Box
@@ -18,6 +21,4 @@ const PrincipalParchmentContainer: React.FC<{ width?: WidthType }> = ({
       <Box width={width}>{children}</Box>
     </Box>
   );
-};
-
-export default PrincipalParchmentContainer;
+}

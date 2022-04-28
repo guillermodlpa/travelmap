@@ -152,7 +152,7 @@ const addCountryHoverInteractivity = (
   });
 };
 
-const HighlightedCountriesMap: React.FC<{
+type HighlighedCountriesMapProps = {
   height?: HeightType;
   id: string;
   interactive: boolean;
@@ -161,7 +161,9 @@ const HighlightedCountriesMap: React.FC<{
   highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
   countriesCanBeSelected: boolean;
   onCountrySelected?: (code: string) => void;
-}> = ({
+};
+
+function HighlightedCountriesMap({
   height = '100%',
   id,
   interactive,
@@ -170,7 +172,7 @@ const HighlightedCountriesMap: React.FC<{
   highlightedCountries = [],
   countriesCanBeSelected,
   onCountrySelected = () => {},
-}) => {
+}: HighlighedCountriesMapProps) {
   const { mode } = useThemeMode();
   const mapboxStyle = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
@@ -289,6 +291,6 @@ const HighlightedCountriesMap: React.FC<{
       $animate={applyMapMotion}
     />
   );
-};
+}
 
 export default withNoSsr(HighlightedCountriesMap);

@@ -1,9 +1,9 @@
 import { Box } from 'grommet';
 
-const LegendActions: React.FC = ({ children }) => (
-  <Box gap="medium" align="end">
-    {children}
-  </Box>
-);
-
-export default LegendActions;
+export default function LegendActions({ children }: { children: React.ReactNode }) {
+  return (
+    <Box gap="medium" align="end">
+      {children}
+    </Box>
+  );
+}

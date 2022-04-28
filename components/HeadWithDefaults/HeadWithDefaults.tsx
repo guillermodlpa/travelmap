@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useTheme } from 'styled-components';
 
-const HeadWithDefaults: React.FC<{ title: string }> = ({ title }) => {
+export default function HeadWithDefaults({ title }: { title: string }) {
   const theme = useTheme();
   return (
     <Head>
@@ -22,6 +22,4 @@ const HeadWithDefaults: React.FC<{ title: string }> = ({ title }) => {
       ></meta>
     </Head>
   );
-};
-
-export default HeadWithDefaults;
+}

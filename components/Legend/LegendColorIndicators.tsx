@@ -9,12 +9,12 @@ type LegendItem = {
   subItems?: Array<{ id: string; label: string }>;
 };
 
-const LegendColorIndicator: React.FC<LegendItem & { forceExpanded?: boolean }> = ({
+function LegendColorIndicator({
   label,
   color,
   subItems,
   forceExpanded = false,
-}) => {
+}: LegendItem & { forceExpanded?: boolean }) {
   const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(false);
   return (
     <Box direction="column" gap="xsmall" flex={{ shrink: 0 }}>
@@ -53,17 +53,20 @@ const LegendColorIndicator: React.FC<LegendItem & { forceExpanded?: boolean }> =
       )}
     </Box>
   );
-};
+}
 
-const LegendColorIndicators: React.FC<{ data: LegendItem[]; forceExpanded?: boolean }> = ({
+export default function LegendColorIndicators({
   data,
   forceExpanded = false,
-}) => (
-  <Box pad={{ left: 'small' }} gap="xsmall">
-    {data.map((item: LegendItem) => (
-      <LegendColorIndicator key={item.id} {...item} forceExpanded={forceExpanded} />
-    ))}
-  </Box>
-);
-
-export default LegendColorIndicators;
+}: {
+  data: LegendItem[];
+  forceExpanded?: boolean;
+}) {
+  return (
+    <Box pad={{ left: 'small' }} gap="xsmall">
+      {data.map((item: LegendItem) => (
+        <LegendColorIndicator key={item.id} {...item} forceExpanded={forceExpanded} />
+      ))}
+    </Box>
+  );
+}

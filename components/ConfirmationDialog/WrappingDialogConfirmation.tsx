@@ -1,14 +1,14 @@
 import { SyntheticEvent, useCallback, useState } from 'react';
 import ConfirmationDialog, { ConfirmationDialogProps } from './ConfirmationDialog';
 
-type WrappingDialogConfirmationRenderProps = {
+type WrappingDialogConfirmationProps = {
   children: (handleClick: (event: SyntheticEvent) => void) => JSX.Element;
-};
+} & Omit<ConfirmationDialogProps, 'open' | 'onCancel' | 'onRequestClose'>;
 
-const WrappingDialogConfirmation: React.FC<
-  Omit<ConfirmationDialogProps, 'open' | 'onCancel' | 'onRequestClose'> &
-    WrappingDialogConfirmationRenderProps
-> = ({ children, ...props }) => {
+export default function WrappingDialogConfirmation({
+  children,
+  ...props
+}: WrappingDialogConfirmationProps) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const handleClick = useCallback((event) => {
@@ -31,6 +31,4 @@ const WrappingDialogConfirmation: React.FC<
       {children(handleClick)}
     </>
   );
-};
-
-export default WrappingDialogConfirmation;
+}

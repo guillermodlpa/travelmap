@@ -14,13 +14,13 @@ import { useTheme } from 'styled-components';
 import type { NextPage } from 'next';
 import ButtonCssFilter from '../components/ButtonCssFilter/ButtonCssFilter';
 
-const ThemeDebugger: React.FC = () => {
+function ThemeDevelopmentDebugger() {
   const theme = useTheme();
   useEffect(() => {
     console.log('[development] theme', theme);
   }, [theme]);
   return null;
-};
+}
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -62,7 +62,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ThemeModeContextProvider value={themeContextValue}>
           <ViewportSizeListener onSize={setSize} />
           <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>
-          {process.env.NODE_ENV === 'development' && <ThemeDebugger />}
+          {process.env.NODE_ENV === 'development' && <ThemeDevelopmentDebugger />}
           <ButtonCssFilter />
         </ThemeModeContextProvider>
       </Grommet>

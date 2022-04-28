@@ -36,11 +36,15 @@ const useUniqueId = (prefix = '') => {
   return idRef.current;
 };
 
-const Map: React.FC<{
+function Map({
+  visitedCountries,
+  onCountryClicked,
+  countryZoomedInto,
+}: {
   visitedCountries: string[];
   onCountryClicked: (country: string) => void;
   countryZoomedInto: string | undefined;
-}> = ({ visitedCountries, onCountryClicked, countryZoomedInto }) => {
+}) {
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState(false);
   const uniqueMapId = useUniqueId('map_');
@@ -222,6 +226,6 @@ const Map: React.FC<{
   }, [size]);
 
   return <Box id={uniqueMapId} flex="grow" background={MAP_BACKGROUND_COLOR} />;
-};
+}
 
 export default withNoSsr(Map);

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const NoSsr: React.FC = ({ children }) => {
+export default function NoSsr({ children }: { children: React.ReactNode }) {
   const [mountedState, setMountedState] = useState(false);
 
   useEffect(() => {
@@ -8,6 +8,4 @@ const NoSsr: React.FC = ({ children }) => {
   }, []);
 
   return <>{mountedState ? children : null}</>;
-};
-
-export default NoSsr;
+}

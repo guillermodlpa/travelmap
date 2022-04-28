@@ -16,7 +16,7 @@ const joinUserNames = (travelMap: ClientCombinedTravelMap | ClientIndividualTrav
     );
 };
 
-const CombinedMapsList: React.FC = () => {
+export default function CombinedMapsList() {
   const { mapList, mutate } = useUserCombinedMaps({ shouldFetch: true });
 
   const handleDelete = (travelMapId: string) =>
@@ -41,6 +41,4 @@ const CombinedMapsList: React.FC = () => {
       }}
     />
   );
-};
-
-export default CombinedMapsList;
+}

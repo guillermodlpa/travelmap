@@ -14,7 +14,7 @@ const ThemeModeContext = createContext<ThemeModeContextValue>({} as ThemeModeCon
 export const useThemeMode = () => useContext(ThemeModeContext);
 
 const KEY = 'themeMode';
-const ThemeModeInLocalStorage: React.FC = ({ children }) => {
+function ThemeModeInLocalStorage({ children }: { children: React.ReactNode }) {
   const { mode, setMode } = useThemeMode();
 
   useEffect(() => {
@@ -41,13 +41,18 @@ const ThemeModeInLocalStorage: React.FC = ({ children }) => {
     }
   }, [mode]);
   return <>{children}</>;
-};
+}
 
-export const ThemeModeContextProvider: React.FC<{ value: ThemeModeContextValue }> = ({
+export function ThemeModeContextProvider({
   children,
   value,
-}) => (
-  <ThemeModeContext.Provider value={value}>
-    <ThemeModeInLocalStorage>{children}</ThemeModeInLocalStorage>
-  </ThemeModeContext.Provider>
-);
+}: {
+  children: React.ReactNode;
+  value: ThemeModeContextValue;
+}) {
+  return (
+    <ThemeModeContext.Provider value={value}>
+      <ThemeModeInLocalStorage>{children}</ThemeModeInLocalStorage>
+    </ThemeModeContext.Provider>
+  );
+}

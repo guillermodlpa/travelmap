@@ -14,7 +14,7 @@ const FullScreenBackground = styled.div`
  * Using a common component as a layout for multiple NextPages enables
  * to keep the map loaded while navigating across pages that use the same layout
  */
-const StaticMapBackgroundLayout: React.FC = ({ children }) => {
+export default function StaticMapBackgroundLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Nav />
@@ -26,6 +26,4 @@ const StaticMapBackgroundLayout: React.FC = ({ children }) => {
       {children}
     </>
   );
-};
-
-export default StaticMapBackgroundLayout;
+}

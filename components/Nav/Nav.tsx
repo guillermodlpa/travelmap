@@ -35,7 +35,7 @@ const ThemeModeToggleNavButton = () => {
   return <NavButton a11yTitle={tip} icon={icon} tip={tip} onClick={onClick} />;
 };
 
-const Nav: React.FC = () => {
+export default function Nav() {
   const { user: auth0User, isLoading, error } = useUser();
   const { data: myUser } = useMyUser();
   if (isLoading) {
@@ -104,6 +104,4 @@ const Nav: React.FC = () => {
       </NavFloatingBox>
     </>
   );
-};
-
-export default Nav;
+}

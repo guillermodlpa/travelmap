@@ -30,56 +30,63 @@ const AvatarContainer = styled.div<{ $position: number }>`
   }
 `;
 
-const ConditionalLink: React.FC<{ href: string | undefined }> = ({ href, children }) =>
-  !href ? (
+function ConditionalLink({
+  href,
+  children,
+}: {
+  href: string | undefined;
+  children: React.ReactNode;
+}) {
+  return !href ? (
     <>{children}</>
   ) : (
     <NextLink href={href} passHref>
       <AnchorButton style={{ display: 'block', borderRadius: '100%' }}>{children}</AnchorButton>
     </NextLink>
   );
+}
 
 const defaultAvatar = { id: '_', name: '', pictureUrl: null, href: undefined };
 
-const LegendTitle: React.FC<LegendTitleProps> = ({
+export default function LegendTitle({
   heading,
   avatars = [defaultAvatar],
   showEditNameButton = false,
   onClickEditNameButton,
-}) => (
-  <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
-    <Box direction="row" flex={{ shrink: 0 }}>
-      {avatars.map(({ id, name, pictureUrl, href }, index) => (
-        <AvatarContainer $position={index} key={id}>
-          <ConditionalLink href={href}>
-            <Avatar
-              background="parchment"
-              border={{ color: 'brand', size: 'small' }}
-              src={pictureUrl || undefined}
-            >
-              {(name || '').substring(0, 1)}
-            </Avatar>
-          </ConditionalLink>
-        </AvatarContainer>
-      ))}
-    </Box>
-    <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex={{ shrink: 1, grow: 1 }}>
-      <Heading level={1} size="small">
-        {heading || NBSP_CHAR}
-      </Heading>
-    </Box>
-    {showEditNameButton && (
-      <Box flex={{ shrink: 0 }} alignSelf="center">
-        <Button
-          icon={<FormEdit color="text" />}
-          size="medium"
-          tip="Edit name and picture"
-          a11yTitle="Edit name and picture"
-          onClick={onClickEditNameButton}
-        />
+}: LegendTitleProps) {
+  return (
+    <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
+      <Box direction="row" flex={{ shrink: 0 }}>
+        {avatars.map(({ id, name, pictureUrl, href }, index) => (
+          <AvatarContainer $position={index} key={id}>
+            <ConditionalLink href={href}>
+              <Avatar
+                background="parchment"
+                border={{ color: 'brand', size: 'small' }}
+                src={pictureUrl || undefined}
+              >
+                {(name || '').substring(0, 1)}
+              </Avatar>
+            </ConditionalLink>
+          </AvatarContainer>
+        ))}
       </Box>
-    )}
-  </Box>
-);
-
-export default LegendTitle;
+      <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex={{ shrink: 1, grow: 1 }}>
+        <Heading level={1} size="small">
+          {heading || NBSP_CHAR}
+        </Heading>
+      </Box>
+      {showEditNameButton && (
+        <Box flex={{ shrink: 0 }} alignSelf="center">
+          <Button
+            icon={<FormEdit color="text" />}
+            size="medium"
+            tip="Edit name and picture"
+            a11yTitle="Edit name and picture"
+            onClick={onClickEditNameButton}
+          />
+        </Box>
+      )}
+    </Box>
+  );
+}

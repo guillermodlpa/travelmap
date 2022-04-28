@@ -1,9 +1,9 @@
 import { Box, BoxExtendedProps } from 'grommet';
 
-const LegendBody: React.FC<BoxExtendedProps> = ({ children, ...props }) => (
-  <Box gap="xsmall" overflow="auto" {...props}>
-    {children}
-  </Box>
-);
-
-export default LegendBody;
+export default function LegendBody({ children, ...props }: BoxExtendedProps) {
+  return (
+    <Box gap="xsmall" overflow="auto" {...props}>
+      {children}
+    </Box>
+  );
+}

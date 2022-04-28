@@ -41,10 +41,15 @@ const ParchmentBackground = styled(Box)<{
   filter: url(#wavy2);
 `;
 
-const Parchment: React.FC<{
+export default function Parchment({
+  children,
+  contentPad,
+  insetShadowSize = 'large',
+}: {
+  children: React.ReactNode;
   contentPad?: PadType;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
-}> = ({ children, contentPad, insetShadowSize = 'large' }) => {
+}) {
   const content = createRef<HTMLDivElement>();
   const [backgroundHeight, setBackgroundHeight] = useState<number>();
 
@@ -85,6 +90,4 @@ const Parchment: React.FC<{
       </svg>
     </>
   );
-};
-
-export default Parchment;
+}

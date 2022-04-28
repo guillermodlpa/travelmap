@@ -14,7 +14,7 @@ const useRecentMapList = () => {
   };
 };
 
-const RecentMapsList: React.FC = () => {
+export default function RecentMapsList() {
   const { mapList, loading, error } = useRecentMapList();
 
   if (!mapList && !loading && !error) {
@@ -22,6 +22,4 @@ const RecentMapsList: React.FC = () => {
   }
 
   return <MapList mapList={mapList} allowEdit={false} />;
-};
-
-export default RecentMapsList;
+}

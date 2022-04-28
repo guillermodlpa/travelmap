@@ -14,11 +14,15 @@ type MapListProps = {
   };
 };
 
-const MapList: React.FC<MapListProps> = ({
+export default function MapList({
   mapList,
   allowEdit,
-  deleteSettings = { allowDelete: false, getConfirmMessage: () => '', handleDelete: () => false },
-}) => {
+  deleteSettings = {
+    allowDelete: false,
+    getConfirmMessage: () => '',
+    handleDelete: () => Promise.reject(),
+  },
+}: MapListProps) {
   const size = useContext(ResponsiveContext);
 
   if (!mapList) {
@@ -101,6 +105,4 @@ const MapList: React.FC<MapListProps> = ({
       ))}
     </Box>
   );
-};
-
-export default MapList;
+}
