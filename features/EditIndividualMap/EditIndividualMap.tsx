@@ -11,6 +11,7 @@ import LegendActions from '../../components/Legend/LegendActions';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
 import EditMapSettings from './EditMapSettings';
+import HoveredCountryToast from './HoveredCountryToast';
 
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
@@ -73,6 +74,13 @@ export default function EditMap({
       });
   };
 
+  const [hoveredCountry, setHoveredCountry] = useState<
+    undefined | { code: string; name: string }
+  >();
+  const handleCountryHovered = (param: undefined | { code: string; name: string }) => {
+    setHoveredCountry(param);
+  };
+
   return (
     <>
       <HighlightedCountriesMap
@@ -91,6 +99,7 @@ export default function EditMap({
         zoomCountriesOnLoad={false}
         countriesCanBeSelected={true}
         onCountrySelected={toggleCountry}
+        onCountryHovered={handleCountryHovered}
       />
 
       <EditMapSettings
@@ -99,6 +108,8 @@ export default function EditMap({
         showWelcomeMessage={defaultOUserSettingsModal && !travelMap?.userDisplayName}
         allowUserToClose={Boolean(travelMap?.userDisplayName)}
       />
+
+      <HoveredCountryToast hoveredCountry={hoveredCountry} />
 
       <Legend>
         <LegendTitle

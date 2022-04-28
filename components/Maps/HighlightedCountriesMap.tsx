@@ -8,6 +8,7 @@ import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
 import styled, { useTheme } from 'styled-components';
 import simplifiedWorldAdministrativeBoundaries from '../../util/simplified-world-administrative-boundaries.json';
 import mapStyles from './mapStyles';
+import getCountryName from '../../util/getCountryName';
 
 const MapboxContainer = styled(Box)<{ $animate: boolean }>`
   & .mapboxgl-canvas {
@@ -84,7 +85,8 @@ const zoomMapToCountries = (map: mapboxgl.Map, countries: string[], animate: boo
 const addCountryHoverInteractivity = (
   map: mapboxgl.Map,
   fillColor: string,
-  onCountryClicked: (code: string) => void
+  onCountryClicked: (code: string) => void,
+  onCountryHovered: (param: undefined | { code: string; name: string }) => void
 ) => {
   // add a transparent layer of countries. We use it when interacting with the map to know which country it is
   map.addLayer(
@@ -129,9 +131,12 @@ const addCountryHoverInteractivity = (
     if (features.length) {
       map.getCanvas().style.cursor = 'pointer';
       map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
+      const code = features[0].properties?.iso_3166_1_alpha_3;
+      onCountryHovered({ code, name: getCountryName(code) || code });
     } else {
       map.setFilter('country-fills-hover', ['==', 'name', '']);
       map.getCanvas().style.cursor = '';
+      onCountryHovered(undefined);
     }
   });
 
@@ -139,6 +144,7 @@ const addCountryHoverInteractivity = (
   map.on('mouseout', () => {
     map.getCanvas().style.cursor = 'auto';
     map.setFilter('country-fills-hover', ['==', 'name', '']);
+    onCountryHovered(undefined);
   });
 
   map.on('click', (event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
@@ -162,6 +168,7 @@ type HighlighedCountriesMapProps = {
   highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
   countriesCanBeSelected: boolean;
   onCountrySelected?: (code: string) => void;
+  onCountryHovered?: (param: undefined | { code: string; name: string }) => void;
 };
 
 function HighlightedCountriesMap({
@@ -174,6 +181,7 @@ function HighlightedCountriesMap({
   highlightedCountries = [],
   countriesCanBeSelected,
   onCountrySelected = () => {},
+  onCountryHovered = () => {},
 }: HighlighedCountriesMapProps) {
   const { mode } = useThemeMode();
   const mapboxStyle = mapStyles[mode];
@@ -185,6 +193,7 @@ function HighlightedCountriesMap({
   const interactiveInitialValue = useRef(interactive).current;
   const countriesCanBeSelectedInitialValue = useRef(countriesCanBeSelected).current;
   const onCountrySelectedInitialValue = useRef(onCountrySelected).current;
+  const onCountryHoveredInitialValue = useRef(onCountryHovered).current;
   const themeInitialValue = useRef(theme).current;
   const highlightedCountriesInitialValue = useRef(highlightedCountries).current;
 
@@ -226,7 +235,8 @@ function HighlightedCountriesMap({
           addCountryHoverInteractivity(
             thisMap,
             themeInitialValue.global.colors.border[themeInitialValue.dark ? 'dark' : 'light'],
-            onCountrySelectedInitialValue
+            onCountrySelectedInitialValue,
+            onCountryHoveredInitialValue
           );
         }
 
