@@ -17,7 +17,7 @@ const LegendColorIndicator: React.FC<LegendItem & { forceExpanded?: boolean }> =
 }) => {
   const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(false);
   return (
-    <Box direction="column" gap="xsmall">
+    <Box direction="column" gap="xsmall" flex={{ shrink: 0 }}>
       <Box direction="row" gap="small" align="center">
         <Box width="1rem" height="1rem" border background={color} />
         <Text>{label}</Text>

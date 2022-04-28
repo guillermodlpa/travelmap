@@ -47,7 +47,7 @@ const LegendTitle: React.FC<LegendTitleProps> = ({
   showEditNameButton = false,
   onClickEditNameButton,
 }) => (
-  <Box direction="row" align="center" gap="small">
+  <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
     <Box direction="row" flex={{ shrink: 0 }}>
       {avatars.map(({ id, name, pictureUrl, href }, index) => (
         <AvatarContainer $position={index} key={id}>
