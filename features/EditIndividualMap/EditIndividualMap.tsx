@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWRImmutable, { Fetcher } from 'swr';
 
-import { Button, Paragraph } from 'grommet';
+import { Button, Card, CardBody, Paragraph } from 'grommet';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
@@ -15,7 +15,11 @@ import EditDisplayNameDialog from './EditDisplayNameDialog';
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
 
-export default function EditMap() {
+export default function EditMap({
+  defaultOUserSettingsModal,
+}: {
+  defaultOUserSettingsModal: boolean;
+}) {
   const router = useRouter();
 
   const { data: travelMap, error } = useSWRImmutable(`/api/map`, fetcher, {
@@ -39,7 +43,8 @@ export default function EditMap() {
       return newCountries;
     });
 
-  const [editDisplayNameDialogOpen, setEditDisplayNameDialogOpen] = useState<boolean>(false);
+  const [editDisplayNameDialogOpen, setEditDisplayNameDialogOpen] =
+    useState<boolean>(defaultOUserSettingsModal);
 
   const [saving, setSaving] = useState<boolean>(false);
   const handleSave = () => {
@@ -89,6 +94,8 @@ export default function EditMap() {
       <EditDisplayNameDialog
         open={editDisplayNameDialogOpen}
         onClose={() => setEditDisplayNameDialogOpen(false)}
+        showWelcomeMessage={defaultOUserSettingsModal && !travelMap?.userDisplayName}
+        allowUserToClose={Boolean(travelMap?.userDisplayName)}
       />
 
       <Legend>
@@ -112,9 +119,11 @@ export default function EditMap() {
         />
 
         <LegendBody>
-          <Paragraph margin={{ top: 'none' }}>
-            Find the country in the map and click on it to add it.
-          </Paragraph>
+          <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
+            <CardBody>
+              <Paragraph margin="none">Find countries in the map and select them</Paragraph>
+            </CardBody>
+          </Card>
 
           <LegendColorIndicators
             forceExpanded
@@ -134,7 +143,7 @@ export default function EditMap() {
           <LegendActions>
             <Button
               label={saving ? 'Saving' : 'Save'}
-              secondary
+              primary
               disabled={loading || saving || countries.length === 0}
               onClick={handleSave}
             />

@@ -45,7 +45,7 @@ const LegendColorIndicator: React.FC<LegendItem & { forceExpanded?: boolean }> =
                 pad={{ left: '24px' }}
                 style={{ display: 'list-item', textIndent: '-24px' }}
               >
-                {subItem.label}
+                <Text size="small">{subItem.label}</Text>
               </Box>
             ))}
           </Box>

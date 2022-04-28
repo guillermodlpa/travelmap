@@ -2,12 +2,15 @@ import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import MapViewLayout from '../../layouts/MapViewLayout';
 import EditIndividualMap from '../../features/EditIndividualMap';
+import { useRouter } from 'next/router';
 
 function EditMapPage() {
+  const router = useRouter();
+  const onboardingFlag = router.query.onboarding !== undefined;
   return (
     <>
       <HeadWithDefaults title="Travelmap - Edit Map" />
-      <EditIndividualMap />
+      <EditIndividualMap defaultOUserSettingsModal={onboardingFlag} />
     </>
   );
 }

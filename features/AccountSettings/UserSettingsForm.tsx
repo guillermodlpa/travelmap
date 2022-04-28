@@ -14,7 +14,15 @@ import useMyUser from '../../hooks/useMyUser';
 const isDisplayNameInputValueValid = (displayName: string): boolean =>
   displayName.trim().length > 0;
 
-export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () => void }) {
+export default function UserSettingsForm({
+  onSaved = () => {},
+  showCancelButton = false,
+  onCancel = () => {},
+}: {
+  onSaved?: () => void;
+  showCancelButton?: boolean;
+  onCancel?: () => void;
+}) {
   const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
   const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>('');
@@ -181,10 +189,19 @@ export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () 
           />
         </Box>
       </Box>
-      <Box>
+      <Box direction="row" gap="large" justify="center">
+        {showCancelButton && (
+          <Button
+            secondary
+            alignSelf="center"
+            label="Cancel"
+            disabled={saving}
+            onClick={onCancel}
+          />
+        )}
+
         <Button
           primary
-          alignSelf="center"
           label={saving ? 'Saving' : 'Save'}
           disabled={isLoadingMyUser || saving}
           onClick={handleSave}
