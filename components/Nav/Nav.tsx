@@ -1,8 +1,15 @@
 import { useUser } from '@auth0/nextjs-auth0';
-import { Avatar, Box, Button, ButtonExtendedProps, Nav as GrommetNav } from 'grommet';
-import { Globe, Logout, MapLocation, SettingsOption } from 'grommet-icons';
+import {
+  Avatar,
+  Box,
+  Button,
+  ButtonExtendedProps,
+  Nav as GrommetNav,
+  ResponsiveContext,
+} from 'grommet';
+import { Logout, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
-import { forwardRef } from 'react';
+import { forwardRef, useContext } from 'react';
 import styled from 'styled-components';
 import useMyUser from '../../hooks/useMyUser';
 import { PATH_LOG_OUT } from '../../util/paths';
@@ -30,6 +37,12 @@ const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11
 );
 NavButton.displayName = 'NavButton';
 
+const LandingPageButton = styled(Button)`
+  font-family: ${({ theme }) => theme.heading.font.family};
+  padding-left: ${({ theme }) => theme.button.size.large.pad.vertical};
+  padding-right: ${({ theme }) => theme.button.size.large.pad.vertical};
+`;
+
 const ThemeModeToggleNavButton = () => {
   const { icon, tip, onClick } = useColorThemeToggle();
   return <NavButton a11yTitle={tip} icon={icon} tip={tip} onClick={onClick} />;
@@ -38,6 +51,7 @@ const ThemeModeToggleNavButton = () => {
 export default function Nav() {
   const { user: auth0User, isLoading, error } = useUser();
   const { data: myUser } = useMyUser();
+  const size = useContext(ResponsiveContext);
   if (isLoading) {
     return <></>;
   }
@@ -47,10 +61,10 @@ export default function Nav() {
       <HomeLogoFloatingBox>
         <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
           <NextLink passHref href="/">
-            <NavButton
-              a11yTitle="Travelmap Landing Page"
-              icon={<Globe color="text" />}
-              tip="Travelmap Landing Page"
+            <LandingPageButton
+              size="large"
+              label={size === 'small' ? '🗺' : '🗺 Travelmap'}
+              tip="Landing page"
             />
           </NextLink>
         </Parchment>
