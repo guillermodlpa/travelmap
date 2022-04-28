@@ -162,6 +162,7 @@ const customTheme = deepMerge(grommet, {
     default: {
       color: 'text',
       extend: () => css`
+        font-weight: 600;
         border-radius: 5px;
       `,
     },
@@ -171,6 +172,8 @@ const customTheme = deepMerge(grommet, {
       extend: () => css<{ colorValue: string }>`
         position: relative;
         background-color: transparent; // override when a color is set, like status-critical
+        font-weight: 600;
+
         &:before {
           content: '';
           position: absolute;
@@ -187,9 +190,10 @@ const customTheme = deepMerge(grommet, {
       `,
     },
     secondary: {
-      color: 'text',
+      color: 'brand',
       extend: () => css<{ colorValue: string }>`
         position: relative;
+        font-weight: 600;
 
         &:before {
           content: '';
@@ -233,6 +237,9 @@ const customTheme = deepMerge(grommet, {
     extend: { '-webkit-font-smoothing': 'auto' },
   },
   formField: {
+    extend: () => css`
+      width: 100%;
+    `,
     label: {
       margin: {
         top: 'xsmall',

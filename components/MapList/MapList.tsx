@@ -1,4 +1,4 @@
-import { Button, Box, Avatar, Text, ResponsiveContext, Anchor } from 'grommet';
+import { Button, Box, Avatar, Text, ResponsiveContext } from 'grommet';
 import NextLink from 'next/link';
 import { useContext } from 'react';
 import getTravelMapNameForUsers from '../../util/getTravelMapName';
@@ -75,7 +75,7 @@ export default function MapList({
           <Box key={`action-${travelMap}`} direction="row" gap="small" align="center" justify="end">
             {allowEdit && travelMap.type === 'individual' && (
               <NextLink href={'/map/edit'} passHref>
-                <Anchor>Edit</Anchor>
+                <Button label="Edit" secondary />
               </NextLink>
             )}
 
@@ -98,7 +98,7 @@ export default function MapList({
             )}
 
             <NextLink href={travelMap.pathView} passHref>
-              <Anchor>View</Anchor>
+              <Button secondary label="View" />
             </NextLink>
           </Box>
         </Box>

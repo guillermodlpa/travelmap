@@ -2,10 +2,15 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { createRef } from 'react';
+import { createRef, useMemo, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
+import LegendActions from '../../components/Legend/LegendActions';
+import { Button } from 'grommet';
+import ShareMap from '../ViewIndividualMap/ShareMap';
+import { useUser } from '@auth0/nextjs-auth0';
+import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
 
 function arrayExclude<T>(array1: T[], array2: T[]): T[] {
   return (array1 || []).filter((value) => !(array2 || []).includes(value));
@@ -39,6 +44,17 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
     travelMap.individualTravelMaps[1]
   );
 
+  const { user: auth0User } = useUser();
+  const isLoggedInUserMap = useMemo(
+    () =>
+      travelMap.individualTravelMaps.some(
+        (travelMap) => travelMap.userId === auth0User?.[CUSTOM_CLAIM_APP_USER_ID]
+      ),
+    [travelMap, auth0User]
+  );
+
+  const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
+
   return (
     <>
       <HighlightedCountriesMap
@@ -49,6 +65,12 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
         countriesCanBeSelected={false}
         applyMapMotion
         animateCamera
+      />
+
+      <ShareMap
+        open={shareMapDialogOpen}
+        onClose={() => setShareMapDialogOpen(false)}
+        pathView={travelMap.pathView}
       />
 
       <Legend ref={legendRef}>
@@ -103,6 +125,21 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
             ].filter((item) => item.subItems.length > 0)}
           />
         </LegendBody>
+
+        <LegendActions>
+          {isLoggedInUserMap ? (
+            <Button
+              key="share-button"
+              label="Share"
+              size="small"
+              secondary
+              onClick={() => setShareMapDialogOpen(true)}
+            />
+          ) : (
+            // render a space so we have the same height as if buttons render, to minimize CLS
+            <>{'\u00A0'}</>
+          )}
+        </LegendActions>
       </Legend>
     </>
   );

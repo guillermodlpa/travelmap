@@ -1,4 +1,3 @@
-import { Box, Text } from 'grommet';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import MapList from './MapList';
 import NoResults from './NoResults';
@@ -11,7 +10,7 @@ const joinUserNames = (travelMap: ClientCombinedTravelMap | ClientIndividualTrav
     .map((individualTravelMap) => individualTravelMap.userDisplayName)
     .reduce(
       (memo, userName, index, { length }) =>
-        `${memo}${index === 0 ? '' : index === length - 1 ? ' & ' : ', '}${userName}`,
+        `${memo}${index === 0 ? '' : index === length - 1 ? ' and ' : ', '}${userName}`,
       ''
     );
 };
@@ -36,7 +35,8 @@ export default function CombinedMapsList() {
       allowEdit={false}
       deleteSettings={{
         allowDelete: true,
-        getConfirmMessage: (travelMap) => joinUserNames(travelMap),
+        getConfirmMessage: (travelMap) =>
+          `Are you sure about deleting the together map of ${joinUserNames(travelMap)}?`,
         handleDelete,
       }}
     />

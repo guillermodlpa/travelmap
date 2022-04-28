@@ -58,9 +58,7 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
           contentPad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}
           insetShadowSize="medium"
         >
-          <Box direction="column" gap="medium">
-            {children}
-          </Box>
+          <Box direction="column">{children}</Box>
         </Parchment>
       </LegendContainer>
     );

@@ -55,7 +55,13 @@ export default function LegendTitle({
   onClickEditNameButton,
 }: LegendTitleProps) {
   return (
-    <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
+    <Box
+      direction="row"
+      align="center"
+      gap="small"
+      flex={{ shrink: 0 }}
+      margin={{ bottom: 'medium' }}
+    >
       <Box direction="row" flex={{ shrink: 0 }}>
         {avatars.map(({ id, name, pictureUrl, href }, index) => (
           <AvatarContainer $position={index} key={id}>
