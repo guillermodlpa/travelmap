@@ -20,7 +20,7 @@ const HomeLogoFloatingBox = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 20;
 `;
 
 const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11yTitle: string }>(
