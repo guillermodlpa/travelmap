@@ -8,6 +8,7 @@ import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import OnboardingBanner from './OnboardingBanner';
 import useMyUser from '../../hooks/useMyUser';
+import useRedirectUserWithoutDisplayNameToOnboarding from '../../hooks/useRedirectNewUserToEditMap';
 
 const SuspenseNoSsr = withNoSsr(Suspense);
 
@@ -20,6 +21,8 @@ export default function MyMaps() {
       alert('Error loading user record');
     }
   }, [errorLoadingUserRecord]);
+
+  useRedirectUserWithoutDisplayNameToOnboarding();
 
   return (
     <PrincipalParchmentContainer width="xlarge">

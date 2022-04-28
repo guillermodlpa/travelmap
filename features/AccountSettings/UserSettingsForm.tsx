@@ -42,7 +42,7 @@ export default function UserSettingsForm({
   }, [profilePictureFile]);
 
   const { data: myUser, error: myUserError, mutate: mutateMyUser } = useMyUser();
-  const isLoadingMyUser = !myUserError && !myUser;
+  const loadingMyUser = !myUserError && !myUser;
   useEffect(() => {
     if (myUser) {
       setNotifyOnCombinedMap(myUser.notifyOnCombinedMaps);
@@ -203,7 +203,7 @@ export default function UserSettingsForm({
         <Button
           primary
           label={saving ? 'Saving' : 'Save'}
-          disabled={isLoadingMyUser || saving}
+          disabled={loadingMyUser || saving}
           onClick={handleSave}
         />
       </Box>

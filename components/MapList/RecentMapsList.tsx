@@ -9,15 +9,15 @@ const useRecentMapList = () => {
   const { data, error } = useSWR('/api/recent-maps', fetcher, { suspense: true });
   return {
     mapList: data || [],
-    isLoading: !error && !data,
+    loading: !error && !data,
     error,
   };
 };
 
 const RecentMapsList: React.FC = () => {
-  const { mapList, isLoading, error } = useRecentMapList();
+  const { mapList, loading, error } = useRecentMapList();
 
-  if (!mapList && !isLoading && !error) {
+  if (!mapList && !loading && !error) {
     return <NoResults />;
   }
 

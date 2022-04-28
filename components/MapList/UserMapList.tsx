@@ -3,9 +3,9 @@ import MapList from './MapList';
 import NoResults from './NoResults';
 
 const UserMapList: React.FC = () => {
-  const { map, isLoading, error } = useUserMap();
+  const { map, loading, error } = useUserMap();
 
-  if (!map && !isLoading && !error) {
+  if (!map && !loading && !error) {
     return <NoResults />;
   }
 
