@@ -14,8 +14,8 @@ export default function PrincipalParchmentContainer({
     <Box
       style={{ position: 'relative' }}
       align="center"
-      responsive={false}
-      pad={{ top: 'xlarge', bottom: 'medium', horizontal: size === 'small' ? 'small' : 'medium' }}
+      margin={{ top: size === 'small' ? 'xlarge' : 'medium' }}
+      pad={{ top: 'xlarge', bottom: 'medium', horizontal: 'medium' }}
       animation={['fadeIn', { type: 'slideUp', size: 'xsmall' }]}
     >
       <Box width={width}>{children}</Box>
