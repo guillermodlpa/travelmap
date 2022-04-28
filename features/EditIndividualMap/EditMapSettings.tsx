@@ -1,7 +1,7 @@
 import { Box, Heading, Layer, Text } from 'grommet';
 import UserSettingsForm from '../AccountSettings/UserSettingsForm';
 
-export default function EditDisplayNameDialog({
+export default function EditMapSettings({
   open,
   onClose,
   showWelcomeMessage,

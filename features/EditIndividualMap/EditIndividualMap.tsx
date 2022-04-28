@@ -10,7 +10,7 @@ import LegendBody from '../../components/Legend/LegendBody';
 import LegendActions from '../../components/Legend/LegendActions';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
-import EditDisplayNameDialog from './EditDisplayNameDialog';
+import EditMapSettings from './EditMapSettings';
 
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
@@ -43,7 +43,7 @@ export default function EditMap({
       return newCountries;
     });
 
-  const [editDisplayNameDialogOpen, setEditDisplayNameDialogOpen] =
+  const [editMapSettingsDialogOpen, setEditMapSettingsDialogOpen] =
     useState<boolean>(defaultOUserSettingsModal);
 
   const [saving, setSaving] = useState<boolean>(false);
@@ -91,9 +91,9 @@ export default function EditMap({
         onCountrySelected={toggleCountry}
       />
 
-      <EditDisplayNameDialog
-        open={editDisplayNameDialogOpen}
-        onClose={() => setEditDisplayNameDialogOpen(false)}
+      <EditMapSettings
+        open={editMapSettingsDialogOpen}
+        onClose={() => setEditMapSettingsDialogOpen(false)}
         showWelcomeMessage={defaultOUserSettingsModal && !travelMap?.userDisplayName}
         allowUserToClose={Boolean(travelMap?.userDisplayName)}
       />
@@ -115,7 +115,7 @@ export default function EditMap({
               : []
           }
           showEditNameButton
-          onClickEditNameButton={() => setEditDisplayNameDialogOpen(true)}
+          onClickEditNameButton={() => setEditMapSettingsDialogOpen(true)}
         />
 
         <LegendBody>
