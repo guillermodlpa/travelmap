@@ -11,6 +11,9 @@ import {
 import { useContext, useEffect, useState } from 'react';
 import useMyUser from '../../hooks/useMyUser';
 
+const isDisplayNameInputValueValid = (displayName: string): boolean =>
+  displayName.trim().length > 0;
+
 export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () => void }) {
   const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
   const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
@@ -42,8 +45,20 @@ export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () 
 
   const size = useContext(ResponsiveContext);
 
+  const [displayNameInputError, setDisplayNameInputError] = useState<boolean>(false);
+  useEffect(() => {
+    if (displayNameInputError && isDisplayNameInputValueValid(displayName)) {
+      setDisplayNameInputError(false);
+    }
+  }, [displayName, displayNameInputError]);
+
   const [saving, setSaving] = useState<boolean>(false);
   const handleSave = async () => {
+    if (!isDisplayNameInputValueValid(displayName)) {
+      setDisplayNameInputError(true);
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -122,6 +137,7 @@ export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () 
                 label="Display name"
                 htmlFor="display-name-input" /* @todo: replace for React 18's useId */
                 required
+                error={displayNameInputError ? 'Invalid' : undefined}
               >
                 <TextInput
                   value={displayName}
