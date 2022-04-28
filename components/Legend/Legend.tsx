@@ -47,7 +47,10 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
         $bottom={coordinates.bottom}
         $right={coordinates.right}
         ref={ref as React.ForwardedRef<HTMLDivElement>}
-        animation={{ delay: 100, type: 'fadeIn' }}
+        animation={[
+          { delay: 100, type: 'fadeIn' },
+          { type: 'slideUp', size: 'xsmall' },
+        ]}
       >
         <Parchment
           contentPad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}

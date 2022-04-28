@@ -44,7 +44,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           justify="end"
           pad={{ top: 'medium', bottom: 'small' }}
         >
-          <Button label="Cancel" onClick={onCancel} />
+          <Button secondary label="Cancel" onClick={onCancel} />
           <Button
             label={confirmButtonLabel}
             onClick={(event) => onConfirm(event, onRequestClose)}

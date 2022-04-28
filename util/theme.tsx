@@ -3,18 +3,34 @@ import { FormDown, FormUp } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 import { css } from 'styled-components';
 
-const theme = deepMerge(grommet, {
+const getColorCode = (theme: ThemeType, colorValue: string): string => {
+  const themeColor = theme.global.colors?.[colorValue];
+  if (typeof themeColor === 'string') {
+    return themeColor;
+  }
+  if (typeof themeColor === 'object' && themeColor[theme.dark ? 'dark' : 'light']) {
+    return themeColor[theme.dark ? 'dark' : 'light'] as string;
+  }
+  return colorValue;
+};
+
+const customTheme = deepMerge(grommet, {
   global: {
+    animation: { duration: '0.5s' },
+    background: { light: '#cfb19b', dark: '#1c1b1e' },
+    baseBackground: { light: '#cfb19b', dark: '#1c1b1e' },
     font: {
       family: "'Barlow', sans-serif",
       size: '18px',
       height: '20px',
     },
     colors: {
+      active: { light: 'rgba(0, 0, 0, 0.05)', dark: 'rgba(255, 255, 255, 0.05)' },
       brand: { light: '#112f6a', dark: '#91b0ee' },
       parchment: { light: '#e8ceba', dark: '#383842' },
       parchmentInset: { light: '#c29c80', dark: '#1c1c21' },
       popup: { light: '#f4e7dd', dark: '#101013' },
+      'map-background': { light: '#cfb19b', dark: '#1c1b1e' },
       info: '#FFCA58',
       'status-ok': '#00C781',
       control: 'brand',
@@ -22,6 +38,7 @@ const theme = deepMerge(grommet, {
       border: { light: 'rgba(0, 0, 0, 0.33)', dark: 'rgba(255, 255, 255, 0.33)' },
       placeholder: 'text',
       text: { light: '#0f0f0f', dark: '#FCF5E5' },
+      'text-inverted': { light: '#FCF5E5', dark: '#0f0f0f' },
       'text-strong': { light: '#000000', dark: '#FFFFFF' },
       'text-weak': { light: '#555555', dark: '#CCCCCC' },
       'text-xweak': { light: '#666666', dark: '#BBBBBB' },
@@ -95,7 +112,7 @@ const theme = deepMerge(grommet, {
       up: FormUp,
     },
     // control: {
-    //   extend: (/* { open, theme } */) => css`
+    //   extend: (/* { open, theme: ThemeType } */) => css`
     //     & input::placeholder {
     //       font-weight: normal;
     //     }
@@ -117,14 +134,93 @@ const theme = deepMerge(grommet, {
     color: 'brand',
   },
   button: {
+    extend: () => css<{
+      hasIcon: boolean;
+      hasLabel: boolean;
+      sizeProp: 'small' | 'medium' | 'large';
+    }>`
+      ${(props) => {
+        // We customize padding for icon-only buttons
+        const iconOnlyButton = Boolean(props.hasIcon && !props.hasLabel);
+        if (iconOnlyButton) {
+          const pad = props.theme.button.size[props.sizeProp]?.pad;
+          // We use on all sides the vertical padding, so they are squares
+          return pad ? `padding: ${pad.vertical} ${pad.vertical};` : '';
+        }
+        return '';
+      }}
+    `,
     border: { radius: '0px' },
     size: {
-      large: {
-        border: { radius: 0 },
-        pad: { vertical: '24px', horizontal: '32px' },
+      large: { pad: { vertical: '16px', horizontal: '32px' } },
+      medium: { pad: { vertical: '4px', horizontal: '22px' } },
+      small: { pad: { vertical: '4px', horizontal: '20px' } },
+    },
+    default: {
+      color: 'text',
+      extend: () => css`
+        border-radius: 5px;
+      `,
+    },
+    primary: {
+      background: 'transparent',
+      color: 'text-inverted',
+      extend: () => css<{ colorValue: string }>`
+        position: relative;
+        background-color: transparent; // override when a color is set, like status-critical
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          filter: url(#wavy-button);
+          z-index: -1;
+          background-color: ${(props) => getColorCode(props.theme, props.colorValue || 'brand')};
+          transform: scale(1);
+          transition: transform 0.1s ease-in-out;
+        }
+      `,
+    },
+    secondary: {
+      color: 'text',
+      extend: () => css<{ colorValue: string }>`
+        position: relative;
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          filter: url(#wavy-button);
+          z-index: -1;
+          border: 2px solid ${(props) => getColorCode(props.theme, props.colorValue || 'brand')};
+          transform: scale(1);
+          transition: transform 0.1s ease-in-out;
+        }
+      `,
+    },
+    hover: {
+      primary: {
+        extend: () => css`
+          &:before {
+            transform: scale(1.1);
+          }
+        `,
       },
-      medium: { border: { radius: 0 } },
-      small: { border: { radius: 0 } },
+      secondary: {
+        extend: () => css`
+          &:before {
+            transform: scale(1.1);
+          }
+        `,
+      },
+      default: {
+        background: 'active',
+      },
     },
   },
   text: {
@@ -153,17 +249,13 @@ const theme = deepMerge(grommet, {
       elevation: 'none',
     },
   },
-  grommet: {
-    extend: {
-      // overflow: 'hidden',
-    },
-  },
+  grommet: {},
 });
 
-type ThemeType = typeof theme & { dark: boolean };
+type ThemeType = typeof customTheme & { dark: boolean };
 
 declare module 'styled-components' {
   export interface DefaultTheme extends ThemeType {}
 }
 
-export default theme;
+export default customTheme;

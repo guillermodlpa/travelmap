@@ -134,6 +134,7 @@ export default function EditMap() {
           <LegendActions>
             <Button
               label={saving ? 'Saving' : 'Save'}
+              secondary
               disabled={loading || saving || countries.length === 0}
               onClick={handleSave}
             />

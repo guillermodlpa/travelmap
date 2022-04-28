@@ -105,7 +105,10 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
               <NextLink href={togetherMapList[0].pathView} passHref>
                 <Anchor size="small">View Map Together</Anchor>
               </NextLink>
-            ) : undefined}
+            ) : (
+              // render a space so we have the same height as if buttons render, to avoid CLS
+              <>{'\u00A0'}</>
+            )}
           </Text>
         </LegendBody>
       </Legend>

@@ -75,10 +75,6 @@ const MapList: React.FC<MapListProps> = ({
               </NextLink>
             )}
 
-            <NextLink href={travelMap.pathView} passHref>
-              <Anchor>View</Anchor>
-            </NextLink>
-
             {deleteSettings.allowDelete && (
               <WrappingDialogConfirmation
                 onConfirm={(event, onRequestClose) => {
@@ -96,6 +92,10 @@ const MapList: React.FC<MapListProps> = ({
                 {(handleClick) => <Button label="Delete" color="border" onClick={handleClick} />}
               </WrappingDialogConfirmation>
             )}
+
+            <NextLink href={travelMap.pathView} passHref>
+              <Anchor>View</Anchor>
+            </NextLink>
           </Box>
         </Box>
       ))}

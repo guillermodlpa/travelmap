@@ -12,6 +12,7 @@ import {
 } from '../components/ThemeModeContext';
 import { useTheme } from 'styled-components';
 import type { NextPage } from 'next';
+import ButtonCssFilter from '../components/ButtonCssFilter/ButtonCssFilter';
 
 const ThemeDebugger: React.FC = () => {
   const theme = useTheme();
@@ -57,11 +58,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           -webkit-font-smoothing: auto;
         }
       `}</style>
-      <Grommet theme={theme} full themeMode={mode}>
+      <Grommet theme={theme} full themeMode={mode} background="map-background">
         <ThemeModeContextProvider value={themeContextValue}>
           <ViewportSizeListener onSize={setSize} />
           <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>
           {process.env.NODE_ENV === 'development' && <ThemeDebugger />}
+          <ButtonCssFilter />
         </ThemeModeContextProvider>
       </Grommet>
     </>

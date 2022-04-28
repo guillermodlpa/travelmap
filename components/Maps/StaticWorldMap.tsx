@@ -12,7 +12,7 @@ const StaticWorldMap: React.FC<{
   id: string;
 }> = ({ height = '100%', id }) => {
   const { mode } = useThemeMode();
-  const { backgroundColor, mapboxStyle } = mapStyles[mode];
+  const mapboxStyle = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const StaticWorldMap: React.FC<{
     }
   }, [mapboxStyle, id]);
 
-  return <Box id={id} height={height} background={backgroundColor} />;
+  return <Box id={id} height={height} background="map-background" />;
 };
 
 export default withNoSsr(StaticWorldMap);

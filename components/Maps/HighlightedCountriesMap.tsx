@@ -172,7 +172,7 @@ const HighlightedCountriesMap: React.FC<{
   onCountrySelected = () => {},
 }) => {
   const { mode } = useThemeMode();
-  const { backgroundColor, mapboxStyle } = mapStyles[mode];
+  const mapboxStyle = mapStyles[mode];
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
@@ -285,7 +285,7 @@ const HighlightedCountriesMap: React.FC<{
     <MapboxContainer
       id={id}
       height={height}
-      background={backgroundColor}
+      background="map-background"
       $animate={applyMapMotion}
     />
   );

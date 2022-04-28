@@ -41,7 +41,7 @@ export default function DeleteAccountButton() {
       confirmMessage="Are you sure that you want to delete your account and data?"
     >
       {(handleClick) => (
-        <Button label="Delete Account" color="border" alignSelf="end" onClick={handleClick} />
+        <Button secondary label="Delete Account" alignSelf="end" onClick={handleClick} />
       )}
     </WrappingDialogConfirmation>
   );

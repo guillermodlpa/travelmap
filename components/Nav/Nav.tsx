@@ -25,7 +25,7 @@ const HomeLogoFloatingBox = styled(Box)`
 
 const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11yTitle: string }>(
   ({ ...props }, ref) => (
-    <Button size="medium" style={{ display: 'flex', alignItems: 'center' }} {...props} ref={ref} />
+    <Button size="large" style={{ display: 'flex', alignItems: 'center' }} {...props} ref={ref} />
   )
 );
 NavButton.displayName = 'NavButton';

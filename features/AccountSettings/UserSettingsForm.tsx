@@ -183,6 +183,7 @@ export default function UserSettingsForm({ onSaved = () => {} }: { onSaved?: () 
       </Box>
       <Box>
         <Button
+          primary
           alignSelf="center"
           label={saving ? 'Saving' : 'Save'}
           disabled={isLoadingMyUser || saving}
