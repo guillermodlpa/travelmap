@@ -143,9 +143,12 @@ const customTheme = deepMerge(grommet, {
         // We customize padding for icon-only buttons
         const iconOnlyButton = Boolean(props.hasIcon && !props.hasLabel);
         if (iconOnlyButton) {
-          const pad = props.theme.button.size[props.sizeProp]?.pad;
-          // We use on all sides the vertical padding, so they are squares
-          return pad ? `padding: ${pad.vertical} ${pad.vertical};` : '';
+          const pad = {
+            large: '16px',
+            medium: '4px',
+            small: '2px',
+          }[props.sizeProp];
+          return pad ? `padding: ${pad} ${pad};` : '';
         }
         return '';
       }}

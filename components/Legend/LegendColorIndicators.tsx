@@ -23,7 +23,7 @@ const LegendColorIndicator: React.FC<LegendItem & { forceExpanded?: boolean }> =
         <Text>{label}</Text>
         {subItems && !forceExpanded && (
           <Button
-            plain
+            size="small"
             a11yTitle="Show or hide list of countries"
             icon={subItemsExpanded ? <FormUp /> : <FormDown />}
             onClick={() => setSubItemsExpanded(!subItemsExpanded)}
