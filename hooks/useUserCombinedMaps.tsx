@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import getFetcher from '../util/fetcher';
 
 const fetcher = getFetcher<Array<ClientCombinedTravelMap>>();
@@ -23,7 +23,7 @@ const useUserCombinedMaps = ({
   return {
     mapList: !error ? data : undefined,
     loading: !error && data == null,
-    error: error ? data : undefined,
+    error,
     mutate,
   };
 };

@@ -1,10 +1,8 @@
-import { Box, Button, Heading, Paragraph, ResponsiveContext, Text } from 'grommet';
-import { useContext, Suspense } from 'react';
+import { Box, Button, Heading, Paragraph, ResponsiveContext } from 'grommet';
+import { useContext } from 'react';
 import NextLink from 'next/link';
 import styled from 'styled-components';
-import withNoSsr from '../../components/NoSsr/withNoSsr';
 import RecentMapsList from '../../components/MapList/RecentMapsList';
-import ErrorBoundary from '../../components/ErrorBoundary';
 import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import { PATH_SIGN_UP, PATH_LOG_IN } from '../../util/paths';
@@ -13,8 +11,6 @@ import { useUser } from '@auth0/nextjs-auth0';
 const ButtonTextCentered = styled(Button)`
   text-align: center;
 `;
-
-const SuspenseNoSsr = withNoSsr(Suspense);
 
 export default function Landing() {
   const size = useContext(ResponsiveContext);
@@ -75,17 +71,7 @@ export default function Landing() {
             Recenly Created Travelmaps
           </Heading>
 
-          <ErrorBoundary fallback={<Text>Could not fetch recent maps.</Text>}>
-            <SuspenseNoSsr
-              fallback={
-                <Box animation={{ delay: 2000, type: 'fadeIn' }}>
-                  <Text>Loading...</Text>
-                </Box>
-              }
-            >
-              <RecentMapsList />
-            </SuspenseNoSsr>
-          </ErrorBoundary>
+          <RecentMapsList />
         </Box>
       </Parchment>
     </PrincipalParchmentContainer>

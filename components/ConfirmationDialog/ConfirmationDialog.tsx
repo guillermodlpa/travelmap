@@ -8,6 +8,7 @@ export type ConfirmationDialogProps = {
   confirmButtonLabel: string;
   confirmButtonDisabled?: boolean;
   confirmMessage: string;
+  errorMessage?: string;
 };
 
 export default function ConfirmationDialog({
@@ -18,6 +19,7 @@ export default function ConfirmationDialog({
   confirmButtonLabel,
   confirmButtonDisabled = false,
   confirmMessage,
+  errorMessage,
 }: ConfirmationDialogProps) {
   if (!open) {
     return <></>;
@@ -36,6 +38,7 @@ export default function ConfirmationDialog({
           Confirm
         </Heading>
         <Text>{confirmMessage}</Text>
+        {errorMessage && <Text color="status-error">{errorMessage}</Text>}
         <Box
           as="footer"
           gap="small"

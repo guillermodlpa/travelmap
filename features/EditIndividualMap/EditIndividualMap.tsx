@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWRImmutable, { Fetcher } from 'swr';
 
-import { Button, Card, CardBody, Paragraph } from 'grommet';
+import { Box, Button, Card, CardBody, Paragraph, Text } from 'grommet';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
@@ -25,7 +25,6 @@ export default function EditMap({
   const { data: travelMap, error } = useSWRImmutable(`/api/map`, fetcher, {
     suspense: false,
   });
-  const loading = !error && !travelMap;
 
   const [countries, setCountries] = useState<string[]>([]);
   useEffect(() => {
@@ -47,8 +46,10 @@ export default function EditMap({
     useState<boolean>(defaultOUserSettingsModal);
 
   const [saving, setSaving] = useState<boolean>(false);
+  const [savingError, setSavingError] = useState<string>();
   const handleSave = () => {
     setSaving(true);
+    setSavingError(undefined);
 
     fetch(`/api/map`, {
       method: 'PATCH',
@@ -68,7 +69,7 @@ export default function EditMap({
       .catch((error) => {
         setSaving(false);
         console.error(error);
-        alert('error');
+        setSavingError(error.message);
       });
   };
 
@@ -119,6 +120,12 @@ export default function EditMap({
         />
 
         <LegendBody>
+          {error && (
+            <Text color="status-error" margin={{ bottom: 'small' }}>
+              {error.message}
+            </Text>
+          )}
+
           <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
             <CardBody>
               <Paragraph margin="none">Find countries in the map and select them</Paragraph>
@@ -139,16 +146,21 @@ export default function EditMap({
               },
             ]}
           />
-
-          <LegendActions>
-            <Button
-              label={saving ? 'Saving' : 'Save'}
-              primary
-              disabled={loading || saving || countries.length === 0}
-              onClick={handleSave}
-            />
-          </LegendActions>
         </LegendBody>
+
+        <LegendActions>
+          {savingError && (
+            <Box flex={{ shrink: 0 }}>
+              <Text color="status-error">{savingError}</Text>
+            </Box>
+          )}
+          <Button
+            label={saving ? 'Saving' : 'Save'}
+            primary
+            disabled={error || !travelMap || saving || countries.length === 0}
+            onClick={handleSave}
+          />
+        </LegendActions>
       </Legend>
     </>
   );

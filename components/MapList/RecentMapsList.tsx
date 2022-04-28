@@ -1,3 +1,4 @@
+import { Text } from 'grommet';
 import useSWR from 'swr';
 import getFetcher from '../../util/fetcher';
 import MapList from './MapList';
@@ -6,7 +7,7 @@ import NoResults from './NoResults';
 const fetcher = getFetcher<Array<ClientIndividualTravelMap | ClientCombinedTravelMap>>();
 
 const useRecentMapList = () => {
-  const { data, error } = useSWR('/api/recent-maps', fetcher, { suspense: true });
+  const { data, error } = useSWR('/api/recent-maps', fetcher);
   return {
     mapList: data || [],
     loading: !error && !data,
@@ -21,5 +22,10 @@ export default function RecentMapsList() {
     return <NoResults />;
   }
 
-  return <MapList mapList={mapList} allowEdit={false} />;
+  return (
+    <>
+      {error && <Text color="status-error">{error.message || 'Error'}</Text>}
+      <MapList mapList={mapList} allowEdit={false} />
+    </>
+  );
 }

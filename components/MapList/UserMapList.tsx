@@ -1,3 +1,4 @@
+import { Text } from 'grommet';
 import useUserMap from '../../hooks/useUserMap';
 import MapList from './MapList';
 import NoResults from './NoResults';
@@ -9,5 +10,10 @@ export default function UserMapList() {
     return <NoResults />;
   }
 
-  return <MapList mapList={map ? [map] : []} allowEdit />;
+  return (
+    <>
+      {error && <Text color="status-error">{error.message || 'Error'}</Text>}
+      <MapList mapList={map ? [map] : []} allowEdit />
+    </>
+  );
 }

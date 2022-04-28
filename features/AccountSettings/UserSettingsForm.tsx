@@ -6,6 +6,7 @@ import {
   FormField,
   Heading,
   ResponsiveContext,
+  Text,
   TextInput,
 } from 'grommet';
 import { useContext, useEffect, useState } from 'react';
@@ -61,6 +62,7 @@ export default function UserSettingsForm({
   }, [displayName, displayNameInputError]);
 
   const [saving, setSaving] = useState<boolean>(false);
+  const [savingErrorMessage, setSavingErrorMessage] = useState<string>();
   const handleSave = async () => {
     if (!isDisplayNameInputValueValid(displayName)) {
       setDisplayNameInputError(true);
@@ -68,6 +70,7 @@ export default function UserSettingsForm({
     }
 
     setSaving(true);
+    setSavingErrorMessage(undefined);
 
     try {
       if (profilePictureFile) {
@@ -99,12 +102,14 @@ export default function UserSettingsForm({
     } catch (error) {
       setSaving(false);
       console.error(error);
-      alert('error');
+      setSavingErrorMessage(error instanceof Error ? error.message : 'Error');
     }
   };
 
   return (
     <Box gap="small">
+      {myUserError && <Text color="status-error">{myUserError.message}</Text>}
+
       <Box
         direction={size === 'small' ? 'column' : 'row'}
         gap={size === 'small' ? 'medium' : 'large'}
@@ -189,6 +194,13 @@ export default function UserSettingsForm({
           />
         </Box>
       </Box>
+
+      {savingErrorMessage && (
+        <Text textAlign="center" color="status-error">
+          {savingErrorMessage}
+        </Text>
+      )}
+
       <Box direction="row" gap="large" justify="center">
         {showCancelButton && (
           <Button

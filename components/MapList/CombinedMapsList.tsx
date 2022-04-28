@@ -1,3 +1,4 @@
+import { Text } from 'grommet';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import MapList from './MapList';
 import NoResults from './NoResults';
@@ -16,7 +17,7 @@ const joinUserNames = (travelMap: ClientCombinedTravelMap | ClientIndividualTrav
 };
 
 export default function CombinedMapsList() {
-  const { mapList, mutate } = useUserCombinedMaps({ shouldFetch: true });
+  const { mapList, mutate, error } = useUserCombinedMaps({ shouldFetch: true });
 
   const handleDelete = (travelMapId: string) =>
     fetch(`/api/combined-maps/${travelMapId}`, {
@@ -30,15 +31,18 @@ export default function CombinedMapsList() {
   }
 
   return (
-    <MapList
-      mapList={mapList || []}
-      allowEdit={false}
-      deleteSettings={{
-        allowDelete: true,
-        getConfirmMessage: (travelMap) =>
-          `Are you sure about deleting the together map of ${joinUserNames(travelMap)}?`,
-        handleDelete,
-      }}
-    />
+    <>
+      {error && <Text color="status-error">{error.message || 'Error'}</Text>}
+      <MapList
+        mapList={mapList || []}
+        allowEdit={false}
+        deleteSettings={{
+          allowDelete: true,
+          getConfirmMessage: (travelMap) =>
+            `Are you sure about deleting the together map of ${joinUserNames(travelMap)}?`,
+          handleDelete,
+        }}
+      />
+    </>
   );
 }

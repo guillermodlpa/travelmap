@@ -8,8 +8,10 @@ export default function DeleteAccountButton() {
   const { mutate: mutateMyUser } = useMyUser();
 
   const [deletingAccount, setDeletingAccount] = useState<boolean>(false);
-  const handleDeleteAccount = (): Promise<void> => {
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const handleDeleteAccount = (requestClose: () => void): Promise<void> => {
     setDeletingAccount(true);
+    setErrorMessage(undefined);
     return fetch(`/api/user`, {
       method: 'DELETE',
     })
@@ -17,6 +19,7 @@ export default function DeleteAccountButton() {
         setTimeout(() => {
           setDeletingAccount(false);
           mutateMyUser();
+          requestClose();
           if (typeof window !== 'undefined') {
             window.location.href = PATH_LOG_OUT;
           }
@@ -25,20 +28,19 @@ export default function DeleteAccountButton() {
       .catch((error) => {
         setDeletingAccount(false);
         console.error(error);
-        alert('error');
+        setErrorMessage(error instanceof Error ? error.message : 'Error');
       });
   };
 
   return (
     <WrappingDialogConfirmation
       onConfirm={(event, requestClose) => {
-        handleDeleteAccount().then(() => {
-          requestClose();
-        });
+        handleDeleteAccount(requestClose);
       }}
       confirmButtonLabel={deletingAccount ? 'Deleting Account' : 'Delete Account'}
       confirmButtonDisabled={deletingAccount}
       confirmMessage="Are you sure that you want to delete your account and data?"
+      errorMessage={errorMessage}
     >
       {(handleClick) => (
         <Button secondary label="Delete Account" alignSelf="end" onClick={handleClick} />
