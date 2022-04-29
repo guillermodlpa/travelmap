@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWRImmutable, { Fetcher } from 'swr';
 
-import { Box, Button, Card, CardBody, Paragraph, Text } from 'grommet';
+import { Box, Button, Card, CardBody, Paragraph, ResponsiveContext, Text } from 'grommet';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
@@ -22,6 +22,7 @@ export default function EditMap({
   defaultOUserSettingsModal: boolean;
 }) {
   const router = useRouter();
+  const size = useContext(ResponsiveContext);
 
   const { data: travelMap, error } = useSWRImmutable(`/api/map`, fetcher, {
     suspense: false,
@@ -140,17 +141,17 @@ export default function EditMap({
 
           <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
             <CardBody>
-              <Paragraph margin="none">Find countries in the map and select them</Paragraph>
+              <Paragraph margin="none">Select the countries in the map</Paragraph>
             </CardBody>
           </Card>
 
           <LegendColorIndicators
-            forceExpanded
+            expandedInitially={size !== 'small'}
             data={[
               {
                 id: 'edit-map',
                 color: 'status-ok',
-                label: `Visited countries (${countries.length})`,
+                label: travelMap ? `Visited countries (${countries.length})` : 'Visited countries',
                 subItems: countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',

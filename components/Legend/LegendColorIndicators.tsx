@@ -13,15 +13,15 @@ function LegendColorIndicator({
   label,
   color,
   subItems,
-  forceExpanded = false,
-}: LegendItem & { forceExpanded?: boolean }) {
-  const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(false);
+  expandedInitially = false,
+}: LegendItem & { expandedInitially?: boolean }) {
+  const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(expandedInitially);
   return (
     <Box direction="column" gap="xsmall" flex={{ shrink: 0 }}>
       <Box direction="row" gap="small" align="center">
         <Box width="1rem" height="1rem" border background={color} />
         <Text>{label}</Text>
-        {subItems && !forceExpanded && (
+        {subItems && (
           <Button
             size="small"
             a11yTitle="Show or hide list of countries"
@@ -30,7 +30,7 @@ function LegendColorIndicator({
           />
         )}
       </Box>
-      {(subItemsExpanded || forceExpanded) && (
+      {subItemsExpanded && (
         <Box animation={['fadeIn']}>
           <Box
             as="ul"
@@ -57,15 +57,15 @@ function LegendColorIndicator({
 
 export default function LegendColorIndicators({
   data,
-  forceExpanded = false,
+  expandedInitially = false,
 }: {
   data: LegendItem[];
-  forceExpanded?: boolean;
+  expandedInitially?: boolean;
 }) {
   return (
     <Box pad={{ left: 'small' }} gap="xsmall">
       {data.map((item: LegendItem) => (
-        <LegendColorIndicator key={item.id} {...item} forceExpanded={forceExpanded} />
+        <LegendColorIndicator key={item.id} {...item} expandedInitially={expandedInitially} />
       ))}
     </Box>
   );

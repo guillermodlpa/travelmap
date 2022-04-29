@@ -20,14 +20,14 @@ const NavFloatingBox = styled(GrommetNav)`
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 2;
+  z-index: 100;
 `;
 
 const HomeLogoFloatingBox = styled(Box)`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 200;
 `;
 
 const NavButton = forwardRef<any, ButtonExtendedProps & { icon: JSX.Element; a11yTitle: string }>(
@@ -59,7 +59,10 @@ export default function Nav() {
   return (
     <>
       <HomeLogoFloatingBox>
-        <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
+        <Parchment
+          contentBox={{ pad: { horizontal: 'small', vertical: 'small' } }}
+          insetShadowSize="xsmall"
+        >
           <NextLink passHref href="/">
             <LandingPageButton
               size="large"
@@ -71,7 +74,10 @@ export default function Nav() {
       </HomeLogoFloatingBox>
 
       <NavFloatingBox animation="fadeIn">
-        <Parchment contentPad={{ horizontal: 'small', vertical: 'small' }} insetShadowSize="xsmall">
+        <Parchment
+          contentBox={{ pad: { horizontal: 'small', vertical: 'small' } }}
+          insetShadowSize="xsmall"
+        >
           <Box direction="row" gap="xsmall">
             {Boolean(auth0User) && (
               <NextLink passHref href="/my/maps">

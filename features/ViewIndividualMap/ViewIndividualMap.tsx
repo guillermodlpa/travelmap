@@ -4,7 +4,7 @@ import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
 import { Button } from 'grommet';
 import NextLink from 'next/link';
-import { createRef, useState } from 'react';
+import { useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import { useUser } from '@auth0/nextjs-auth0';
@@ -16,8 +16,6 @@ import ShareMap from './ShareMap';
 import LegendActions from '../../components/Legend/LegendActions';
 
 export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndividualTravelMap }) {
-  const legendRef = createRef<HTMLDivElement>();
-
   const { user: auth0User } = useUser();
 
   const { mapList: togetherMapList } = useUserCombinedMaps({
@@ -51,6 +49,7 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
         countriesCanBeSelected={false}
         applyMapMotion
         animateCamera
+        initialZoomPadding={{ bottom: 250, top: 70 }}
       />
 
       {confirmedUserDoesntHaveTogetherMaps && (
@@ -69,7 +68,7 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
         name={travelMapName}
       />
 
-      <Legend ref={legendRef}>
+      <Legend>
         <LegendTitle
           heading={travelMapName}
           avatars={[

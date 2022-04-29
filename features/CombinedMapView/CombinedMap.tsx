@@ -2,7 +2,7 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { createRef, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
@@ -37,8 +37,6 @@ function getNonOverlappingListsOfCountries(
 }
 
 export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTravelMap }) {
-  const legendRef = createRef<HTMLDivElement>();
-
   const countryListDescriptors = getNonOverlappingListsOfCountries(
     travelMap.individualTravelMaps[0],
     travelMap.individualTravelMaps[1]
@@ -77,7 +75,7 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
         name={travelMapName}
       />
 
-      <Legend ref={legendRef}>
+      <Legend>
         <LegendTitle
           heading={travelMapName}
           avatars={[

@@ -5,10 +5,14 @@ import Parchment from '../../components/Parchment';
 
 const FloatingBox = styled(Box)`
   position: absolute;
-  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 15;
+  z-index: 150;
+  top: 80px;
+
+  @media (min-width: ${({ theme }) => theme.global.breakpoints?.small?.value}px) {
+    top: 10px;
+  }
 `;
 
 export default function HoveredCountryToast({
@@ -37,7 +41,10 @@ export default function HoveredCountryToast({
 
   return (
     <FloatingBox animation={animation}>
-      <Parchment contentPad={{ horizontal: 'medium', vertical: 'small' }} insetShadowSize="xsmall">
+      <Parchment
+        contentBox={{ pad: { horizontal: 'medium', vertical: 'small' } }}
+        insetShadowSize="xsmall"
+      >
         <Heading level={5} data-code={lastValue?.code} margin="none" as="span">
           {lastValue?.name}
         </Heading>

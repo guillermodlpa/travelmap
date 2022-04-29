@@ -11,7 +11,7 @@ const LegendContainer = styled(Box)<BoxExtendedProps & LegendContainerStyleProps
   bottom: ${({ $bottom }) => $bottom};
   right: ${({ $right }) => $right};
   right: 0;
-  z-index: 10;
+  z-index: 100;
   left: ${({ $size }) => ($size === 'small' ? '0' : 'auto')};
 `;
 
@@ -40,7 +40,7 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
       <LegendContainer
         margin={{ bottom: 'large', horizontal: 'large' }}
         width={{
-          width: size === 'small' ? 'auto' : '450px',
+          width: 'auto',
           max: size === 'small' ? '100%' : '50%',
         }}
         $size={size}
@@ -54,7 +54,7 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
         height={{ max: '80vh' }}
       >
         <Parchment
-          contentPad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}
+          contentBox={{ pad: { horizontal: 'medium', vertical: 'medium' } }}
           insetShadowSize="medium"
         >
           <Box direction="column">{children}</Box>

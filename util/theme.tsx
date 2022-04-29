@@ -17,8 +17,6 @@ const getColorCode = (theme: ThemeType, colorValue: string): string => {
 const customTheme = deepMerge(grommet, {
   global: {
     animation: { duration: '0.5s' },
-    background: { light: '#cfb19b', dark: '#1c1b1e' },
-    baseBackground: { light: '#cfb19b', dark: '#1c1b1e' },
     font: {
       family: "'Barlow', sans-serif",
       size: '18px',
@@ -67,6 +65,12 @@ const customTheme = deepMerge(grommet, {
         size: '3px',
       },
     },
+    drop: {
+      zIndex: 200,
+    },
+  },
+  layer: {
+    zIndex: 100,
   },
   avatar: {
     size: {
@@ -80,19 +84,14 @@ const customTheme = deepMerge(grommet, {
       family: "'Merienda', cursive",
     },
     extend: {
+      'margin-top': '0',
       '-webkit-font-smoothing': 'auto',
       'word-break': 'break-word',
     },
     level: {
       1: {
-        xsmall: {
-          size: '20px',
-          height: '24px',
-        },
-        small: {
-          size: '24px',
-          height: '28px',
-        },
+        xsmall: { size: '20px', height: '24px' },
+        small: { size: '24px', height: '28px' },
       },
     },
   },

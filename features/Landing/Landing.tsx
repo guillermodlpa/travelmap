@@ -19,10 +19,8 @@ export default function Landing() {
 
   return (
     <PrincipalParchmentContainer>
-      <Parchment contentPad="large">
-        <Heading level={2} margin={{ top: '0' }}>
-          Welcome to Travelmap
-        </Heading>
+      <Parchment contentBox={{ pad: 'large' }}>
+        <Heading level={2}>Welcome to Travelmap</Heading>
 
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
           <Paragraph margin={{ top: '0' }} fill size="large">
@@ -67,9 +65,7 @@ export default function Landing() {
         </Box>
 
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Heading level={4} margin={{ top: '0' }}>
-            Recenly Created Travelmaps
-          </Heading>
+          <Heading level={4}>Recenly Created Travelmaps</Heading>
 
           <RecentMapsList />
         </Box>

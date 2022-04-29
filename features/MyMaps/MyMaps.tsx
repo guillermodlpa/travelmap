@@ -14,7 +14,7 @@ export default function MyMaps() {
 
   return (
     <PrincipalParchmentContainer width="xlarge">
-      <Parchment contentPad="large">
+      <Parchment contentBox={{ pad: 'large' }}>
         <Box direction="row" margin={{ bottom: 'medium' }} align="center" gap="medium" wrap>
           <Box flex>
             <Heading level={2} margin={'0'}>
@@ -32,16 +32,12 @@ export default function MyMaps() {
         )}
 
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Heading level={4} margin={{ top: '0' }}>
-            Your Map
-          </Heading>
+          <Heading level={4}>Your Map</Heading>
 
           <UserMapList />
         </Box>
         <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Heading level={4} margin={{ top: '0' }}>
-            {`"Together" Maps`}
-          </Heading>
+          <Heading level={4}>{`"Together" Maps`}</Heading>
 
           <CombinedMapsList />
 

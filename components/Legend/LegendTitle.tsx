@@ -6,13 +6,6 @@ import styled from 'styled-components';
 
 const NBSP_CHAR = '\u00A0';
 
-interface LegendTitleProps {
-  heading: string | undefined;
-  avatars: { id: string; name: string; href?: string; pictureUrl: string | null }[] | undefined;
-  showEditNameButton?: boolean;
-  onClickEditNameButton?: (event: SyntheticEvent) => void;
-}
-
 const AnchorButton = styled(Anchor)`
   transform: scale(1);
   transition: transform 0.1s ease-in-out;
@@ -48,20 +41,23 @@ function ConditionalLink({
 
 const defaultAvatar = { id: '_', name: '', pictureUrl: null, href: undefined };
 
+interface LegendTitleProps {
+  heading: string | undefined;
+  avatars: { id: string; name: string; href?: string; pictureUrl: string | null }[] | undefined;
+  showEditNameButton?: boolean;
+  onClickEditNameButton?: (event: SyntheticEvent) => void;
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
 export default function LegendTitle({
   heading,
   avatars = [defaultAvatar],
   showEditNameButton = false,
+  headingLevel = 1,
   onClickEditNameButton,
 }: LegendTitleProps) {
   return (
-    <Box
-      direction="row"
-      align="center"
-      gap="small"
-      flex={{ shrink: 0 }}
-      margin={{ bottom: 'medium' }}
-    >
+    <Box direction="row" align="center" gap="small" flex={{ shrink: 0 }}>
       <Box direction="row" flex={{ shrink: 0 }}>
         {avatars.map(({ id, name, pictureUrl, href }, index) => (
           <AvatarContainer $position={index} key={id}>
@@ -77,11 +73,17 @@ export default function LegendTitle({
           </AvatarContainer>
         ))}
       </Box>
-      <Box border={{ color: 'brand', size: 'small', side: 'bottom' }} flex={{ shrink: 1, grow: 1 }}>
-        <Heading level={1} size="small">
-          {heading || NBSP_CHAR}
-        </Heading>
-      </Box>
+      {heading !== undefined && (
+        <Box
+          border={{ color: 'brand', size: 'small', side: 'bottom' }}
+          flex={{ shrink: 1, grow: 1 }}
+        >
+          <Heading level={headingLevel} size="small" margin={{ bottom: 'small' }}>
+            {heading}
+          </Heading>
+        </Box>
+      )}
+
       {showEditNameButton && (
         <Box flex={{ shrink: 0 }} alignSelf="center">
           <Button

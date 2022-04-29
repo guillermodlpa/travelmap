@@ -1,5 +1,4 @@
 import { Box, BoxExtendedProps } from 'grommet';
-import { PadType } from 'grommet/utils';
 import { createRef, forwardRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +9,7 @@ BoxForwardingRef.displayName = 'BoxForwardingRef';
 
 const ParchmentContainer = styled(BoxForwardingRef)`
   position: relative;
+  z-index: 2;
 `;
 
 const ParchmentContent = styled(BoxForwardingRef)`
@@ -43,11 +43,13 @@ const ParchmentBackground = styled(Box)<{
 
 export default function Parchment({
   children,
-  contentPad,
+  contentBox = {},
+  containerBox = {},
   insetShadowSize = 'large',
 }: {
   children: React.ReactNode;
-  contentPad?: PadType;
+  contentBox?: BoxExtendedProps;
+  containerBox?: BoxExtendedProps;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }) {
   const content = createRef<HTMLDivElement>();
@@ -72,8 +74,8 @@ export default function Parchment({
 
   return (
     <>
-      <ParchmentContainer ref={content}>
-        <ParchmentContent pad={contentPad}>{children}</ParchmentContent>
+      <ParchmentContainer ref={content} {...containerBox}>
+        <ParchmentContent {...contentBox}>{children}</ParchmentContent>
         <ParchmentBackground
           background="parchment"
           height={backgroundHeight ? `${backgroundHeight}px` : undefined}

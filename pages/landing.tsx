@@ -1,0 +1,21 @@
+import HeadWithDefaults from '../components/HeadWithDefaults';
+import Landing from '../features/NewLanding';
+import Nav from '../components/Nav';
+
+export default function Welcome() {
+  return (
+    <>
+      <HeadWithDefaults title="Travelmap" />
+      <Landing />
+    </>
+  );
+}
+
+Welcome.getLayout = function getLayout(page: React.ReactElement) {
+  return (
+    <>
+      <Nav />
+      {page}
+    </>
+  );
+};

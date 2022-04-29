@@ -51,7 +51,7 @@ const addLayerToMap = (map: mapboxgl.Map, id: string, color: string) => {
 
 const updateMapHighlightedCountries = (
   map: mapboxgl.Map,
-  highlightedCountries: Array<{ id: string; countries: string[]; color: string }>
+  highlightedCountries: HighlighterCountriesDescriptor[]
 ) => {
   highlightedCountries.forEach((descriptor) => {
     map.setFilter(descriptor.id, ['in', 'iso_3166_1_alpha_3', ...descriptor.countries]);
@@ -60,7 +60,12 @@ const updateMapHighlightedCountries = (
 
 type Bounds = [number, number, number, number];
 
-const zoomMapToCountries = (map: mapboxgl.Map, countries: string[], animate: boolean) => {
+const zoomMapToCountries = (
+  map: mapboxgl.Map,
+  countries: string[],
+  animate: boolean,
+  padding: ZoomPadding
+) => {
   if (countries.length === 0) {
     return;
   }
@@ -77,7 +82,12 @@ const zoomMapToCountries = (map: mapboxgl.Map, countries: string[], animate: boo
   ];
 
   map.fitBounds(overarchingBounds, {
-    padding: { top: 50, bottom: 250, left: 50, right: 50 },
+    padding: {
+      top: padding.top ?? 50,
+      bottom: padding.bottom ?? 50,
+      left: padding.left ?? 50,
+      right: padding.right ?? 50,
+    },
     duration: animate ? 5000 : 0,
   });
 };
@@ -158,6 +168,10 @@ const addCountryHoverInteractivity = (
   });
 };
 
+export type HighlighterCountriesDescriptor = { id: string; countries: string[]; color: string };
+
+type ZoomPadding = { top?: number; bottom?: number; left?: number; right?: number };
+
 type HighlighedCountriesMapProps = {
   height?: HeightType;
   id: string;
@@ -165,7 +179,9 @@ type HighlighedCountriesMapProps = {
   applyMapMotion: boolean;
   animateCamera: boolean;
   zoomCountriesOnLoad: boolean;
-  highlightedCountries?: Array<{ id: string; countries: string[]; color: string }>;
+  scrollZoom?: boolean;
+  highlightedCountries?: HighlighterCountriesDescriptor[];
+  initialZoomPadding?: ZoomPadding;
   countriesCanBeSelected: boolean;
   onCountrySelected?: (code: string) => void;
   onCountryHovered?: (param: undefined | { code: string; name: string }) => void;
@@ -178,8 +194,10 @@ function HighlightedCountriesMap({
   applyMapMotion = false,
   animateCamera = true,
   zoomCountriesOnLoad = false,
+  initialZoomPadding = { top: 50, bottom: 50, left: 50, right: 50 },
   highlightedCountries = [],
   countriesCanBeSelected,
+  scrollZoom = true,
   onCountrySelected = () => {},
   onCountryHovered = () => {},
 }: HighlighedCountriesMapProps) {
@@ -190,12 +208,14 @@ function HighlightedCountriesMap({
 
   const theme = useTheme();
 
-  const interactiveInitialValue = useRef(interactive).current;
-  const countriesCanBeSelectedInitialValue = useRef(countriesCanBeSelected).current;
-  const onCountrySelectedInitialValue = useRef(onCountrySelected).current;
-  const onCountryHoveredInitialValue = useRef(onCountryHovered).current;
-  const themeInitialValue = useRef(theme).current;
-  const highlightedCountriesInitialValue = useRef(highlightedCountries).current;
+  const interactiveRef = useRef(interactive);
+  const scrollZoomRef = useRef(scrollZoom);
+  const countriesCanBeSelectedRef = useRef(countriesCanBeSelected);
+  const onCountrySelectedRef = useRef(onCountrySelected);
+  const onCountryHoveredRef = useRef(onCountryHovered);
+  const themeRef = useRef(theme);
+  const initialZoomPaddingRef = useRef(initialZoomPadding);
+  const highlightedCountriesRef = useRef(highlightedCountries);
 
   useEffect(() => {
     try {
@@ -213,33 +233,17 @@ function HighlightedCountriesMap({
         center: [25, 20],
         zoom: 1,
         localFontFamily: "'Roboto', sans-serif",
-        interactive: interactiveInitialValue,
+        interactive: interactiveRef.current,
         doubleClickZoom: false,
+        scrollZoom: scrollZoomRef.current,
       });
 
       map.on('load', (event) => {
-        const thisMap = event.target;
         // include the information of country boundaries
-        thisMap.addSource('countryBoundariesV1', {
+        event.target.addSource('countryBoundariesV1', {
           type: 'vector',
           url: 'mapbox://mapbox.country-boundaries-v1',
         });
-
-        highlightedCountriesInitialValue.forEach((descriptor) => {
-          const color =
-            (themeInitialValue.global.colors[descriptor.color] as string) || descriptor.color;
-          addLayerToMap(thisMap, descriptor.id, color);
-        });
-
-        if (countriesCanBeSelectedInitialValue) {
-          addCountryHoverInteractivity(
-            thisMap,
-            themeInitialValue.global.colors.border[themeInitialValue.dark ? 'dark' : 'light'],
-            onCountrySelectedInitialValue,
-            onCountryHoveredInitialValue
-          );
-        }
-
         setMapLoaded(true);
       });
 
@@ -255,15 +259,27 @@ function HighlightedCountriesMap({
     } catch (error) {
       console.error(error);
     }
-  }, [
-    mapboxStyle,
-    id,
-    interactiveInitialValue,
-    countriesCanBeSelectedInitialValue,
-    onCountrySelectedInitialValue,
-    themeInitialValue,
-    highlightedCountriesInitialValue,
-  ]);
+  }, [mapboxStyle, id]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !mapLoaded) {
+      return;
+    }
+    highlightedCountriesRef.current.forEach((descriptor) => {
+      const color =
+        (themeRef.current.global.colors[descriptor.color] as string) || descriptor.color;
+      addLayerToMap(map, descriptor.id, color);
+    });
+    if (countriesCanBeSelectedRef.current) {
+      addCountryHoverInteractivity(
+        map,
+        themeRef.current.global.colors.border[themeRef.current.dark ? 'dark' : 'light'],
+        onCountrySelectedRef.current,
+        onCountryHoveredRef.current
+      );
+    }
+  }, [mapLoaded]);
 
   useEffect(() => {
     if (mapRef.current && mapLoaded) {
@@ -281,34 +297,44 @@ function HighlightedCountriesMap({
     }
   }, [highlightedCountries, mapLoaded]);
 
-  const [countriesLoaded, setCountriesLoaded] = useState<boolean>(false);
-  const animateCameraInitialValue = useRef(animateCamera).current;
-  const zoomCountriesOnLoadInitialValue = useRef(zoomCountriesOnLoad).current;
+  const zoomDone = useRef(false);
+  const animateCameraRef = useRef(animateCamera);
+  const zoomCountriesOnLoadRef = useRef(zoomCountriesOnLoad);
+
+  // when we change the color mode, we reset this flag so we re-zoom
   useEffect(() => {
-    if (!zoomCountriesOnLoadInitialValue) {
+    zoomDone.current = false;
+  }, [mapboxStyle]);
+
+  useEffect(() => {
+    if (!zoomCountriesOnLoadRef.current) {
       return;
     }
     const allCountries = highlightedCountries.map((descriptor) => descriptor.countries).flat();
-    if (!countriesLoaded && allCountries.length > 0) {
-      setCountriesLoaded(true);
+    if (!zoomDone.current && allCountries.length > 0) {
       if (mapRef.current) {
-        zoomMapToCountries(mapRef.current, allCountries, animateCameraInitialValue);
+        zoomMapToCountries(
+          mapRef.current,
+          allCountries,
+          animateCameraRef.current,
+          initialZoomPaddingRef.current
+        );
+        // we only want to animate the camera on zoom the first time
+        // Any subsequent zoom call to all countries should be direct, like changing color theme mode
+        zoomDone.current = true;
+        animateCameraRef.current = false;
       } else {
         console.warn(`Couldn't zoom to countries because ref is undefined`);
       }
     }
-  }, [
-    countriesLoaded,
-    highlightedCountries,
-    animateCameraInitialValue,
-    zoomCountriesOnLoadInitialValue,
-  ]);
+  }, [highlightedCountries, mapboxStyle]);
 
   return (
     <MapboxContainer
       id={id}
       height={height}
       background="map-background"
+      overflow="hidden"
       $animate={applyMapMotion}
     />
   );
