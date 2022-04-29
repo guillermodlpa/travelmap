@@ -4,10 +4,13 @@ import RecentMapsList from '../../components/MapList/RecentMapsList';
 import Parchment from '../../components/Parchment';
 import LandingFooter from './LandingFooter';
 import LandingMap from './LandingMap';
+import LoginBlock from './LoginBlock';
 import QuoteBlock from './QuoteBlock';
 import quotes from './quotes';
 
 const LANDING_MAP_HEIGHT = '60vh';
+
+const CONTENT_CONTAINER_WIDTH = 'xlarge';
 
 export default function Landing() {
   const size = useContext(ResponsiveContext);
@@ -19,11 +22,19 @@ export default function Landing() {
 
       <Parchment containerBox={{ margin: { top: '-5px' }, align: 'center' }}>
         <Box
+          width={CONTENT_CONTAINER_WIDTH}
+          align="center"
+          pad={{ top: 'large', bottom: 'small', horizontal: 'large' }}
+        >
+          <LoginBlock />
+        </Box>
+
+        <Box
           direction={size === 'small' ? 'column' : 'row'}
           gap="xlarge"
-          width="xlarge"
-          pad={{ top: 'xlarge', horizontal: 'large' }}
-          margin={{ bottom: 'xlarge' }}
+          width={CONTENT_CONTAINER_WIDTH}
+          pad={{ top: 'large', horizontal: 'large' }}
+          margin={{ bottom: 'large' }}
         >
           <Box>
             <Box margin={{ bottom: 'large' }}>
@@ -43,6 +54,7 @@ export default function Landing() {
               <QuoteBlock key={index} author={author} content={content} />
             ))}
           </Box>
+
           <Box width={size === 'small' ? 'auto' : '40%'} flex={{ shrink: 0 }}>
             <Box margin={{ bottom: 'large' }}>
               <Heading level={3} responsive={false} margin="none">
@@ -51,6 +63,14 @@ export default function Landing() {
             </Box>
             <RecentMapsList />
           </Box>
+        </Box>
+
+        <Box
+          width={CONTENT_CONTAINER_WIDTH}
+          align="center"
+          pad={{ bottom: 'xlarge', horizontal: 'large' }}
+        >
+          <LoginBlock />
         </Box>
       </Parchment>
       <LandingFooter />
