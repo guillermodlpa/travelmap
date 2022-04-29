@@ -1,6 +1,6 @@
-import StaticMapBackgroundLayout from '../layouts/StaticMapBackgroundLayout';
 import HeadWithDefaults from '../components/HeadWithDefaults';
 import Landing from '../features/Landing';
+import Nav from '../components/Nav';
 
 export default function Welcome() {
   return (
@@ -12,5 +12,10 @@ export default function Welcome() {
 }
 
 Welcome.getLayout = function getLayout(page: React.ReactElement) {
-  return <StaticMapBackgroundLayout>{page}</StaticMapBackgroundLayout>;
+  return (
+    <>
+      <Nav />
+      {page}
+    </>
+  );
 };

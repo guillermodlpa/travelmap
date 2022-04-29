@@ -13,15 +13,20 @@ const ThemeModeContext = createContext<ThemeModeContextValue>({} as ThemeModeCon
 
 export const useThemeMode = () => useContext(ThemeModeContext);
 
+const getSavedMode = (): ThemeMode | undefined => {
+  if (typeof window === 'undefined' || !window.localStorage) {
+    return undefined;
+  }
+  const localStorageValue = window.localStorage.getItem(KEY) as ThemeMode | null;
+  return localStorageValue || undefined;
+};
+
 const KEY = 'themeMode';
 function ThemeModeInLocalStorage({ children }: { children: React.ReactNode }) {
   const { mode, setMode } = useThemeMode();
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.localStorage) {
-      return;
-    }
-    const localStorageValue = window.localStorage.getItem(KEY) as ThemeMode | null;
+    const localStorageValue = getSavedMode();
     if (localStorageValue) {
       setMode(localStorageValue);
     }

@@ -42,6 +42,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  const [moounted, setMounted] = useState<boolean>(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <>
       <style jsx global>{`
@@ -50,15 +55,18 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           margin: 0;
           height: 100%;
         }
-        * {
-          transition: background-color 0.2s;
-        }
         ::placeholder {
           font-weight: normal;
           -webkit-font-smoothing: auto;
         }
       `}</style>
-      <Grommet theme={theme} full themeMode={mode} background="map-background">
+      <Grommet
+        theme={theme}
+        full
+        themeMode={mode}
+        background="map-background"
+        style={{ visibility: moounted ? 'visible' : 'hidden' }}
+      >
         <ThemeModeContextProvider value={themeContextValue}>
           <ViewportSizeListener onSize={setSize} />
           <UserProvider>{getLayout(<Component {...pageProps} />)}</UserProvider>

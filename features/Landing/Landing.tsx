@@ -1,75 +1,59 @@
-import { Box, Button, Heading, Paragraph, ResponsiveContext } from 'grommet';
+import { Box, Heading, Paragraph, ResponsiveContext } from 'grommet';
 import { useContext } from 'react';
-import NextLink from 'next/link';
-import styled from 'styled-components';
 import RecentMapsList from '../../components/MapList/RecentMapsList';
 import Parchment from '../../components/Parchment';
-import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
-import { PATH_SIGN_UP, PATH_LOG_IN } from '../../util/paths';
-import { useUser } from '@auth0/nextjs-auth0';
+import LandingFooter from './LandingFooter';
+import LandingMap from './LandingMap';
+import QuoteBlock from './QuoteBlock';
+import quotes from './quotes';
 
-const ButtonTextCentered = styled(Button)`
-  text-align: center;
-`;
+const LANDING_MAP_HEIGHT = '60vh';
 
 export default function Landing() {
   const size = useContext(ResponsiveContext);
-
-  const { user: auth0User } = useUser();
-
   return (
-    <PrincipalParchmentContainer>
-      <Parchment contentBox={{ pad: 'large' }}>
-        <Heading level={2}>Welcome to Travelmap</Heading>
+    <>
+      <Box height={LANDING_MAP_HEIGHT}>
+        <LandingMap height={LANDING_MAP_HEIGHT} />
+      </Box>
 
-        <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Paragraph margin={{ top: '0' }} fill size="large">
-            “Why do you go away? So that you can come back. So that you can see the place you came
-            from with new eyes and extra colors. And the people there see you differently, too.
-            Coming back to where you started is not the same as never leaving.”
-          </Paragraph>
-          <Paragraph fill textAlign="end" margin={{ top: '0' }}>
-            ― Terry Pratchett, A Hat Full of Sky
-          </Paragraph>
-        </Box>
-
+      <Parchment containerBox={{ margin: { top: '-5px' }, align: 'center' }}>
         <Box
           direction={size === 'small' ? 'column' : 'row'}
-          gap="medium"
-          flex={{ shrink: 0 }}
-          justify="center"
-          align="center"
+          gap="xlarge"
+          width="xlarge"
+          pad={{ top: 'xlarge', horizontal: 'large' }}
+          margin={{ bottom: 'xlarge' }}
         >
-          {Boolean(auth0User) ? (
-            <NextLink href="/my/maps" passHref>
-              <ButtonTextCentered primary size="large" label="View My Maps" />
-            </NextLink>
-          ) : (
-            [
-              <ButtonTextCentered
-                key="login"
-                secondary
-                size="large"
-                label="Log in"
-                href={PATH_LOG_IN}
-              />,
-              <ButtonTextCentered
-                key="signup"
-                primary
-                size="large"
-                label="Create your Travelmap"
-                href={PATH_SIGN_UP}
-              />,
-            ]
-          )}
-        </Box>
+          <Box>
+            <Box margin={{ bottom: 'large' }}>
+              <Heading level={3} as="h1" responsive={false} margin="none">
+                Welcome to Travelmap
+              </Heading>
+            </Box>
+            <Paragraph fill margin={{ top: 'none' }}>
+              A map of the countries you have visited.
+            </Paragraph>
 
-        <Box margin={{ vertical: 'large' }} flex={{ shrink: 0 }}>
-          <Heading level={4}>Recenly Created Travelmaps</Heading>
+            <Paragraph fill margin={{ top: 'none' }}>
+              Sign up, create your map, and combine it with the maps of your friends.
+            </Paragraph>
 
-          <RecentMapsList />
+            {quotes.map(({ author, content }, index) => (
+              <QuoteBlock key={index} author={author} content={content} />
+            ))}
+          </Box>
+          <Box width={size === 'small' ? 'auto' : '40%'} flex={{ shrink: 0 }}>
+            <Box margin={{ bottom: 'large' }}>
+              <Heading level={3} responsive={false} margin="none">
+                Recently Created Travelmaps
+              </Heading>
+            </Box>
+            <RecentMapsList />
+          </Box>
         </Box>
       </Parchment>
-    </PrincipalParchmentContainer>
+      <LandingFooter />
+    </>
   );
 }
