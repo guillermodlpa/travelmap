@@ -4,6 +4,12 @@
 
 This is a small web application that allows to make a list of visited countries, display them in a map, and share the URL.
 
+[https://travelmap.guillermodlpa.com](https://travelmap.guillermodlpa.com) (not yet live)
+
+| Landing Page                              | Map View                                   |
+| ----------------------------------------- | ------------------------------------------ |
+| ![Screenshot](./docs/preview-landing.jpg) | ![Screenshot](./docs/preview-map-view.jpg) |
+
 ## Technologies
 
 - Frontend: TypeScript, Next.js
