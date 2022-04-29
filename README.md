@@ -38,3 +38,24 @@ Once that's done, this is a Next.js app, so you can run it simply by:
 npm install
 npm run dev
 ```
+
+### Planetscale reference for creating database
+
+Keeping it here for future reference.
+
+Commands to set up the development database:
+
+```sh
+# Create database
+pscale database create travelmap-dev --org travelmap
+# Create `main` branch and password for it
+pscale password create travelmap-dev main main-password --org travelmap
+
+# Then copy the values in the DATABASE_URL env var, with format `mysql://[username]:[password]@[host]/travelmap-dev?sslaccept=strict`
+
+# Push the schema
+DATABASE_URL='mysql://[username]:[password]@[host]/travelmap-dev?sslaccept=strict' npx prisma db push
+
+# Promote branch to production
+pscale branch promote travelmap-dev main --org travelmap
+```
