@@ -1,5 +1,8 @@
 const axios = require('axios');
 
+const baseUrl = 'https://travelmap.guillermodlpa.com'; // replace by ngrok URL when developing locally
+const claimNamespace = 'https://travelmap.guillermodlpa.com'
+
 /**
 * Handler that will be called during the execution of a PostLogin flow.
 *
@@ -9,8 +12,6 @@ const axios = require('axios');
 exports.onExecutePostLogin = async (event, api) => {
   // Credit to https://www.prisma.io/blog/fullstack-nextjs-graphql-prisma-3-clxbrcqppv#sync-auth0-users-with-the-apps-database
 
-  const baseUrl = 'https://f47d-37-169-18-167.eu.ngrok.io';
-  const claimNamespace = 'https://travelmap.guillermodlpa.com'
 
   // 1. Get the se
   const auth0ActionsHookSecret = event.secrets.AUTH0_ACTIONS_HOOK_SECRET
