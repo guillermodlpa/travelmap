@@ -8,8 +8,9 @@ This is a small web application that allows to make a list of visited countries,
 
 ## Technologies
 
-TypeScript, Next.js, React, Auth0, Planetscale, Prisma
-
+- Frontend: TypeScript, Next.js
+  - UI Library: Grommet
+  - Vercel SWR for data fetching
 - Backend: TypeScript
   - Implemented in this repository using Next.js in `pages/api`
   - Prisma for ORM
