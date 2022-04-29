@@ -1,3 +1,4 @@
+import { useUser } from '@auth0/nextjs-auth0';
 import { Box, Heading, Paragraph, ResponsiveContext } from 'grommet';
 import { useContext } from 'react';
 import RecentMapsList from '../../components/MapList/RecentMapsList';
@@ -7,6 +8,7 @@ import LandingMap from './LandingMap';
 import LoginBlock from './LoginBlock';
 import QuoteBlock from './QuoteBlock';
 import quotes from './quotes';
+import ViewMyMapsBlock from './ViewMyMapsBlock';
 
 const LANDING_MAP_HEIGHT = '60vh';
 
@@ -14,6 +16,7 @@ const CONTENT_CONTAINER_WIDTH = 'xlarge';
 
 export default function Landing() {
   const size = useContext(ResponsiveContext);
+  const { user: auth0User } = useUser();
   return (
     <>
       <Box height={LANDING_MAP_HEIGHT}>
@@ -26,7 +29,7 @@ export default function Landing() {
           align="center"
           pad={{ top: 'large', bottom: 'small', horizontal: 'large' }}
         >
-          <LoginBlock />
+          {auth0User ? <ViewMyMapsBlock /> : <LoginBlock />}
         </Box>
 
         <Box
@@ -65,13 +68,15 @@ export default function Landing() {
           </Box>
         </Box>
 
-        <Box
-          width={CONTENT_CONTAINER_WIDTH}
-          align="center"
-          pad={{ bottom: 'xlarge', horizontal: 'large' }}
-        >
-          <LoginBlock />
-        </Box>
+        {!auth0User && (
+          <Box
+            width={CONTENT_CONTAINER_WIDTH}
+            align="center"
+            pad={{ bottom: 'xlarge', horizontal: 'large' }}
+          >
+            <LoginBlock />
+          </Box>
+        )}
       </Parchment>
       <LandingFooter />
     </>
