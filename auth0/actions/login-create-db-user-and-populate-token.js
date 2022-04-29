@@ -9,8 +9,7 @@ const axios = require('axios');
 exports.onExecutePostLogin = async (event, api) => {
   // Credit to https://www.prisma.io/blog/fullstack-nextjs-graphql-prisma-3-clxbrcqppv#sync-auth0-users-with-the-apps-database
 
-  const baseUrl = 'https://06e6-37-167-168-203.eu.ngrok.io';
-  // const redirectBaseUrl = 'http://localhost:3000';
+  const baseUrl = 'https://f47d-37-169-18-167.eu.ngrok.io';
   const claimNamespace = 'https://travelmap.guillermodlpa.com'
 
   // 1. Get the se
@@ -20,7 +19,6 @@ exports.onExecutePostLogin = async (event, api) => {
   if (event.user.app_metadata.appUserId) {
     // add app_user_id to the token, so in the frontend app, useUser() has it
     api.idToken.setCustomClaim(`${claimNamespace}/app_user_id`, event.user.app_metadata.appUserId);
-    // api.redirect.sendUserTo(`${redirectBaseUrl}/my/maps`);
     return;
   }
 
@@ -28,7 +26,6 @@ exports.onExecutePostLogin = async (event, api) => {
   return axios.post(`${baseUrl}/api/auth/hook/login`, {
     email: event.user.email,
     sub: event.user.user_id,
-    displayName: event.user.given_name || event.user.username || event.user.nickname,
     pictureUrl: event.user.picture || null,
     secret: auth0ActionsHookSecret,
   })
