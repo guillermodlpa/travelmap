@@ -5,6 +5,7 @@ generator client {
 
 datasource db {
     provider             = "mysql"
+    // about this env var, you can add it to .env (without committing) or do `DATABASE_URL=value npx prisma db push`
     url                  = env("DATABASE_URL")
     referentialIntegrity = "prisma"
 }
