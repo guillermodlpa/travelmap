@@ -7,6 +7,15 @@ export default function LandingFooter() {
         <Box as="ul" direction="row" justify="end" gap="medium">
           <Box as="li" direction="row" margin="xsmall" justify="center">
             <Anchor
+              href="https://github.com/guillermodlpa/travelmap/issues"
+              target="_blank"
+              color="text-inverted"
+            >
+              Report an issue
+            </Anchor>
+          </Box>
+          <Box as="li" direction="row" margin="xsmall" justify="center">
+            <Anchor
               href="https://github.com/guillermodlpa/travelmap"
               target="_blank"
               color="text-inverted"
