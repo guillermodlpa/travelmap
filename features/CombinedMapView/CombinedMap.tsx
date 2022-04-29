@@ -55,6 +55,8 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
 
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
 
+  const travelMapName = getTravelMapName(travelMap);
+
   return (
     <>
       <HighlightedCountriesMap
@@ -72,11 +74,12 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
         open={shareMapDialogOpen}
         onClose={() => setShareMapDialogOpen(false)}
         pathView={travelMap.pathView}
+        name={travelMapName}
       />
 
       <Legend ref={legendRef}>
         <LegendTitle
-          heading={getTravelMapName(travelMap)}
+          heading={travelMapName}
           avatars={[
             {
               id: travelMap.individualTravelMaps[0].userId,

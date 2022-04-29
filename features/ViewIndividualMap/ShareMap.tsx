@@ -1,6 +1,7 @@
 import { Box, Button, FormField, Layer, TextInput } from 'grommet';
 import { Copy, Link } from 'grommet-icons';
 import { useState } from 'react';
+import ShareButtons from './ShareButtons';
 
 const getUrlHost = (): string => (typeof window !== 'undefined' ? window.location.host : '');
 
@@ -10,10 +11,12 @@ export default function ShareMap({
   open,
   onClose,
   pathView,
+  name,
 }: {
   open: boolean;
   onClose: () => void;
   pathView: string;
+  name: string;
 }) {
   const mapUrl = `https://${getUrlHost()}${pathView}`;
 
@@ -41,6 +44,8 @@ export default function ShareMap({
       margin="large"
     >
       <Box width="large" pad={{ vertical: 'large', horizontal: 'large' }} gap="large">
+        <ShareButtons mapUrl={mapUrl} mapName={name} />
+
         <Box direction="row" gap="small" align="center">
           <FormField label="Shareable URL" htmlFor="share-url-input">
             <TextInput id="share-url-input" readOnly value={mapUrl} size="small" icon={<Link />} />

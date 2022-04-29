@@ -52,7 +52,6 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
           { type: 'slideUp', size: 'xsmall' },
         ]}
         height={{ max: '80vh' }}
-        overflow="hidden"
       >
         <Parchment
           contentPad={{ horizontal: 'medium', top: 'small', bottom: 'medium' }}
