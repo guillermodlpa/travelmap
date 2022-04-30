@@ -39,7 +39,7 @@ export default function AccountSettings() {
             flex={{ shrink: 0 }}
             width={size === 'small' ? '100%' : '50%'}
             gap="medium"
-            alignSelf="end"
+            alignSelf="center"
           >
             <Heading level={4} margin={'0'}>
               Account

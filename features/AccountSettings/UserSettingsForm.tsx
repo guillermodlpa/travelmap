@@ -24,8 +24,6 @@ export default function UserSettingsForm({
   showCancelButton?: boolean;
   onCancel?: () => void;
 }) {
-  const [notifyOnCombinedMaps, setNotifyOnCombinedMap] = useState<boolean>(false);
-  const [notifyOnAppUpdates, setNotifyOnAppUpdates] = useState<boolean>(false);
   const [displayName, setDisplayName] = useState<string>('');
   const [profilePictureFile, setProfilePictureFile] = useState<File>();
 
@@ -46,8 +44,6 @@ export default function UserSettingsForm({
   const loadingMyUser = !myUserError && !myUser;
   useEffect(() => {
     if (myUser) {
-      setNotifyOnCombinedMap(myUser.notifyOnCombinedMaps);
-      setNotifyOnAppUpdates(myUser.notifyOnAppUpdates);
       setDisplayName(myUser.displayName);
     }
   }, [myUser]);
@@ -90,8 +86,6 @@ export default function UserSettingsForm({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          notifyOnCombinedMaps,
-          notifyOnAppUpdates,
           displayName,
         }),
       }).then(() => {
@@ -107,19 +101,14 @@ export default function UserSettingsForm({
   };
 
   return (
-    <Box gap="small">
+    <Box gap="small" width="medium" alignSelf="center">
       {myUserError && <Text color="status-error">{myUserError.message}</Text>}
 
       <Box
         direction={size === 'small' ? 'column' : 'row'}
         gap={size === 'small' ? 'medium' : 'large'}
       >
-        <Box
-          margin={{ vertical: 'large' }}
-          flex={{ grow: size === 'small' ? 0 : 1, shrink: 1 }}
-          // width={size === 'small' ? 'auto' : '50%'}
-          gap="medium"
-        >
+        <Box margin={{ top: 'large', bottom: 'medium' }} gap="medium">
           <Heading level={4} margin={'0'}>
             User
           </Heading>
@@ -156,6 +145,7 @@ export default function UserSettingsForm({
                   value={displayName}
                   disabled={!Boolean(myUser)}
                   id="display-name-input"
+                  maxLength={40}
                   onChange={(event) => {
                     setDisplayName(event.target.value);
                   }}
@@ -165,34 +155,7 @@ export default function UserSettingsForm({
           </Box>
         </Box>
 
-        <Box
-          margin={{ vertical: 'large' }}
-          flex={{ grow: size === 'small' ? 0 : 1, shrink: 1 }}
-          // width={size === 'small' ? 'auto' : '50%'}
-          gap="medium"
-        >
-          <Heading level={4} margin={'0'}>
-            Notifications
-          </Heading>
-
-          <CheckBox
-            checked={notifyOnCombinedMaps}
-            disabled={!Boolean(myUser)}
-            label="When somebody makes a combined map with me"
-            onChange={(event) => {
-              setNotifyOnCombinedMap(event.target.checked);
-            }}
-          />
-
-          <CheckBox
-            checked={notifyOnAppUpdates}
-            disabled={!Boolean(myUser)}
-            label="Updates about Travelmap"
-            onChange={(event) => {
-              setNotifyOnAppUpdates(event.target.checked);
-            }}
-          />
-        </Box>
+        {/* could add another column here with more settings */}
       </Box>
 
       {savingErrorMessage && (
@@ -201,7 +164,7 @@ export default function UserSettingsForm({
         </Text>
       )}
 
-      <Box direction="row" gap="large" justify="center">
+      <Box direction="row" gap="large" justify="end">
         {showCancelButton && (
           <Button
             secondary
