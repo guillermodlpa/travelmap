@@ -58,7 +58,6 @@ export default function CreateTogetherMapDialog({
         <Text>
           {`Doing this will make it show for both of you in your list of "Together" Maps.`}
         </Text>
-        <Text>{`A notification email will be sent to ${userDisplayName}.`}</Text>
         <Text>{`From your account settings, any of you can delete it later.`}</Text>
         <Box
           as="footer"
