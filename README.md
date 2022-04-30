@@ -4,7 +4,7 @@
 
 This is a small web application that allows to make a list of visited countries, display them in a map, and share the URL.
 
-[https://travelmap.guillermodlpa.com](https://travelmap.guillermodlpa.com) (not yet live)
+[https://travelmap.guillermodlpa.com](https://travelmap.guillermodlpa.com) (not finished yet!)
 
 | Landing Page                              | Map View                                   |
 | ----------------------------------------- | ------------------------------------------ |
