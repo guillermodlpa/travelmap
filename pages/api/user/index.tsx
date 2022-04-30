@@ -41,7 +41,7 @@ const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | Erro
     return res.status(404).json({ error: 'User not found' });
   }
 
-  const { displayName, notifyOnCombinedMaps, notifyOnAppUpdates } = req.body;
+  const { displayName } = req.body;
 
   // @todo: add validation! Joi!
   // @todo: trim displayName
@@ -49,8 +49,6 @@ const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | Erro
     where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
     data: {
       displayName,
-      notifyOnCombinedMaps,
-      notifyOnAppUpdates,
     },
   });
 
