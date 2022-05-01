@@ -7,7 +7,7 @@ const useUserMap = () => {
   const { data, error } = useSWR(`/api/map`, fetcher);
   return {
     map: data,
-    loading: !error && data != null,
+    loading: !error && data == null,
     error: error,
   };
 };
