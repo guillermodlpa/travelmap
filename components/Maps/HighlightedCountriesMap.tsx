@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
+import throttle from 'lodash.throttle';
 import withNoSsr from '../NoSsr/withNoSsr';
 import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
@@ -136,26 +137,32 @@ const addCountryHoverInteractivity = (
   // at the mouse position (e.point) and within the states layer (countries-fill).
   // If a feature is found, then we'll update the filter in the state-fills-hover
   // layer to only show that state, thus making a hover effect.
-  map.on('mousemove', (e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
-    const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-    if (features.length) {
-      map.getCanvas().style.cursor = 'pointer';
-      map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
-      const code = features[0].properties?.iso_3166_1_alpha_3;
-      onCountryHovered({ code, name: getCountryName(code) || code });
-    } else {
-      map.setFilter('country-fills-hover', ['==', 'name', '']);
-      map.getCanvas().style.cursor = '';
-      onCountryHovered(undefined);
-    }
-  });
+  map.on(
+    'mousemove',
+    throttle((e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
+      if (features.length) {
+        map.getCanvas().style.cursor = 'pointer';
+        map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
+        const code = features[0].properties?.iso_3166_1_alpha_3;
+        onCountryHovered({ code, name: getCountryName(code) || code });
+      } else {
+        map.setFilter('country-fills-hover', ['==', 'name', '']);
+        map.getCanvas().style.cursor = '';
+        onCountryHovered(undefined);
+      }
+    }, 50)
+  );
 
   // Reset the country-fills-hover layer's filter when the mouse leaves the map
-  map.on('mouseout', () => {
-    map.getCanvas().style.cursor = 'auto';
-    map.setFilter('country-fills-hover', ['==', 'name', '']);
-    onCountryHovered(undefined);
-  });
+  map.on(
+    'mouseout',
+    throttle(() => {
+      map.getCanvas().style.cursor = 'auto';
+      map.setFilter('country-fills-hover', ['==', 'name', '']);
+      onCountryHovered(undefined);
+    }, 50)
+  );
 
   map.on('click', (event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
     const features = map.queryRenderedFeatures(event.point, {
