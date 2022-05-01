@@ -17,8 +17,14 @@ function LegendColorIndicator({
 }: LegendItem & { expandedInitially?: boolean }) {
   const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(expandedInitially);
   return (
-    <Box direction="column" gap="xsmall" flex={{ shrink: 0 }}>
-      <Box direction="row" gap="small" align="center" pad={{ bottom: 'xsmall' }}>
+    <Box direction="column">
+      <Box
+        direction="row"
+        gap="small"
+        align="center"
+        pad={{ bottom: 'small' }}
+        flex={{ shrink: 0 }}
+      >
         <Box width="1rem" height="1rem" border background={color} />
         <Text>{label}</Text>
         {subItems && (
@@ -32,7 +38,7 @@ function LegendColorIndicator({
         )}
       </Box>
       {subItemsExpanded && (
-        <Box animation={['fadeIn']}>
+        <Box animation={['fadeIn']} overflow="auto">
           <Box
             as="ul"
             pad="none"
@@ -66,7 +72,7 @@ export default function LegendColorIndicators({
   expandedInitially?: boolean;
 }) {
   return (
-    <Box pad={{ left: 'small' }} gap="xsmall">
+    <Box pad={{ left: 'small' }}>
       {data.map((item: LegendItem) => (
         <LegendColorIndicator key={item.id} {...item} expandedInitially={expandedInitially} />
       ))}
