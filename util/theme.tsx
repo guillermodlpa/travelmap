@@ -183,7 +183,8 @@ const customTheme = deepMerge(grommet, {
           filter: url(#wavy-button);
           z-index: -1;
           background-color: ${(props) => getColorCode(props.theme, props.colorValue || 'brand')};
-          transform: scale(1);
+          /* translateZ(0) is a Safari workaround. https://stackoverflow.com/a/58289524/2853239 */
+          transform: scale(1) translateZ(0);
           transition: transform 0.1s ease-in-out;
         }
       `,
@@ -204,7 +205,8 @@ const customTheme = deepMerge(grommet, {
           filter: url(#wavy-button);
           z-index: -1;
           border: 2px solid ${(props) => getColorCode(props.theme, props.colorValue || 'brand')};
-          transform: scale(1);
+          /* translateZ(0) is a Safari workaround. https://stackoverflow.com/a/58289524/2853239 */
+          transform: scale(1) translateZ(0);
           transition: transform 0.1s ease-in-out;
         }
       `,
@@ -213,14 +215,14 @@ const customTheme = deepMerge(grommet, {
       primary: {
         extend: () => css`
           &:before {
-            transform: scale(1.1);
+            transform: scale(1.1) translateZ(0);
           }
         `,
       },
       secondary: {
         extend: () => css`
           &:before {
-            transform: scale(1.1);
+            transform: scale(1.1) translateZ(0);
           }
         `,
       },

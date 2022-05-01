@@ -39,6 +39,8 @@ const ParchmentBackground = styled(Box)<{
     0 0 10px ${({ theme }) => theme.global.colors.parchmentInset[theme.dark ? 'dark' : 'light']}
       inset;
   filter: url(#wavy2);
+  /* iOS Safari workaround. https://stackoverflow.com/a/58289524/2853239 */
+  transform: translateZ(0);
 `;
 
 export default function Parchment({
