@@ -5,7 +5,7 @@ import { PATH_LOG_IN, PATH_SIGN_UP } from '../../util/paths';
 export default function LoginBlock() {
   const size = useContext(ResponsiveContext);
   return (
-    <Box direction="row" gap="medium">
+    <Box direction="row" gap="medium" wrap justify="center">
       <Button size="large" secondary label="Log In" href={PATH_LOG_IN} />
       <Button
         size="large"
