@@ -5,7 +5,11 @@ const getTravelMapName = (
   params: { short?: boolean } = {}
 ): string => {
   if (travelMap.type === 'individual') {
-    return params.short ? travelMap.userDisplayName : `${travelMap.userDisplayName}'s Travelmap`;
+    return params.short
+      ? travelMap.userDisplayName
+      : /s$/.test(travelMap.userDisplayName)
+      ? `${travelMap.userDisplayName}' Travelmap`
+      : `${travelMap.userDisplayName}'s Travelmap`;
   }
 
   const nameString = travelMap.individualTravelMaps
