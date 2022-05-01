@@ -22,12 +22,14 @@ function LegendColorIndicator({
         <Box width="1rem" height="1rem" border background={color} />
         <Text>{label}</Text>
         {subItems && (
-          <Button
-            size="small"
-            a11yTitle="Show or hide list of countries"
-            icon={subItemsExpanded ? <FormUp /> : <FormDown />}
-            onClick={() => setSubItemsExpanded(!subItemsExpanded)}
-          />
+          <Box background="parchment">
+            <Button
+              size="small"
+              a11yTitle="Show or hide list of countries"
+              icon={subItemsExpanded ? <FormUp /> : <FormDown />}
+              onClick={() => setSubItemsExpanded(!subItemsExpanded)}
+            />
+          </Box>
         )}
       </Box>
       {subItemsExpanded && (
