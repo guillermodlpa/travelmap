@@ -50,9 +50,15 @@ export default function MapList({
             as="li"
             data-travelmap-id={travelMap.id}
             border={{ side: index === 0 ? 'horizontal' : 'bottom', color: 'border', size: '1px' }}
-            direction={'row'}
+            direction={size === 'small' ? 'column' : 'row'}
           >
-            <Box direction="row" gap="small" align="center" flex={{ grow: 1, shrink: 1 }}>
+            <Box
+              direction="row"
+              gap="small"
+              responsive={false}
+              align="center"
+              flex={{ grow: 1, shrink: 1 }}
+            >
               <Box direction="row" flex={{ shrink: 0 }}>
                 {travelMap.type === 'individual' ? (
                   <Avatar
