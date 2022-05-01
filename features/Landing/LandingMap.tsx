@@ -35,6 +35,7 @@ export default function LandingMap({ height }: { height: string }) {
         applyMapMotion
         animateCamera
         scrollZoom={false}
+        initialZoomPadding={{ top: 0, bottom: 0, left: 0, right: 0 }}
       />
     </Box>
   );
