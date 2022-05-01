@@ -3,6 +3,12 @@ import Landing from '../features/Landing';
 import Nav from '../components/Nav';
 
 export default function Welcome() {
+  if (typeof window !== 'undefined') {
+    window.onerror = (message) => {
+      console.error(`window.onerror`, message);
+    };
+  }
+
   return (
     <>
       <HeadWithDefaults title="Travelmap" />

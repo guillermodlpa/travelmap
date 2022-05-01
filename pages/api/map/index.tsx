@@ -82,7 +82,11 @@ export default withApiAuthRequired(async (req: NextApiRequest, res: NextApiRespo
     // the patch endpoint doesn't take an ID because users only have 1 map
     PATCH: handlePatch,
   };
-  return req.method && handlers[req.method]
-    ? handlers[req.method](req, res)
-    : res.status(405).json({ error: 'Method not allowed' });
+  try {
+    return req.method && handlers[req.method]
+      ? await handlers[req.method](req, res)
+      : res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Internal error' });
+  }
 });

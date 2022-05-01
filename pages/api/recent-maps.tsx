@@ -60,7 +60,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   } = {
     GET: handleGet,
   };
-  return req.method && handlers[req.method]
-    ? handlers[req.method](req, res)
-    : res.status(405).json({ error: 'Method not allowed' });
+  try {
+    return req.method && handlers[req.method]
+      ? await handlers[req.method](req, res)
+      : res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : 'Internal error' });
+  }
 }
