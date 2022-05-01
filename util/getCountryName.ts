@@ -7,8 +7,9 @@
  */
 import simplifiedWorldAdministrativeBoundaries from './simplified-world-administrative-boundaries.json';
 
-const unlistedCountries: { [iso3: string]: string } = {
+const unlistedAndOverrides: { [iso3: string]: string } = {
   XKS: 'Kosovo',
+  GBR: 'United Kingdom',
 };
 
 const iso3ToName: { [iso3: string]: string } = simplifiedWorldAdministrativeBoundaries.reduce(
@@ -23,5 +24,5 @@ const iso3ToName: { [iso3: string]: string } = simplifiedWorldAdministrativeBoun
 );
 
 export default function getCountryName(iso3Code: string): string | undefined {
-  return iso3ToName[iso3Code] || unlistedCountries[iso3Code] || iso3Code;
+  return unlistedAndOverrides[iso3Code] || iso3ToName[iso3Code] || iso3Code;
 }
