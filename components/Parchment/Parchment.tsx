@@ -55,32 +55,36 @@ export default function Parchment({
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }) {
   const content = createRef<HTMLDivElement>();
-  const [backgroundHeight, setBackgroundHeight] = useState<number>();
+  const background = createRef<HTMLDivElement>();
 
   useEffect(() => {
     if (content?.current) {
+      const node = content.current;
       const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
         const entry = entries[0];
+        const target = entry.target;
         const height = entry.contentBoxSize
           ? entry.borderBoxSize[0].blockSize
-          : entry.contentRect.width;
-        setBackgroundHeight(height);
+          : entry.contentRect.height;
+
+        background?.current?.setAttribute('height', `${height}`);
       });
-      const node = content.current;
       resizeObserver.observe(node);
       return () => {
         resizeObserver.unobserve(node);
       };
     }
-  }, [content]);
+  }, [content, background]);
 
   return (
     <>
-      <ParchmentContainer ref={content} {...containerBox}>
-        <ParchmentContent {...contentBox}>{children}</ParchmentContent>
+      <ParchmentContainer {...containerBox}>
+        <ParchmentContent {...contentBox} ref={content}>
+          {children}
+        </ParchmentContent>
         <ParchmentBackground
           background="parchment"
-          height={backgroundHeight ? `${backgroundHeight}px` : undefined}
+          ref={background}
           $insetShadowSize={insetShadowSize}
         />
       </ParchmentContainer>
