@@ -45,6 +45,7 @@ function LegendColorIndicator({
                 pad={{ left: '24px' }}
                 style={{ display: 'list-item', textIndent: '-24px' }}
                 data-code={subItem.id}
+                width={{ max: '150px' }}
               >
                 <Text size="small">{subItem.label}</Text>
               </Box>
