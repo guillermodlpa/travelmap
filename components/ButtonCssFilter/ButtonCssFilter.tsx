@@ -7,7 +7,7 @@ export default function ButtonCssFilter() {
     <svg display="none">
       <filter id="wavy-button">
         <feTurbulence x="0" y="0" baseFrequency="0.1" numOctaves="5" seed="5"></feTurbulence>
-        <feDisplacementMap in="SourceGraphic" scale="1" />
+        <feDisplacementMap in="SourceGraphic" scale="2" />
       </filter>
     </svg>
   );
