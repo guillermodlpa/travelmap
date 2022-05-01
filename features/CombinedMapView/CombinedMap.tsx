@@ -66,6 +66,7 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
         countriesCanBeSelected={false}
         applyMapMotion
         animateCamera
+        initialZoomPadding={{ bottom: 250, top: 70 }}
       />
 
       <ShareMap

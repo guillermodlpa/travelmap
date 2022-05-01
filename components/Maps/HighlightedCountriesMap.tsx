@@ -84,10 +84,10 @@ const zoomMapToCountries = (
 
   map.fitBounds(overarchingBounds, {
     padding: {
-      top: padding.top ?? 50,
-      bottom: padding.bottom ?? 50,
-      left: padding.left ?? 50,
-      right: padding.right ?? 50,
+      top: padding.top ?? 0,
+      bottom: padding.bottom ?? 0,
+      left: padding.left ?? 0,
+      right: padding.right ?? 0,
     },
     duration: animate ? 5000 : 0,
   });
@@ -201,7 +201,7 @@ function HighlightedCountriesMap({
   applyMapMotion = false,
   animateCamera = true,
   zoomCountriesOnLoad = false,
-  initialZoomPadding = { top: 50, bottom: 50, left: 50, right: 50 },
+  initialZoomPadding = { top: 0, bottom: 0, left: 0, right: 0 },
   highlightedCountries = [],
   countriesCanBeSelected,
   scrollZoom = true,
@@ -243,6 +243,7 @@ function HighlightedCountriesMap({
         interactive: interactiveRef.current,
         doubleClickZoom: false,
         scrollZoom: scrollZoomRef.current,
+        minZoom: 0.5,
       });
 
       map.on('load', (event) => {
