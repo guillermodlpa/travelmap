@@ -1,4 +1,5 @@
 import { Box, BoxExtendedProps } from 'grommet';
+import { useId } from 'react';
 import styled from 'styled-components';
 
 const ParchmentContainer = styled(Box)`
@@ -19,6 +20,7 @@ const insetShadowSizes = {
 
 const ParchmentBackground = styled(Box)<{
   $insetShadowSize: 'xsmall' | 'small' | 'medium' | 'large';
+  $filterId: string;
 }>`
   position: absolute;
   top: 0;
@@ -32,7 +34,7 @@ const ParchmentBackground = styled(Box)<{
       inset,
     0 0 10px ${({ theme }) => theme.global.colors.parchmentInset[theme.dark ? 'dark' : 'light']}
       inset;
-  filter: url(#wavy2);
+  filter: ${({ $filterId }) => `url(#${$filterId})`};
   /* iOS Safari workaround. https://stackoverflow.com/a/58289524/2853239 */
   transform: translateZ(0);
 `;
@@ -51,15 +53,21 @@ export default function Parchment({
   containerBox?: BoxExtendedProps;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }) {
+  const filterId = `${useId()}-wavy`;
+
   return (
     <>
       <ParchmentContainer {...containerBox}>
         <ParchmentContent {...contentBox}>{children}</ParchmentContent>
-        <ParchmentBackground background="parchment" $insetShadowSize={insetShadowSize} />
+        <ParchmentBackground
+          background="parchment"
+          $insetShadowSize={insetShadowSize}
+          $filterId={filterId}
+        />
       </ParchmentContainer>
 
       <svg display="none">
-        <filter id="wavy2">
+        <filter id={filterId}>
           {/* @todo: replace wavy2 with React 18's useId */}
           <feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1"></feTurbulence>
           <feDisplacementMap in="SourceGraphic" scale="10" />
