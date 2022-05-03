@@ -7,7 +7,7 @@ import Parchment from '../Parchment';
 type LegendContainerStyleProps = { $size: ResponsiveViewportSize; $bottom: string; $right: string };
 
 const LegendContainer = styled(Box)<BoxExtendedProps & LegendContainerStyleProps>`
-  position: absolute;
+  position: fixed;
   bottom: ${({ $bottom }) => $bottom};
   right: ${({ $right }) => $right};
   right: 0;

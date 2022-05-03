@@ -17,14 +17,14 @@ import Parchment from '../Parchment';
 import useColorThemeToggle from './useColorThemeToggle';
 
 const NavFloatingBox = styled(GrommetNav)`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   z-index: 100;
 `;
 
 const HomeLogoFloatingBox = styled(Box)`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
