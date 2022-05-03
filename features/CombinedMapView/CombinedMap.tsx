@@ -2,12 +2,12 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
 import LegendActions from '../../components/Legend/LegendActions';
-import { Button } from 'grommet';
+import { Button, ResponsiveContext } from 'grommet';
 import ShareMap from '../ViewIndividualMap/ShareMap';
 import { useUser } from '@auth0/nextjs-auth0';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
@@ -53,8 +53,8 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
 
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
 
-  const travelMapName = getTravelMapName(travelMap);
-
+  const size = useContext(ResponsiveContext);
+  const travelMapName = getTravelMapName(travelMap, { short: size === 'small' });
   return (
     <>
       <HighlightedCountriesMap
@@ -101,7 +101,10 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
               {
                 id: 'both',
                 color: 'status-warning',
-                label: `Visited countries by both (${countryListDescriptors[0].countries.length})`,
+                label:
+                  size === 'small'
+                    ? `Both (${countryListDescriptors[0].countries.length})`
+                    : `Visited countries by both (${countryListDescriptors[0].countries.length})`,
                 subItems: countryListDescriptors[0].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
@@ -110,7 +113,10 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
               {
                 id: `combined-${travelMap.individualTravelMaps[0].id}`,
                 color: 'status-ok',
-                label: `${travelMap.individualTravelMaps[0].userDisplayName} visited countries (${countryListDescriptors[1].countries.length})`,
+                label:
+                  size === 'small'
+                    ? `${travelMap.individualTravelMaps[0].userDisplayName} (${countryListDescriptors[1].countries.length})`
+                    : `${travelMap.individualTravelMaps[0].userDisplayName} visited countries (${countryListDescriptors[1].countries.length})`,
                 subItems: countryListDescriptors[1].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',
@@ -119,7 +125,10 @@ export default function CombinedMap({ travelMap }: { travelMap: ClientCombinedTr
               {
                 id: `combined-${travelMap.individualTravelMaps[1].id}`,
                 color: 'status-critical',
-                label: `${travelMap.individualTravelMaps[1].userDisplayName} visited countries (${countryListDescriptors[2].countries.length})`,
+                label:
+                  size === 'small'
+                    ? `${travelMap.individualTravelMaps[1].userDisplayName} (${countryListDescriptors[2].countries.length})`
+                    : `${travelMap.individualTravelMaps[1].userDisplayName} visited countries (${countryListDescriptors[2].countries.length})`,
                 subItems: countryListDescriptors[2].countries.map((country) => ({
                   id: country,
                   label: getCountryName(country) || '',

@@ -2,9 +2,9 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { Button } from 'grommet';
+import { Button, ResponsiveContext } from 'grommet';
 import NextLink from 'next/link';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import { useUser } from '@auth0/nextjs-auth0';
@@ -30,7 +30,8 @@ export default function ViewIndividualMap({ travelMap }: { travelMap: ClientIndi
   const [createTogetherMapDialogOpen, setCreateTogetherMapDialogOpen] = useState<boolean>(false);
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
 
-  const travelMapName = getTravelMapName(travelMap);
+  const size = useContext(ResponsiveContext);
+  const travelMapName = getTravelMapName(travelMap, { short: size === 'small' });
 
   return (
     <>

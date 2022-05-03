@@ -88,12 +88,6 @@ const customTheme = deepMerge(grommet, {
       '-webkit-font-smoothing': 'auto',
       'word-break': 'break-word',
     },
-    level: {
-      1: {
-        xsmall: { size: '20px', height: '24px' },
-        small: { size: '24px', height: '28px' },
-      },
-    },
   },
   select: {
     background: 'transparent',

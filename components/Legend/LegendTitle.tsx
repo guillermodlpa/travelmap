@@ -46,14 +46,12 @@ interface LegendTitleProps {
   avatars: { id: string; name: string; href?: string; pictureUrl: string | null }[] | undefined;
   showEditNameButton?: boolean;
   onClickEditNameButton?: (event: SyntheticEvent) => void;
-  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 export default function LegendTitle({
   heading,
   avatars = [defaultAvatar],
   showEditNameButton = false,
-  headingLevel = 1,
   onClickEditNameButton,
 }: LegendTitleProps) {
   return (
@@ -78,7 +76,7 @@ export default function LegendTitle({
           border={{ color: 'brand', size: 'small', side: 'bottom' }}
           flex={{ shrink: 1, grow: 1 }}
         >
-          <Heading level={headingLevel} size="small" margin={{ bottom: 'small' }}>
+          <Heading as="h1" level={4} responsive={false} size="small" margin={{ bottom: 'small' }}>
             {heading}
           </Heading>
         </Box>
