@@ -1,8 +1,8 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import ConfirmationDialog, { ConfirmationDialogProps } from './ConfirmationDialog';
 
 type WrappingDialogConfirmationProps = {
-  children: (handleClick: (event: SyntheticEvent) => void) => JSX.Element;
+  children: (handleClick: (event: React.SyntheticEvent) => void) => JSX.Element;
 } & Omit<ConfirmationDialogProps, 'open' | 'onCancel' | 'onRequestClose'>;
 
 export default function WrappingDialogConfirmation({
@@ -11,7 +11,7 @@ export default function WrappingDialogConfirmation({
 }: WrappingDialogConfirmationProps) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const handleClick = useCallback((event) => {
+  const handleClick = useCallback((event: React.SyntheticEvent) => {
     event.stopPropagation();
     setDialogOpen(true);
   }, []);
