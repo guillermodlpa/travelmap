@@ -41,7 +41,7 @@ export default function ShareMap({
       onClickOutside={onClose}
       onEsc={onClose}
       responsive={false}
-      margin="large"
+      margin="small"
     >
       <Box width="large" pad={{ vertical: 'large', horizontal: 'large' }} gap="large">
         <ShareButtons mapUrl={mapUrl} mapName={name} />

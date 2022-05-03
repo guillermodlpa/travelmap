@@ -70,9 +70,8 @@ function ShareButton({
 }
 
 export default function ShareButtons({ mapUrl, mapName }: { mapUrl: string; mapName: string }) {
-  const size = useContext(ResponsiveContext);
   return (
-    <Box direction="row" wrap gap="small" justify={size === 'small' ? 'between' : 'start'}>
+    <Box direction="row" wrap gap="small" justify="center">
       <ShareButton label="Email" Icon={ShareButtonEmail} href={getEmailHref(mapUrl, mapName)} />
       <ShareButton
         label="WhatsApp"
