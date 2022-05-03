@@ -1,18 +1,12 @@
 import { Box, BoxExtendedProps } from 'grommet';
-import { createRef, forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 
-const BoxForwardingRef = forwardRef<HTMLDivElement, BoxExtendedProps>((props, ref) => (
-  <Box ref={ref} {...props} />
-));
-BoxForwardingRef.displayName = 'BoxForwardingRef';
-
-const ParchmentContainer = styled(BoxForwardingRef)`
+const ParchmentContainer = styled(Box)`
   position: relative;
   z-index: 2;
 `;
 
-const ParchmentContent = styled(BoxForwardingRef)`
+const ParchmentContent = styled(Box)`
   z-index: 1;
 `;
 
@@ -43,9 +37,6 @@ const ParchmentBackground = styled(Box)<{
   transform: translateZ(0);
 `;
 
-const isResizeObserverSupported = (): boolean =>
-  typeof window !== 'undefined' && typeof window.ResizeObserver !== 'undefined';
-
 export default function Parchment({
   children,
   contentBox = {},
@@ -57,44 +48,11 @@ export default function Parchment({
   containerBox?: BoxExtendedProps;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }) {
-  const content = createRef<HTMLDivElement>();
-  const background = createRef<HTMLDivElement>();
-  const resizeObserverSupported = isResizeObserverSupported();
-
-  useEffect(() => {
-    if (content?.current && isResizeObserverSupported()) {
-      const node = content.current;
-      const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
-        const entry = entries[0];
-        const height = entry.contentBoxSize
-          ? entry.borderBoxSize[0].blockSize
-          : entry.contentRect.height;
-
-        background?.current?.setAttribute('height', `${height}`);
-      });
-      resizeObserver.observe(node);
-      return () => {
-        resizeObserver.unobserve(node);
-      };
-    }
-  }, [content, background]);
-
   return (
     <>
-      <ParchmentContainer
-        {...containerBox}
-        background={resizeObserverSupported ? 'transparent' : 'parchment'}
-      >
-        <ParchmentContent {...contentBox} ref={content}>
-          {children}
-        </ParchmentContent>
-        {resizeObserverSupported && (
-          <ParchmentBackground
-            background="parchment"
-            ref={background}
-            $insetShadowSize={insetShadowSize}
-          />
-        )}
+      <ParchmentContainer {...containerBox}>
+        <ParchmentContent {...contentBox}>{children}</ParchmentContent>
+        <ParchmentBackground background="parchment" $insetShadowSize={insetShadowSize} />
       </ParchmentContainer>
 
       <svg display="none">
