@@ -53,7 +53,7 @@ export default function Parchment({
   containerBox?: BoxExtendedProps;
   insetShadowSize?: 'xsmall' | 'small' | 'medium' | 'large';
 }) {
-  const filterId = `${useId()}-wavy`;
+  const filterId = `wavy-${useId()}`;
 
   return (
     <>
@@ -66,7 +66,8 @@ export default function Parchment({
         />
       </ParchmentContainer>
 
-      <svg display="none">
+      {/* the svg styles are a workaround bc display none doesn't work in Firefox. https://bugzilla.mozilla.org/show_bug.cgi?id=376027 */}
+      <svg style={{ position: 'absolute', height: '0' }}>
         <filter id={filterId}>
           {/* @todo: replace wavy2 with React 18's useId */}
           <feTurbulence x="0" y="0" baseFrequency="0.02" numOctaves="5" seed="1"></feTurbulence>
