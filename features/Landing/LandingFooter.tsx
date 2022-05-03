@@ -11,6 +11,7 @@ export default function LandingFooter() {
             <Anchor
               href="https://github.com/guillermodlpa/travelmap/issues"
               target="_blank"
+              size="medium"
               color="text-inverted"
             >
               Report an issue
@@ -20,6 +21,7 @@ export default function LandingFooter() {
             <Anchor
               href="https://github.com/guillermodlpa/travelmap"
               target="_blank"
+              size="medium"
               color="text-inverted"
             >
               Source code
@@ -29,6 +31,7 @@ export default function LandingFooter() {
             <Anchor
               href="https://guillermodlpa.com"
               target="_blank"
+              size="medium"
               color="text-inverted"
             >{`About the author`}</Anchor>
           </Box>

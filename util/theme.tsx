@@ -137,7 +137,7 @@ const customTheme = deepMerge(grommet, {
         const iconOnlyButton = Boolean(props.hasIcon && !props.hasLabel);
         if (iconOnlyButton) {
           const pad = {
-            large: '16px',
+            large: '10px',
             medium: '4px',
             small: '2px',
           }[props.sizeProp];
@@ -148,7 +148,7 @@ const customTheme = deepMerge(grommet, {
     `,
     border: { radius: '0px' },
     size: {
-      large: { pad: { vertical: '16px', horizontal: '32px' } },
+      large: { pad: { vertical: '10px', horizontal: '24px' } },
       medium: { pad: { vertical: '4px', horizontal: '22px' } },
       small: { pad: { vertical: '4px', horizontal: '20px' } },
     },
@@ -227,9 +227,15 @@ const customTheme = deepMerge(grommet, {
   },
   text: {
     extend: { '-webkit-font-smoothing': 'auto' },
+    small: { size: '13px' },
+    medium: { size: '16px' },
+    large: { size: '20px' },
   },
   paragraph: {
     extend: { '-webkit-font-smoothing': 'auto' },
+    small: { size: '13px' },
+    medium: { size: '16px' },
+    large: { size: '20px' },
   },
   formField: {
     extend: () => css`

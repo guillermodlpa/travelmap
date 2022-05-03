@@ -21,7 +21,11 @@ export default function AccountSettings() {
         <Box pad="large" gap="large">
           <Box direction="row" align="center" gap="medium" wrap>
             <NextLink passHref href="/my/maps">
-              <Button a11yTitle="Back to your maps" icon={<Previous color="brand" />} />
+              <Button
+                a11yTitle="Back to your maps"
+                icon={<Previous color="brand" />}
+                size="large"
+              />
             </NextLink>
 
             <Box flex>
