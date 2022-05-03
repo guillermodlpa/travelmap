@@ -166,7 +166,7 @@ function Map({
   }, [uniqueMapId]);
 
   const onClick = useCallback(
-    (e) => {
+    (e: mapboxgl.MapLayerEventType['click'] & mapboxgl.EventData) => {
       const features = mapRef.current?.queryRenderedFeatures(e.point, {
         layers: ['country-fills'],
       });
