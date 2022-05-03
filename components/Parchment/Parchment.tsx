@@ -37,6 +37,9 @@ const ParchmentBackground = styled(Box)<{
   transform: translateZ(0);
 `;
 
+/**
+ * Based on https://codepen.io/AgnusDei/pen/NWPbOxL
+ */
 export default function Parchment({
   children,
   contentBox = {},
