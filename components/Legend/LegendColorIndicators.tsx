@@ -17,20 +17,15 @@ function LegendColorIndicator({
 }: LegendItem & { expandedInitially?: boolean }) {
   const [subItemsExpanded, setSubItemsExpanded] = useState<boolean>(expandedInitially);
   return (
-    <Box direction="column">
-      <Box
-        direction="row"
-        gap="small"
-        align="center"
-        pad={{ bottom: 'small' }}
-        flex={{ shrink: 0 }}
-      >
-        <Box width="1rem" height="1rem" border background={color} />
+    <Box direction="column" pad={{ bottom: 'small' }}>
+      <Box direction="row" align="center" flex={{ shrink: 0 }}>
+        <Box width="1rem" height="1rem" margin={{ right: 'small' }} border background={color} />
         <Text>{label}</Text>
         {subItems && (
           <Button
             size="small"
-            secondary
+            margin={{ left: 'xsmall' }}
+            // secondary
             a11yTitle="Show or hide list of countries"
             icon={subItemsExpanded ? <FormUp /> : <FormDown />}
             onClick={() => setSubItemsExpanded(!subItemsExpanded)}
@@ -42,7 +37,7 @@ function LegendColorIndicator({
           <Box
             as="ul"
             pad="none"
-            margin={{ vertical: 'xsmall', horizontal: 'none' }}
+            margin={{ bottom: 'xsmall', horizontal: 'none', top: 'none' }}
             style={{ listStylePosition: 'inside', display: 'block', columnCount: 2 }}
           >
             {subItems?.map((subItem) => (

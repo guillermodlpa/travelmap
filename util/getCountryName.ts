@@ -10,6 +10,7 @@ import simplifiedWorldAdministrativeBoundaries from './simplified-world-administ
 const unlistedAndOverrides: { [iso3: string]: string } = {
   XKS: 'Kosovo',
   GBR: 'United Kingdom',
+  IRN: 'Iran',
 };
 
 const iso3ToName: { [iso3: string]: string } = simplifiedWorldAdministrativeBoundaries.reduce(

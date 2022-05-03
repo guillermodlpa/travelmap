@@ -38,7 +38,7 @@ const Legend = forwardRef<HTMLElement, PropsWithChildren<{ target?: RefObject<HT
 
     return (
       <LegendContainer
-        margin={{ bottom: 'large', horizontal: 'large' }}
+        margin={{ bottom: size === 'small' ? 'large' : 'medium', horizontal: 'xsmall' }}
         width={{
           width: 'auto',
           max: size === 'small' ? '100%' : '50%',
