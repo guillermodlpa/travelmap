@@ -1,5 +1,5 @@
 import { Box, BoxExtendedProps } from 'grommet';
-import { createRef, forwardRef, useEffect, useState } from 'react';
+import { createRef, forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const BoxForwardingRef = forwardRef<HTMLDivElement, BoxExtendedProps>((props, ref) => (
@@ -43,6 +43,9 @@ const ParchmentBackground = styled(Box)<{
   transform: translateZ(0);
 `;
 
+const isResizeObserverSupported = (): boolean =>
+  typeof window !== 'undefined' && typeof window.ResizeObserver !== 'undefined';
+
 export default function Parchment({
   children,
   contentBox = {},
@@ -56,13 +59,13 @@ export default function Parchment({
 }) {
   const content = createRef<HTMLDivElement>();
   const background = createRef<HTMLDivElement>();
+  const resizeObserverSupported = isResizeObserverSupported();
 
   useEffect(() => {
-    if (content?.current) {
+    if (content?.current && isResizeObserverSupported()) {
       const node = content.current;
       const resizeObserver = new ResizeObserver((entries: ResizeObserverEntry[]) => {
         const entry = entries[0];
-        const target = entry.target;
         const height = entry.contentBoxSize
           ? entry.borderBoxSize[0].blockSize
           : entry.contentRect.height;
@@ -78,15 +81,20 @@ export default function Parchment({
 
   return (
     <>
-      <ParchmentContainer {...containerBox}>
+      <ParchmentContainer
+        {...containerBox}
+        background={resizeObserverSupported ? 'transparent' : 'parchment'}
+      >
         <ParchmentContent {...contentBox} ref={content}>
           {children}
         </ParchmentContent>
-        <ParchmentBackground
-          background="parchment"
-          ref={background}
-          $insetShadowSize={insetShadowSize}
-        />
+        {resizeObserverSupported && (
+          <ParchmentBackground
+            background="parchment"
+            ref={background}
+            $insetShadowSize={insetShadowSize}
+          />
+        )}
       </ParchmentContainer>
 
       <svg display="none">
