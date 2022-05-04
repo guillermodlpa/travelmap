@@ -11,6 +11,7 @@ import { Logout, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
 import { forwardRef, useContext } from 'react';
 import styled from 'styled-components';
+import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
 import useMyUser from '../../hooks/useMyUser';
 import { PATH_LOG_OUT } from '../../util/paths';
 import Parchment from '../Parchment';
@@ -45,13 +46,24 @@ const LandingPageButton = styled(Button)`
 
 const ThemeModeToggleNavButton = () => {
   const { icon, tip, onClick } = useColorThemeToggle();
-  return <NavButton a11yTitle={tip} icon={icon} tip={tip} onClick={onClick} />;
+  const canHoverWithEase = useCanHoverWithEase();
+  return (
+    <NavButton
+      a11yTitle={tip}
+      icon={icon}
+      tip={canHoverWithEase ? tip : undefined}
+      onClick={onClick}
+    />
+  );
 };
 
 export default function Nav() {
   const { user: auth0User, isLoading, error } = useUser();
   const { data: myUser } = useMyUser();
   const size = useContext(ResponsiveContext);
+
+  const canHoverWithEase = useCanHoverWithEase();
+
   if (isLoading) {
     return <></>;
   }
@@ -67,7 +79,7 @@ export default function Nav() {
             <LandingPageButton
               size="large"
               label={size === 'small' ? '🗺' : '🗺 Travelmap'}
-              tip="Landing page"
+              tip={canHoverWithEase ? 'Landing page' : undefined}
             />
           </NextLink>
         </Parchment>
@@ -94,7 +106,7 @@ export default function Nav() {
                       {(myUser?.displayName || '').substring(0, 1)}
                     </Avatar>
                   }
-                  tip="Your Maps"
+                  tip={canHoverWithEase ? 'Your Maps' : undefined}
                 />
               </NextLink>
             )}
@@ -106,7 +118,7 @@ export default function Nav() {
                 <NavButton
                   a11yTitle="Settings"
                   icon={<SettingsOption color="text" />}
-                  tip="Settings"
+                  tip={canHoverWithEase ? 'Settings' : undefined}
                 />
               </NextLink>
             )}
@@ -114,7 +126,7 @@ export default function Nav() {
             {Boolean(auth0User) && (
               <NavButton
                 a11yTitle="Log Out"
-                tip="Log Out"
+                tip={canHoverWithEase ? 'Log Out' : undefined}
                 icon={<Logout color="text" />}
                 href={PATH_LOG_OUT}
               />
