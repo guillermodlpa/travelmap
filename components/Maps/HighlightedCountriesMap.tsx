@@ -209,7 +209,7 @@ function HighlightedCountriesMap({
   onCountryHovered = () => {},
 }: HighlighedCountriesMapProps) {
   const { mode } = useThemeMode();
-  const mapboxStyle = mapStyles[mode];
+  const mapboxStyle = mapStyles[mode || 'light'];
   const mapRef = useRef<mapboxgl.Map>();
   const [mapLoaded, setMapLoaded] = useState<boolean>(false);
 
