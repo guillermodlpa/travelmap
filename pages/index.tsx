@@ -25,3 +25,10 @@ Welcome.getLayout = function getLayout(page: React.ReactElement) {
     </>
   );
 };
+
+// Static Site Generation (on build time)
+export async function getStaticProps() {
+  return {
+    props: {},
+  };
+}
