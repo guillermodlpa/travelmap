@@ -103,8 +103,8 @@ export default function ViewIndividualMap({
 
       {loading && (
         <Legend>
-          <Box align="center" margin="medium">
-            <Spinner size="medium" />
+          <Box align="center" margin="small" responsive={false}>
+            <Spinner responsive={false} size="medium" />
           </Box>
         </Legend>
       )}

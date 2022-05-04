@@ -5,8 +5,8 @@ export type ThemeMode = 'light' | 'dark';
 export const FALLBACK_THEME_MODE = 'light';
 
 interface ThemeModeContextValue {
-  mode: ThemeMode;
-  setMode: Dispatch<SetStateAction<ThemeMode>>;
+  mode: ThemeMode | undefined;
+  setMode: Dispatch<SetStateAction<ThemeMode | undefined>>;
 }
 
 const ThemeModeContext = createContext<ThemeModeContextValue>({} as ThemeModeContextValue);
@@ -31,20 +31,20 @@ function ThemeModeInLocalStorage({ children }: { children: React.ReactNode }) {
       setMode(localStorageValue);
     }
     // Leaving this out, for now. We want all users to start with light mode because it looks so much better
-    // else if (matchMedia('(prefers-color-scheme: dark)').matches) {
-    //   setMode('dark');
-    // }
+    else if (matchMedia('(prefers-color-scheme: dark)').matches) {
+      setMode('dark');
+    }
   }, [setMode]);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.localStorage) {
+    if (!mode || typeof window === 'undefined' || !window.localStorage) {
       return;
     }
-    const localStorageValue = window.localStorage.getItem(KEY) as ThemeMode | null;
-    if (localStorageValue !== mode) {
+    if (getSavedMode() !== mode) {
       window.localStorage.setItem(KEY, mode);
     }
   }, [mode]);
+
   return <>{children}</>;
 }
 

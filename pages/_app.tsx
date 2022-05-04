@@ -5,11 +5,7 @@ import { UserProvider } from '@auth0/nextjs-auth0';
 
 import theme from '../util/theme';
 import ViewportSizeListener from '../components/ViewportSizeListener';
-import {
-  FALLBACK_THEME_MODE,
-  ThemeMode,
-  ThemeModeContextProvider,
-} from '../components/ThemeModeContext';
+import { ThemeMode, ThemeModeContextProvider } from '../components/ThemeModeContext';
 import { useTheme } from 'styled-components';
 import type { NextPage } from 'next';
 import ButtonCssFilter from '../components/ButtonCssFilter/ButtonCssFilter';
@@ -35,7 +31,7 @@ type AppPropsWithLayout = AppProps & {
  * @see {@link https://nextjs.org/docs/advanced-features/custom-app}
  */
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const [mode, setMode] = useState<ThemeMode>(FALLBACK_THEME_MODE);
+  const [mode, setMode] = useState<ThemeMode | undefined>(undefined);
   const [, setSize] = useState<ResponsiveViewportSize>();
 
   const themeContextValue = useMemo(() => ({ mode, setMode }), [mode, setMode]);
@@ -67,7 +63,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Grommet
         theme={theme}
         full
-        themeMode={mode}
+        themeMode={mode || 'light'}
         background="map-background"
         style={{ visibility: moounted ? 'visible' : 'hidden' }}
       >

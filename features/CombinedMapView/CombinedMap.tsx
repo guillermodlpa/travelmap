@@ -101,8 +101,8 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
 
       {loading && (
         <Legend>
-          <Box align="center" margin="medium">
-            <Spinner size="medium" />
+          <Box align="center" margin="small" responsive={false}>
+            <Spinner responsive={false} size="medium" />
           </Box>
         </Legend>
       )}
