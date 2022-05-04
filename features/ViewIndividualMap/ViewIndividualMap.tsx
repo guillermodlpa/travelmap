@@ -2,7 +2,7 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { Button, ResponsiveContext, Text } from 'grommet';
+import { Box, Button, ResponsiveContext, Spinner, Text } from 'grommet';
 import NextLink from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
@@ -26,7 +26,7 @@ export default function ViewIndividualMap({
   const { user: auth0User } = useUser();
   const router = useRouter();
 
-  const { data: travelMap, error } = useIndividualMap(individualMapId);
+  const { data: travelMap, error, loading } = useIndividualMap(individualMapId);
   useEffect(() => {
     if (
       (router.isReady && !individualMapId) ||
@@ -98,6 +98,14 @@ export default function ViewIndividualMap({
           <Text size="large" color="status-error">
             Loading error
           </Text>
+        </Legend>
+      )}
+
+      {loading && (
+        <Legend>
+          <Box align="center" margin="medium">
+            <Spinner size="medium" />
+          </Box>
         </Legend>
       )}
 

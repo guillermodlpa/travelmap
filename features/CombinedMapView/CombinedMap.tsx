@@ -7,7 +7,7 @@ import getTravelMapName from '../../util/getTravelMapName';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
 import LegendActions from '../../components/Legend/LegendActions';
-import { Button, ResponsiveContext, Text } from 'grommet';
+import { Box, Button, ResponsiveContext, Spinner, Text } from 'grommet';
 import ShareMap from '../ViewIndividualMap/ShareMap';
 import { useUser } from '@auth0/nextjs-auth0';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
@@ -32,7 +32,7 @@ function getNonOverlappingListsOfCountries(
 }
 
 export default function CombinedMap({ combinedMapId }: { combinedMapId: string | undefined }) {
-  const { data: travelMap, error } = useCombinedMap(combinedMapId);
+  const { data: travelMap, error, loading } = useCombinedMap(combinedMapId);
   const router = useRouter();
   useEffect(() => {
     if ((router.isReady && !combinedMapId) || (error?.message && /HTTP 404/.test(error.message))) {
@@ -97,6 +97,14 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           pathView={travelMap.pathView}
           name={getTravelMapName(travelMap)}
         />
+      )}
+
+      {loading && (
+        <Legend>
+          <Box align="center" margin="medium">
+            <Spinner size="medium" />
+          </Box>
+        </Legend>
       )}
 
       {error && (
