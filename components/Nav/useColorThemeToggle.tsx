@@ -13,7 +13,7 @@ const useColorThemeToggle = () => {
       ),
     tip: mode === 'dark' ? 'Use light color theme' : 'Use dark color theme',
     onClick: () => {
-      setMode((m: string) => (m === 'light' ? 'dark' : 'light'));
+      setMode((m: 'light' | 'dark' | undefined) => (m === 'light' ? 'dark' : 'light'));
     },
   };
 };
