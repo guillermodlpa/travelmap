@@ -3,10 +3,10 @@ import getFetcher from '../util/fetcher';
 
 const fetcher = getFetcher<ClientCombinedTravelMap>();
 
-const useCombinedMap = (id: string) => {
-  const { data, error } = useSWR(`/api/map/${id}?type=combined`, fetcher);
+const useCombinedMap = (id: string | undefined) => {
+  const { data, error } = useSWR(id ? `/api/map/${id}?type=combined` : null, fetcher);
   return {
-    map: data,
+    data,
     loading: !error && data == null,
     error: error,
   };
