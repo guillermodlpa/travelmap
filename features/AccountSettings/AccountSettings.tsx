@@ -53,6 +53,7 @@ export default function AccountSettings() {
               label="Email"
               htmlFor="email-input" /* @todo: replace for React 18's useId */
               required
+              info="Changing email address hasn't been implemented yet"
             >
               <TextInput
                 value={auth0User?.email || ''}
