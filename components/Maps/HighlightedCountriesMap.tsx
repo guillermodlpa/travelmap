@@ -277,6 +277,9 @@ function HighlightedCountriesMap({
     highlightedCountriesRef.current.forEach((descriptor) => {
       const color =
         (themeRef.current.global.colors[descriptor.color] as string) || descriptor.color;
+      if (descriptor.id.includes('undefined')) {
+        console.warn('Mapbox layer ID might use an undefined value', descriptor.id);
+      }
       addLayerToMap(map, descriptor.id, color);
     });
     if (countriesCanBeSelectedRef.current) {
