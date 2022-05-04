@@ -43,18 +43,18 @@ const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | Erro
 
   const { displayName } = req.body;
 
-  if (
-    typeof displayName !== 'string' ||
-    displayName.trim() === '' ||
-    displayName.trim().length > 40
-  ) {
+  if (typeof displayName !== 'string') {
+    return res.status(400).json({ error: 'Invalid displayName' });
+  }
+  const trimmedDisplayName = displayName.trim();
+  if (trimmedDisplayName === '' || trimmedDisplayName.length > 40) {
     return res.status(400).json({ error: 'Invalid displayName' });
   }
 
   const updatedUser = await prisma.user.update({
     where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
     data: {
-      displayName,
+      displayName: trimmedDisplayName,
     },
   });
 
