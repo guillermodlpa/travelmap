@@ -9,7 +9,7 @@ import mapStyles from './mapStyles';
 
 function StaticWorldMap({ height = '100%', id }: { height?: HeightType; id: string }) {
   const { mode } = useThemeMode();
-  const mapboxStyle = mapStyles[mode];
+  const mapboxStyle = mapStyles[mode || 'light'];
   const mapRef = useRef<mapboxgl.Map>();
 
   useEffect(() => {
