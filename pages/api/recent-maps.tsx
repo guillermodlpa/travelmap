@@ -51,6 +51,7 @@ const handleGet = async (
   allMaps.sort((a, b) => (b.created && a.created ? b.created - a.created : 0));
 
   const response = allMaps.slice(0, 5);
+  res.setHeader('Cache-Control', 'max-age=0, stale-while-revalidate');
   res.status(200).json(response);
 };
 
