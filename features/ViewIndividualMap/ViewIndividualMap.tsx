@@ -17,6 +17,7 @@ import LegendActions from '../../components/Legend/LegendActions';
 import useIndividualMap from '../../hooks/useIndividualMap';
 import { useRouter } from 'next/router';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
+import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 
 export default function ViewIndividualMap({
   individualMapId,
@@ -63,7 +64,7 @@ export default function ViewIndividualMap({
             {
               id: `individual-${individualMapId}`,
               countries: travelMap?.visitedCountries || [],
-              color: 'status-ok',
+              color: MAP_HIGHLIGHT_COLOR_1,
             },
           ]}
           interactive
@@ -127,7 +128,7 @@ export default function ViewIndividualMap({
               data={[
                 {
                   id: `individual-${travelMap.id}`,
-                  color: 'status-ok',
+                  color: MAP_HIGHLIGHT_COLOR_1,
                   label: `Visited countries (${travelMap.visitedCountries.length})`,
                   subItems: travelMap.visitedCountries.map((country) => ({
                     id: country,

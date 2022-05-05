@@ -12,6 +12,7 @@ import LegendColorIndicators from '../../components/Legend/LegendColorIndicators
 import getCountryName from '../../util/getCountryName';
 import EditMapSettings from './EditMapSettings';
 import HoveredCountryToast from './HoveredCountryToast';
+import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
@@ -91,7 +92,7 @@ export default function EditMap({
           {
             id: 'editing',
             countries: countries,
-            color: 'status-ok',
+            color: MAP_HIGHLIGHT_COLOR_1,
           },
         ]}
         interactive
@@ -150,7 +151,7 @@ export default function EditMap({
             data={[
               {
                 id: 'edit-map',
-                color: 'status-ok',
+                color: MAP_HIGHLIGHT_COLOR_1,
                 label: travelMap ? `Visited countries (${countries.length})` : 'Visited countries',
                 subItems: countries.map((country) => ({
                   id: country,

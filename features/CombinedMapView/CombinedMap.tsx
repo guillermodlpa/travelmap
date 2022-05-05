@@ -14,6 +14,11 @@ import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
 import useCombinedMap from '../../hooks/useCombinedMap';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { useRouter } from 'next/router';
+import {
+  MAP_HIGHLIGHT_COLOR_1,
+  MAP_HIGHLIGHT_COLOR_2,
+  MAP_HIGHLIGHT_COLOR_3,
+} from '../../util/mapHighlightColors';
 
 function arrayExclude<T>(array1: T[], array2: T[]): T[] {
   return (array1 || []).filter((value) => !(array2 || []).includes(value));
@@ -72,13 +77,17 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
             {
               id: `overlap-${combinedMapId}`,
               countries: overlapList,
-              color: 'status-warning',
+              color: MAP_HIGHLIGHT_COLOR_3,
             },
-            { id: `exclusive-${combinedMapId}-1`, countries: exclusiveList1, color: 'status-ok' },
+            {
+              id: `exclusive-${combinedMapId}-1`,
+              countries: exclusiveList1,
+              color: MAP_HIGHLIGHT_COLOR_1,
+            },
             {
               id: `exclusive-${combinedMapId}-2`,
               countries: exclusiveList2,
-              color: 'status-critical',
+              color: MAP_HIGHLIGHT_COLOR_2,
             },
           ]}
           zoomCountriesOnLoad
@@ -140,7 +149,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
               data={[
                 {
                   id: 'both',
-                  color: 'status-warning',
+                  color: MAP_HIGHLIGHT_COLOR_3,
                   label:
                     size === 'small'
                       ? `Both (${overlapList.length})`
@@ -152,7 +161,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
                 },
                 {
                   id: `combined-${travelMap.individualTravelMaps[0].id}`,
-                  color: 'status-ok',
+                  color: MAP_HIGHLIGHT_COLOR_1,
                   label:
                     size === 'small'
                       ? `${travelMap.individualTravelMaps[0].userDisplayName} (${exclusiveList1.length})`
@@ -164,7 +173,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
                 },
                 {
                   id: `combined-${travelMap.individualTravelMaps[1].id}`,
-                  color: 'status-critical',
+                  color: MAP_HIGHLIGHT_COLOR_2,
                   label:
                     size === 'small'
                       ? `${travelMap.individualTravelMaps[1].userDisplayName} (${exclusiveList2.length})`

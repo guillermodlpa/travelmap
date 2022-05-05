@@ -2,6 +2,7 @@ import { Box } from 'grommet';
 import { useEffect, useState } from 'react';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
 import useRecentMapList from '../../hooks/useRecentMaps';
+import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 
 export default function LandingMap({ height }: { height: string }) {
   const { data: recentMaps } = useRecentMapList();
@@ -26,7 +27,7 @@ export default function LandingMap({ height }: { height: string }) {
           {
             id: 'landing-map',
             countries: visitedCountries || [],
-            color: 'status-ok',
+            color: MAP_HIGHLIGHT_COLOR_1,
           },
         ]}
         interactive
