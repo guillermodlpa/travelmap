@@ -188,7 +188,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           </LegendBody>
 
           <LegendActions>
-            {isLoggedInUserMap ? (
+            {isLoggedInUserMap && (
               <Button
                 key="share-button"
                 label="Share"
@@ -196,9 +196,6 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
                 secondary
                 onClick={() => setShareMapDialogOpen(true)}
               />
-            ) : (
-              // render a space so we have the same height as if buttons render, to minimize CLS
-              <>{'\u00A0'}</>
             )}
           </LegendActions>
         </Legend>
