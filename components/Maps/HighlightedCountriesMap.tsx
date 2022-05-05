@@ -42,7 +42,7 @@ const addLayerToMap = (map: mapboxgl.Map, id: string, color: string) => {
       type: 'fill',
       paint: {
         'fill-color': color,
-        'fill-opacity': 0.75,
+        'fill-opacity': 1,
       },
     },
     MAPBOX_STUDIO_LAYER_ANCHOR
