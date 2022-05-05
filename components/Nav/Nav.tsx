@@ -135,7 +135,7 @@ export default function Nav() {
               />
             )}
 
-            {!Boolean(auth0User) && router.pathname.includes('/map/') && (
+            {!Boolean(auth0User) && router.pathname.includes('/map/') && size !== 'small' && (
               <Button
                 style={{ display: 'flex', alignItems: 'center' }}
                 href={'/'}
