@@ -9,6 +9,7 @@ import {
 } from 'grommet';
 import { Logout, SettingsOption } from 'grommet-icons';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { forwardRef, useContext } from 'react';
 import styled from 'styled-components';
 import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
@@ -63,6 +64,8 @@ export default function Nav() {
   const size = useContext(ResponsiveContext);
 
   const canHoverWithEase = useCanHoverWithEase();
+
+  const router = useRouter();
 
   if (isLoading) {
     return <></>;
@@ -129,6 +132,14 @@ export default function Nav() {
                 tip={canHoverWithEase ? 'Log Out' : undefined}
                 icon={<Logout color="text" />}
                 href={PATH_LOG_OUT}
+              />
+            )}
+
+            {!Boolean(auth0User) && router.pathname.includes('/map/') && (
+              <Button
+                style={{ display: 'flex', alignItems: 'center' }}
+                href={'/'}
+                label="What is Travelmap?"
               />
             )}
           </Box>
