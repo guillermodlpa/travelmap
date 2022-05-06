@@ -1,10 +1,11 @@
 # Travelmap
 
-![End To End Tests badge](https://github.com/guillermodlpa/travelmap/workflows/End%20To%20End%20Tests/badge.svg) ![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)
+![End To End Tests badge](https://github.com/guillermodlpa/travelmap/workflows/End%20To%20End%20Tests/badge.svg) [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 
-This is a small web application that allows to make a list of visited countries, display them in a map, and share the URL.
 
-[https://travelmap.guillermodlpa.com](https://travelmap.guillermodlpa.com) (not finished yet!)
+**[https://travelmap.guillermodlpa.com](https://travelmap.guillermodlpa.com)**
+
+Travelmap is a small web application that allows users to make a shareable map of visited countries and combine their maps with other users.
 
 | Landing Page                              | Map View                                   |
 | ----------------------------------------- | ------------------------------------------ |
