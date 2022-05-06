@@ -13,22 +13,27 @@ This is a small web application that allows to make a list of visited countries,
 ## Technologies
 
 - Frontend: TypeScript, Next.js
-  - UI Library: Grommet
-  - Vercel SWR for data fetching
-- Backend: TypeScript
+  - UI Library: [Grommet](https://github.com/grommet/grommet)
+  - [Vercel SWR](https://swr.vercel.app/) for data fetching
+- Backend: TypeScript, NextJS
   - Implemented in this repository using Next.js in `pages/api`
-  - Prisma for ORM
+  - [Prisma](https://www.prisma.io/) for ORM
     - Reminder: when making changes to the schema, remember to run `npx prisma generate`.
-- Data: Planetscale (serverless MySQL)
+- Data: [Planetscale](https://planetscale.com/) (serverless MySQL)
   - Reminder: to push a schema up, use Prisma with `npx prisma db push`. It knows where to push thanks to the env var `DATABASE_URL` that you need to set in your `.env`
-- Authentication: Auth0
+- Authentication: [Auth0](https://auth0.com/)
   - When users log in, there's an Auth0 Action executed that,
     - Upon registration, creates the user record and their map, and saves the user record ID in Auth0.
     - Sets the user record ID in the Auth0 token, so we can read it directly from the frontend with the hook `useUser`.
   - There are 2 applications configured, each with its variables defined in the environment variables file:
     - Frontend: it's a generic application, the one integrated with Next.js
     - Backend: it's a "Machine to Machine" application, used to interact with the Management API when needed, like when needing to delete a user account.
-- Images: Cloudinary to host and serve the profile pictures
+- Images: [Cloudinary](https://cloudinary.com/) to host and serve the profile pictures
+- Testing:
+  - End-to-end testing with [Cypress.](https://www.cypress.io/)
+- Continuous Integration: GitHub Actions
+  - Run the end-to-end tests. [See the workflow.](./.github/workflows/end_to_end_tests.yml)
+- Hosting: [Vercel](https://vercel.com/)
 
 ## Development
 
