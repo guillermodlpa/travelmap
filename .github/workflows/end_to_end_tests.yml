@@ -1,4 +1,4 @@
-name: regression tests
+name: End To End Tests
 on: [push]
 jobs:
   cypress-run:
