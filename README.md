@@ -45,6 +45,14 @@ npm install
 npm run dev
 ```
 
+## End-to-end tests with Cypress
+
+User authentication with Auth0 is achieved leveraging [sir-dunxalot/cypress-nextjs-auth0](https://github.com/sir-dunxalot/cypress-nextjs-auth0).
+
+The environment variables for tests are stored in `cypress.env.json`. This file isn't git tracked. There's an empty copy, [cypress.env.dist.json](./cypress.env.dist.json)
+
+Run `npx cypress open` to open Cypress and run any spec.
+
 ### Planetscale reference for creating database
 
 Keeping it here for future reference.

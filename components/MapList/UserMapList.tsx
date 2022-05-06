@@ -11,9 +11,9 @@ export default function UserMapList() {
   }
 
   return (
-    <>
+    <div data-test="UserMapList">
       {error && <Text color="status-error">{error.message || 'Error'}</Text>}
       <MapList mapList={map ? [map] : []} allowEdit />
-    </>
+    </div>
   );
 }

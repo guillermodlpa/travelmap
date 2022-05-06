@@ -39,3 +39,5 @@ yarn-error.log*
 
 # Custom for this app
 scripts/*.geojson
+
+cypress.env.json

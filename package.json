@@ -36,9 +36,13 @@
     "@types/react": "^18.0.8",
     "@types/styled-components": "^5.1.24",
     "@types/uuid": "^8.3.4",
+    "cypress": "^9.6.0",
+    "cypress-nextjs-auth0": "^2.1.0",
+    "dotenv-cli": "^5.1.0",
     "eslint": "^8.14.0",
     "eslint-config-next": "^12.1.6",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "prettier": "^2.6.2",
     "prisma": "^3.12.0",
     "typescript": "4.6.2"
