@@ -1,6 +1,6 @@
 # Travelmap
 
-![End To End Tests badge](https://github.com/guillermodlpa/kikiricoin/workflows/End%20To%20End%20Tests/badge.svg) ![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)
+![End To End Tests badge](https://github.com/guillermodlpa/travelmap/workflows/End%20To%20End%20Tests/badge.svg) ![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)
 
 This is a small web application that allows to make a list of visited countries, display them in a map, and share the URL.
 
