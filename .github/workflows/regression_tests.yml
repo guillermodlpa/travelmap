@@ -37,3 +37,17 @@ jobs:
         with:
           build: npm run build
           start: npm start
+        env:
+          CYPRESS_auth0Audience: ${{ secrets.AUTH0_AUDIENCE }}
+          CYPRESS_auth0Domain: ${{ secrets.AUTH0_DOMAIN }}
+          CYPRESS_auth0ClientId: ${{ secrets.AUTH0_CLIENT_ID }}
+          CYPRESS_auth0ClientSecret: ${{ secrets.AUTH0_CLIENT_SECRET }}
+          CYPRESS_auth0CookieSecret: ${{ secrets.AUTH0_SECRET }}
+          CYPRESS_auth0Scope: ${{ secrets.AUTH0_SCOPE }}
+          CYPRESS_auth0SessionCookieName: ${{ secrets.AUTH0_SESSION_COOKIE_NAME }}
+          CYPRESS_auth0LogoutUrl: /api/auth/logout
+          CYPRESS_auth0ReturnToUrl: /
+          CYPRESS_auth0Username: ${{ secrets.AUTH0_USERNAME }}
+          CYPRESS_auth0Password: ${{ secrets.AUTH0_PASSWORD }}
+          CYPRESS_auth0NewUserUsername: ${{ secrets.AUTH0_NEW_USER_USERNAME }}
+          CYPRESS_auth0NewUserPassword: ${{ secrets.AUTH0_NEW_USER_PASSWORD }}
