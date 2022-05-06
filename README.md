@@ -55,6 +55,12 @@ Run `npx cypress open` to open Cypress and run any spec.
 
 During login, there's an Auth0 action that reaches to an API endpoint of Travelmap. In non-production, this is normally configured to hit https://preview.travelmap.guillermodlpa.com. That's why the repository needs to have a `preview` branch, more or less in sync with `main`, that Vercel will deploy to a Preview environment that uses the dev DB. Vercel doesn't seem to support to deploy the same branch to two environments (with different env vars).
 
+In the dev DB and Auth0 tenant, there are 2 users used for testing:
+
+* `newtestuser@example.com`, a user that hasn't gone through the onboarding.
+* `testuser@example.com`, a user that has gone through the onboarding and has edited their map.
+
+
 ### Planetscale reference for creating database
 
 Keeping it here for future reference.
