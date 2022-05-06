@@ -20,7 +20,7 @@ export const getPrismaClient = (): PrismaClient => {
     new PrismaClient({
       log: ['query'],
     });
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production' || process.env.IS_CI) {
     global.prisma = prisma;
   }
   return prisma;

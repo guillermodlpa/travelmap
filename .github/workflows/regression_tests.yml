@@ -29,6 +29,8 @@ jobs:
       AUTH0_MTM_BACKEND_CLIENT_SECRET: ${{ secrets.AUTH0_MTM_BACKEND_CLIENT_SECRET }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+      IS_CI: 1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
