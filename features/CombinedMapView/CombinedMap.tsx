@@ -98,7 +98,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           countriesCanBeSelected={false}
           applyMapMotion
           animateCamera
-          initialZoomPadding={{ bottom: 250, top: 70 }}
+          initialZoomPadding={size === 'small' ? { bottom: 180, top: 50 } : { bottom: 10, top: 10 }}
         />
       )}
 
