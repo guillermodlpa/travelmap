@@ -8,15 +8,9 @@ export default function HeadWithDefaults({ title }: { title: string }) {
       {title && <title>{title}</title>}
       <meta
         name="theme-color"
-        media="(prefers-color-scheme: light)"
-        content={theme.global.colors.parchment.light}
-        key="theme-color-light"
-      ></meta>
-      <meta
-        name="theme-color"
-        media="(prefers-color-scheme: dark)"
-        content={theme.global.colors.parchment.dark}
-        key="theme-color-dark"
+        content={
+          theme.dark ? theme.global.colors.parchment.dark : theme.global.colors.parchment.light
+        }
       ></meta>
     </Head>
   );
