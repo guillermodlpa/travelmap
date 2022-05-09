@@ -19,6 +19,8 @@ import {
   MAP_HIGHLIGHT_COLOR_2,
   MAP_HIGHLIGHT_COLOR_3,
 } from '../../util/mapHighlightColors';
+import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
+import { ShareOption } from 'grommet-icons';
 
 function arrayExclude<T>(array1: T[], array2: T[]): T[] {
   return (array1 || []).filter((value) => !(array2 || []).includes(value));
@@ -64,6 +66,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
 
   const size = useContext(ResponsiveContext);
+  const canHoverWithEase = useCanHoverWithEase();
 
   return (
     <>
@@ -190,10 +193,9 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           <LegendActions>
             {isLoggedInUserMap && (
               <Button
-                key="share-button"
-                label="Share"
-                size="small"
-                secondary
+                size="medium"
+                tip={canHoverWithEase ? 'Share' : undefined}
+                icon={<ShareOption size="medium" color="brand" />}
                 onClick={() => setShareMapDialogOpen(true)}
               />
             )}

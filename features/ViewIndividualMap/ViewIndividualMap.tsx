@@ -18,6 +18,8 @@ import useIndividualMap from '../../hooks/useIndividualMap';
 import { useRouter } from 'next/router';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
+import { Aggregate, Edit, ShareOption } from 'grommet-icons';
+import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
 
 export default function ViewIndividualMap({
   individualMapId,
@@ -49,6 +51,8 @@ export default function ViewIndividualMap({
 
   const [createTogetherMapDialogOpen, setCreateTogetherMapDialogOpen] = useState<boolean>(false);
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
+
+  const canHoverWithEase = useCanHoverWithEase();
 
   return (
     <>
@@ -140,27 +144,35 @@ export default function ViewIndividualMap({
           <LegendActions>
             {userCanEditThisMap ? (
               [
+                <NextLink key="edit-button" href={`/map/edit`} passHref>
+                  <Button
+                    size="medium"
+                    icon={<Edit size="medium" color="brand" />}
+                    tip={canHoverWithEase ? 'Edit' : undefined}
+                  />
+                </NextLink>,
                 <Button
+                  size="medium"
                   key="share-button"
-                  label="Share"
-                  size="small"
-                  secondary
+                  tip={canHoverWithEase ? 'Share' : undefined}
+                  icon={<ShareOption size="medium" color="brand" />}
                   onClick={() => setShareMapDialogOpen(true)}
                 />,
-                <NextLink key="edit-button" href={`/map/edit`} passHref>
-                  <Button label="Edit" size="small" secondary />
-                </NextLink>,
               ]
             ) : confirmedUserDoesntHaveTogetherMaps ? (
               <Button
-                size="small"
-                label="Create Map Together"
-                secondary
+                size="medium"
+                tip={canHoverWithEase ? 'Create Map Together' : undefined}
+                icon={<Aggregate size="medium" color="brand" />}
                 onClick={() => setCreateTogetherMapDialogOpen(true)}
               />
             ) : confirmedUserHasTogeherMaps ? (
               <NextLink href={togetherMapList[0].pathView} passHref>
-                <Button label="View Map Together" size="small" secondary />
+                <Button
+                  tip={canHoverWithEase ? 'View Map Together' : undefined}
+                  icon={<Aggregate size="medium" color="brand" />}
+                  size="medium"
+                />
               </NextLink>
             ) : (
               // render a space so we have the same height as if buttons render, to minimize CLS
