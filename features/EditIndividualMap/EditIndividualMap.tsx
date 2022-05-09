@@ -14,6 +14,7 @@ import EditMapSettings from './EditMapSettings';
 import HoveredCountryToast from './HoveredCountryToast';
 import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 import getTravelMapName from '../../util/getTravelMapName';
+import { CircleInformation } from 'grommet-icons';
 
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
@@ -36,7 +37,7 @@ export default function EditMap({
     if (countries.length === 0 && travelMap?.visitedCountries) {
       setCountries(travelMap.visitedCountries);
     }
-  }, [travelMap?.visitedCountries, countries]);
+  }, [travelMap?.visitedCountries]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleCountry = (country: string) =>
     setCountries((countries) => {
@@ -148,12 +149,6 @@ export default function EditMap({
             </Text>
           )}
 
-          <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
-            <CardBody>
-              <Paragraph margin="none">Pick countries in the map</Paragraph>
-            </CardBody>
-          </Card>
-
           <LegendColorIndicators
             expandedInitially={size !== 'small'}
             data={[
@@ -168,6 +163,16 @@ export default function EditMap({
               },
             ]}
           />
+
+          {countries.length === 0 && (
+            <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
+              <CardBody>
+                <Paragraph margin="none">
+                  <CircleInformation a11yTitle="Help" size="small" /> Pick countries in the map
+                </Paragraph>
+              </CardBody>
+            </Card>
+          )}
         </LegendBody>
 
         <LegendActions>
