@@ -39,12 +39,7 @@ export default function AccountSettings() {
 
           <Box border={{ color: 'border', size: '1px', side: 'bottom' }} />
 
-          <Box
-            flex={{ shrink: 0 }}
-            width={size === 'small' ? '100%' : '50%'}
-            gap="medium"
-            alignSelf="center"
-          >
+          <Box flex={{ shrink: 0 }} gap="medium" width="medium" alignSelf="center">
             <Heading level={4} margin={'0'}>
               Account
             </Heading>
