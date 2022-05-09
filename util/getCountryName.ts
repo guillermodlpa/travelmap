@@ -11,6 +11,7 @@ const unlistedAndOverrides: { [iso3: string]: string } = {
   XKS: 'Kosovo',
   GBR: 'United Kingdom',
   IRN: 'Iran',
+  ATA: 'Antarctica',
 };
 
 const iso3ToName: { [iso3: string]: string } = simplifiedWorldAdministrativeBoundaries.reduce(
