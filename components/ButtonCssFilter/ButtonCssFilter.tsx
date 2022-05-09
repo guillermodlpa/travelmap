@@ -7,7 +7,7 @@ export default function ButtonCssFilter() {
   return (
     <svg style={{ position: 'absolute', height: '0' }}>
       <filter id="wavy-button">
-        <feTurbulence x="0" y="0" baseFrequency="0.1" numOctaves="5" seed="5"></feTurbulence>
+        <feTurbulence x="0" y="0" baseFrequency="0.03" numOctaves="5" seed="5"></feTurbulence>
         <feDisplacementMap in="SourceGraphic" scale="2" />
       </filter>
     </svg>
