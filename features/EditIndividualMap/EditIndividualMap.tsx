@@ -141,7 +141,7 @@ export default function EditMap({
 
           <Card pad="small" animation="fadeIn" margin={{ bottom: 'small' }}>
             <CardBody>
-              <Paragraph margin="none">Select the countries in the map</Paragraph>
+              <Paragraph margin="none">Pick countries in the map</Paragraph>
             </CardBody>
           </Card>
 
