@@ -72,6 +72,7 @@ const zoomMapToCountries = (
   }
   const filteredBoundaries = simplifiedWorldAdministrativeBoundaries
     .filter(({ iso3 }) => iso3 && countries.includes(iso3))
+    .filter(({ iso3 }) => iso3 && !['ATA'].includes(iso3))
     .filter(({ bounds }) => bounds != undefined);
   const bounds = filteredBoundaries.map(({ bounds }) => bounds) as Bounds[];
 
@@ -82,15 +83,20 @@ const zoomMapToCountries = (
     Math.max(...bounds.map((bound) => bound[3])),
   ];
 
-  map.fitBounds(overarchingBounds, {
-    padding: {
-      top: padding.top ?? 0,
-      bottom: padding.bottom ?? 0,
-      left: padding.left ?? 0,
-      right: padding.right ?? 0,
-    },
-    duration: animate ? 5000 : 0,
-  });
+  try {
+    map.fitBounds(overarchingBounds, {
+      padding: {
+        top: padding.top ?? 0,
+        bottom: padding.bottom ?? 0,
+        left: padding.left ?? 0,
+        right: padding.right ?? 0,
+      },
+      duration: animate ? 5000 : 0,
+    });
+  } catch (error) {
+    // it can happen when the country goes out of bounds, like Antartica
+    console.error(error);
+  }
 };
 
 const addCountryHoverInteractivity = (
