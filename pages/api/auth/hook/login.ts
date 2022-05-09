@@ -52,13 +52,16 @@ const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).json(preExistingUser);
   }
 
+  const userPictureUrl =
+    typeof pictureUrl === 'string' && !pictureUrl.includes('cdn.auth0.com') ? pictureUrl : null;
+
   return prisma.user
     .create({
       data: {
         auth0Sub: sub,
         email,
         displayName: '', // we prompt users to fill this out right after they sign up
-        pictureUrl: pictureUrl || null,
+        pictureUrl: userPictureUrl,
         onboarded: false,
       },
     })
