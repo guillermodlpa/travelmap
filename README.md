@@ -7,9 +7,9 @@
 
 Travelmap is a small web application that allows users to make a shareable map of visited countries and combine their maps with other users.
 
-| Landing Page                              | Map View                                   |
-| ----------------------------------------- | ------------------------------------------ |
-| ![Screenshot](./docs/preview-landing.jpg) | ![Screenshot](./docs/preview-map-view.jpg) |
+| Landing Page (desktop, light)                      | Map View (mobile, dark)                          |
+| -------------------------------------------------- | ------------------------------------------------ |
+| ![Screenshot](./docs/screenshot-landing-light.jpg) | ![Screenshot](./docs/screenshot-view-m-dark.png) |
 
 ## Technologies
 
