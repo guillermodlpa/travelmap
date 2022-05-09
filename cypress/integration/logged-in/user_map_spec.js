@@ -13,7 +13,7 @@ describe('Logged In Test', () => {
   it('displays the user map', () => {
     cy.contains('Welcome Cypress Test User');
     cy.get('[data-test="UserMapList"]').within(() => {
-      cy.contains("Cypress Test User's Travelmap");
+      cy.contains('Cypress Test User');
     });
   });
 
