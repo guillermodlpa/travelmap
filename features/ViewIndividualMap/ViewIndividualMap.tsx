@@ -2,9 +2,9 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { Box, Button, ResponsiveContext, Spinner, Text } from 'grommet';
+import { Box, Button, Spinner, Text } from 'grommet';
 import NextLink from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import useUserCombinedMaps from '../../hooks/useUserCombinedMaps';
 import { useUser } from '@auth0/nextjs-auth0';
@@ -49,8 +49,6 @@ export default function ViewIndividualMap({
 
   const [createTogetherMapDialogOpen, setCreateTogetherMapDialogOpen] = useState<boolean>(false);
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
-
-  const size = useContext(ResponsiveContext);
 
   return (
     <>
@@ -113,7 +111,7 @@ export default function ViewIndividualMap({
       {travelMap && !error && (
         <Legend>
           <LegendTitle
-            heading={getTravelMapName(travelMap, { short: size === 'small' })}
+            heading={getTravelMapName(travelMap)}
             avatars={[
               {
                 id: travelMap.userId,

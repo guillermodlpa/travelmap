@@ -1,15 +1,10 @@
 const NBSP_CHAR = '\u00A0';
 
 const getTravelMapName = (
-  travelMap: ClientIndividualTravelMap | ClientCombinedTravelMap,
-  params: { short?: boolean } = {}
+  travelMap: ClientIndividualTravelMap | ClientCombinedTravelMap
 ): string => {
   if (travelMap.type === 'individual') {
-    return params.short
-      ? travelMap.userDisplayName
-      : /s$/.test(travelMap.userDisplayName)
-      ? `${travelMap.userDisplayName}' Travelmap`
-      : `${travelMap.userDisplayName}'s Travelmap`;
+    return travelMap.userDisplayName;
   }
 
   const nameString = travelMap.individualTravelMaps
@@ -20,7 +15,7 @@ const getTravelMapName = (
       ''
     );
 
-  return params.short ? nameString : `Travelmap of ${nameString}`;
+  return nameString;
 };
 
 export default getTravelMapName;

@@ -39,9 +39,7 @@ export default function MapList({
   return (
     <Box as="ul" pad="0" margin="0" role="list">
       {mapList.map((travelMap, index) => {
-        const travelMapName = getTravelMapNameForUsers(travelMap, {
-          short: travelMap.type === 'combined',
-        });
+        const travelMapName = getTravelMapNameForUsers(travelMap);
         return (
           <Box
             key={travelMap.id}

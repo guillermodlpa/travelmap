@@ -13,6 +13,7 @@ import getCountryName from '../../util/getCountryName';
 import EditMapSettings from './EditMapSettings';
 import HoveredCountryToast from './HoveredCountryToast';
 import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
+import getTravelMapName from '../../util/getTravelMapName';
 
 const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
@@ -115,9 +116,7 @@ export default function EditMap({
 
       <Legend>
         <LegendTitle
-          heading={
-            travelMap?.userDisplayName ? `${travelMap?.userDisplayName}'s Travelmap` : 'Travelmap'
-          }
+          heading={travelMap ? getTravelMapName(travelMap) || 'Travelmap' : 'Travelmap'}
           avatars={
             travelMap
               ? [

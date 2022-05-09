@@ -127,7 +127,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
       {travelMap && !error && (
         <Legend>
           <LegendTitle
-            heading={getTravelMapName(travelMap, { short: size === 'small' })}
+            heading={getTravelMapName(travelMap)}
             avatars={[
               {
                 id: travelMap.individualTravelMaps[0].userId,
