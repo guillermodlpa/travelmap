@@ -143,24 +143,14 @@ export default function ViewIndividualMap({
 
           <LegendActions>
             {userCanEditThisMap ? (
-              [
-                <NextLink key="edit-button" href={`/map/edit`} passHref>
-                  <Button
-                    size="medium"
-                    a11yTitle="Edit"
-                    icon={<Edit size="medium" color="brand" />}
-                    tip={canHoverWithEase ? 'Edit' : undefined}
-                  />
-                </NextLink>,
+              <NextLink key="edit-button" href={`/map/edit`} passHref>
                 <Button
                   size="medium"
-                  key="share-button"
-                  a11yTitle="Share"
-                  tip={canHoverWithEase ? 'Share' : undefined}
-                  icon={<ShareOption size="medium" color="brand" />}
-                  onClick={() => setShareMapDialogOpen(true)}
-                />,
-              ]
+                  a11yTitle="Edit"
+                  icon={<Edit size="medium" color="brand" />}
+                  tip={canHoverWithEase ? 'Edit' : undefined}
+                />
+              </NextLink>
             ) : confirmedUserDoesntHaveTogetherMaps ? (
               <Button
                 size="medium"
@@ -178,10 +168,15 @@ export default function ViewIndividualMap({
                   size="medium"
                 />
               </NextLink>
-            ) : (
-              // render a space so we have the same height as if buttons render, to minimize CLS
-              <>{'\u00A0'}</>
-            )}
+            ) : null}
+
+            <Button
+              size="medium"
+              a11yTitle="Share"
+              tip={canHoverWithEase ? 'Share' : undefined}
+              icon={<ShareOption size="medium" color="brand" />}
+              onClick={() => setShareMapDialogOpen(true)}
+            />
           </LegendActions>
         </Legend>
       )}

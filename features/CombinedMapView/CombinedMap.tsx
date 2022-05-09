@@ -191,14 +191,13 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           </LegendBody>
 
           <LegendActions>
-            {isLoggedInUserMap && (
-              <Button
-                size="medium"
-                tip={canHoverWithEase ? 'Share' : undefined}
-                icon={<ShareOption size="medium" color="brand" />}
-                onClick={() => setShareMapDialogOpen(true)}
-              />
-            )}
+            <Button
+              size="medium"
+              a11yTitle="Share"
+              tip={canHoverWithEase ? 'Share' : undefined}
+              icon={<ShareOption size="medium" color="brand" />}
+              onClick={() => setShareMapDialogOpen(true)}
+            />
           </LegendActions>
         </Legend>
       )}
