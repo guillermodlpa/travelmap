@@ -19,9 +19,9 @@ const fetcher: Fetcher<ClientIndividualTravelMap, string> = (url) =>
   fetch(url).then((r) => r.json());
 
 export default function EditMap({
-  defaultOUserSettingsModal,
+  defaultUserSettingsModal,
 }: {
-  defaultOUserSettingsModal: boolean;
+  defaultUserSettingsModal: boolean;
 }) {
   const router = useRouter();
   const size = useContext(ResponsiveContext);
@@ -47,7 +47,7 @@ export default function EditMap({
     });
 
   const [editMapSettingsDialogOpen, setEditMapSettingsDialogOpen] =
-    useState<boolean>(defaultOUserSettingsModal);
+    useState<boolean>(defaultUserSettingsModal);
 
   const [saving, setSaving] = useState<boolean>(false);
   const [savingError, setSavingError] = useState<string>();
@@ -108,7 +108,7 @@ export default function EditMap({
       <EditMapSettings
         open={editMapSettingsDialogOpen}
         onClose={() => setEditMapSettingsDialogOpen(false)}
-        showWelcomeMessage={defaultOUserSettingsModal && !travelMap?.userDisplayName}
+        showWelcomeMessage={defaultUserSettingsModal}
         allowUserToClose={Boolean(travelMap?.userDisplayName)}
       />
 

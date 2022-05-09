@@ -10,7 +10,7 @@ function EditMapPage() {
   return (
     <>
       <HeadWithDefaults title="Travelmap - Edit Map" />
-      <EditIndividualMap defaultOUserSettingsModal={onboardingFlag} />
+      <EditIndividualMap defaultUserSettingsModal={onboardingFlag} />
     </>
   );
 }

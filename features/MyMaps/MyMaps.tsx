@@ -5,12 +5,9 @@ import Parchment from '../../components/Parchment';
 import PrincipalParchmentContainer from '../../components/Parchment/PrincipalParchmentContainer';
 import OnboardingBanner from './OnboardingBanner';
 import useMyUser from '../../hooks/useMyUser';
-import useRedirectUserWithoutDisplayNameToOnboarding from '../../hooks/useRedirectNewUserToEditMap';
 
 export default function MyMaps() {
   const { data: myUser, error: errorWithMyUser } = useMyUser();
-
-  useRedirectUserWithoutDisplayNameToOnboarding();
 
   return (
     <PrincipalParchmentContainer width="xlarge">

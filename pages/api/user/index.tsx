@@ -55,6 +55,7 @@ const handlePatch = async (req: NextApiRequest, res: NextApiResponse<User | Erro
     where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
     data: {
       displayName: trimmedDisplayName,
+      onboarded: true, // we set to true when user saves their settings the first time
     },
   });
 

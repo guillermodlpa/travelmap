@@ -33,6 +33,7 @@ model User {
     displayName         String
     pictureUrl          String?
     created             DateTime              @default(now())
+    onboarded           Boolean               @default(true)
     individualTravelMap IndividualTravelMap[]
     combinedTravelMaps  CombinedTravelMap[]   @relation(references: [id])
 }

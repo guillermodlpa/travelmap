@@ -59,6 +59,7 @@ const loginHookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         email,
         displayName: '', // we prompt users to fill this out right after they sign up
         pictureUrl: pictureUrl || null,
+        onboarded: false,
       },
     })
     .then(async (user) => {

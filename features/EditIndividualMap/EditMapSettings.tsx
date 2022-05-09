@@ -28,7 +28,7 @@ export default function EditMapSettings({
         {showWelcomeMessage && (
           <>
             <Heading level={2}>{`You're in!`}</Heading>
-            <Text>Start by choosing your display name, and other preferences.</Text>
+            <Text>Start by choosing your display name and picture.</Text>
           </>
         )}
 
