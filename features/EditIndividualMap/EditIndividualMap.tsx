@@ -47,8 +47,12 @@ export default function EditMap({
       return newCountries;
     });
 
-  const [editMapSettingsDialogOpen, setEditMapSettingsDialogOpen] =
-    useState<boolean>(defaultUserSettingsModal);
+  const [editMapSettingsDialogOpen, setEditMapSettingsDialogOpen] = useState<boolean>(false);
+  useEffect(() => {
+    if (defaultUserSettingsModal) {
+      setEditMapSettingsDialogOpen(true);
+    }
+  }, [defaultUserSettingsModal]);
 
   const [saving, setSaving] = useState<boolean>(false);
   const [savingError, setSavingError] = useState<string>();
