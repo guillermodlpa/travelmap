@@ -104,6 +104,7 @@ const handleDelete = async (req: NextApiRequest, res: NextApiResponse<{} | Error
       where: { id: session.user[CUSTOM_CLAIM_APP_USER_ID] },
     })
     .catch((error) => {
+      console.error(error);
       // log the error, but let the execution go through.
     });
 
