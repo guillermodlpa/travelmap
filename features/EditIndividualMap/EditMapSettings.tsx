@@ -22,7 +22,7 @@ export default function EditMapSettings({
       onClickOutside={allowUserToClose ? onClose : undefined}
       onEsc={allowUserToClose ? onClose : undefined}
       responsive={false}
-      margin="large"
+      margin="small"
     >
       <Box width="large" pad={{ vertical: 'large', horizontal: 'large' }}>
         {showWelcomeMessage && (

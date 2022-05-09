@@ -108,7 +108,7 @@ export default function UserSettingsForm({
         direction={size === 'small' ? 'column' : 'row'}
         gap={size === 'small' ? 'medium' : 'large'}
       >
-        <Box margin={{ top: 'large', bottom: 'medium' }} gap="medium">
+        <Box flex={{ grow: 1 }} margin={{ top: 'large', bottom: 'medium' }} gap="medium">
           <Heading level={4} margin={'0'}>
             User
           </Heading>
