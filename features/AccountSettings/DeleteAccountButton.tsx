@@ -1,32 +1,28 @@
 import { Button } from 'grommet';
 import { useState } from 'react';
 import WrappingDialogConfirmation from '../../components/ConfirmationDialog/WrappingDialogConfirmation';
-import useMyUser from '../../hooks/useMyUser';
 import { PATH_LOG_OUT } from '../../util/paths';
 
 export default function DeleteAccountButton() {
-  const { mutate: mutateMyUser } = useMyUser();
-
-  const [deletingAccount, setDeletingAccount] = useState<boolean>(false);
+  const [deletingState, setDeletingState] = useState<'iddle' | 'deleting' | 'deleted'>('iddle');
   const [errorMessage, setErrorMessage] = useState<string>();
-  const handleDeleteAccount = (requestClose: () => void): Promise<void> => {
-    setDeletingAccount(true);
+  const handleDeleteAccount = (requestClose: () => void): Promise<void> | void => {
+    if (deletingState !== 'iddle') {
+      return;
+    }
+    setDeletingState('deleting');
     setErrorMessage(undefined);
     return fetch(`/api/user`, {
       method: 'DELETE',
     })
       .then(() => {
-        setTimeout(() => {
-          setDeletingAccount(false);
-          mutateMyUser();
-          requestClose();
-          if (typeof window !== 'undefined') {
-            window.location.href = PATH_LOG_OUT;
-          }
-        }, 500);
+        setDeletingState('deleted');
+        if (typeof window !== 'undefined') {
+          window.location.href = PATH_LOG_OUT;
+        }
       })
       .catch((error) => {
-        setDeletingAccount(false);
+        setDeletingState('iddle');
         console.error(error);
         setErrorMessage(error instanceof Error ? error.message : 'Error');
       });
@@ -37,8 +33,13 @@ export default function DeleteAccountButton() {
       onConfirm={(event, requestClose) => {
         handleDeleteAccount(requestClose);
       }}
-      confirmButtonLabel={deletingAccount ? 'Deleting Account' : 'Delete Account'}
-      confirmButtonDisabled={deletingAccount}
+      confirmButtonLabel={
+        {
+          iddle: 'Delete Account',
+          deleting: 'Deleting Account',
+          deleted: 'Deleted',
+        }[deletingState]
+      }
       confirmMessage="Are you sure that you want to delete your account and data?"
       errorMessage={errorMessage}
     >
