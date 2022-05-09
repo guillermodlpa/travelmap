@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import useSWRImmutable, { Fetcher } from 'swr';
+import useSWRImmutable, { Fetcher, useSWRConfig } from 'swr';
 
 import { Box, Button, Card, CardBody, Paragraph, ResponsiveContext, Text } from 'grommet';
 import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesMap';
@@ -29,13 +29,14 @@ export default function EditMap({
   const { data: travelMap, error } = useSWRImmutable(`/api/map`, fetcher, {
     suspense: false,
   });
+  const { mutate } = useSWRConfig();
 
   const [countries, setCountries] = useState<string[]>([]);
   useEffect(() => {
-    if (travelMap?.visitedCountries) {
+    if (countries.length === 0 && travelMap?.visitedCountries) {
       setCountries(travelMap.visitedCountries);
     }
-  }, [travelMap?.visitedCountries]);
+  }, [travelMap?.visitedCountries, countries]);
 
   const toggleCountry = (country: string) =>
     setCountries((countries) => {
@@ -67,6 +68,10 @@ export default function EditMap({
       .then(() => {
         setSaving(false);
         if (travelMap) {
+          mutate(`/api/map/${travelMap.id}?type=individual`, {
+            ...travelMap,
+            visitedCountries: countries,
+          });
           router.push(travelMap.pathView);
         }
       })
