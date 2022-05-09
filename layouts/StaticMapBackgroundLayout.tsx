@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import StaticWorldMap from '../components/Maps/StaticWorldMap';
+import WorldMapImage from '../components/Maps/WorldMapImage';
 import Nav from '../components/Nav';
 
 const FullScreenBackground = styled.div`
@@ -20,7 +20,7 @@ export default function StaticMapBackgroundLayout({ children }: { children: Reac
       <Nav />
 
       <FullScreenBackground>
-        <StaticWorldMap height="100vh" id="static-background-map" />
+        <WorldMapImage />
       </FullScreenBackground>
 
       {children}
