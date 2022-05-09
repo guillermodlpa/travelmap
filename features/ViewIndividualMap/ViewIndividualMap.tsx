@@ -147,6 +147,7 @@ export default function ViewIndividualMap({
                 <NextLink key="edit-button" href={`/map/edit`} passHref>
                   <Button
                     size="medium"
+                    a11yTitle="Edit"
                     icon={<Edit size="medium" color="brand" />}
                     tip={canHoverWithEase ? 'Edit' : undefined}
                   />
@@ -154,6 +155,7 @@ export default function ViewIndividualMap({
                 <Button
                   size="medium"
                   key="share-button"
+                  a11yTitle="Share"
                   tip={canHoverWithEase ? 'Share' : undefined}
                   icon={<ShareOption size="medium" color="brand" />}
                   onClick={() => setShareMapDialogOpen(true)}
@@ -162,6 +164,7 @@ export default function ViewIndividualMap({
             ) : confirmedUserDoesntHaveTogetherMaps ? (
               <Button
                 size="medium"
+                a11yTitle="Create Map Together"
                 tip={canHoverWithEase ? 'Create Map Together' : undefined}
                 icon={<Aggregate size="medium" color="brand" />}
                 onClick={() => setCreateTogetherMapDialogOpen(true)}
@@ -169,6 +172,7 @@ export default function ViewIndividualMap({
             ) : confirmedUserHasTogeherMaps ? (
               <NextLink href={togetherMapList[0].pathView} passHref>
                 <Button
+                  a11yTitle="View Map Together"
                   tip={canHoverWithEase ? 'View Map Together' : undefined}
                   icon={<Aggregate size="medium" color="brand" />}
                   size="medium"

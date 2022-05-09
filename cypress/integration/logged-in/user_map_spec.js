@@ -22,7 +22,7 @@ describe('Logged In Test', () => {
       cy.contains('View').click();
     });
     cy.contains('Visited countries (7)');
-    cy.contains('Edit');
-    cy.contains('Share');
+    cy.get('[aria-label="Edit"]').should('exist');
+    cy.get('[aria-label="Share"]').should('exist');
   });
 });
