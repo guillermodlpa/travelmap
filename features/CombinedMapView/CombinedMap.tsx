@@ -70,7 +70,9 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
 
   return (
     <>
-      <HeadWithDefaults title={travelMap ? `${getTravelMapName(travelMap)}` : 'Travelmap'} />
+      <HeadWithDefaults
+        title={travelMap ? `Travelmap - ${getTravelMapName(travelMap)}` : 'Travelmap'}
+      />
 
       {combinedMapId && (
         <HighlightedCountriesMap

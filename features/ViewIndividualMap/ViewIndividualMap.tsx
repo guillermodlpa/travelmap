@@ -57,7 +57,9 @@ export default function ViewIndividualMap({
 
   return (
     <>
-      <HeadWithDefaults title={`${travelMap ? getTravelMapName(travelMap) : 'Travelmap'}`} />
+      <HeadWithDefaults
+        title={travelMap ? `Travelmap - ${getTravelMapName(travelMap)}` : 'Travelmap'}
+      />
 
       {individualMapId && (
         <HighlightedCountriesMap
