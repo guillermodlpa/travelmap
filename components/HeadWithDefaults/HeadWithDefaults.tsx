@@ -19,7 +19,7 @@ export default function HeadWithDefaults({ title }: { title: string }) {
       ></meta>
       <meta
         property="og:image"
-        content="https://https://travelmap.guillermodlpa.com/landing-page-screenshot.png"
+        content="https://travelmap.guillermodlpa.com/landing-page-screenshot.png"
       />
       <meta property="og:title" content={title} />
       <meta property="og:locale" content="en_US" />
