@@ -95,7 +95,7 @@ export default function ViewIndividualMap({
           open={shareMapDialogOpen}
           onClose={() => setShareMapDialogOpen(false)}
           pathView={travelMap.pathView}
-          name={getTravelMapName(travelMap)}
+          name={getTravelMapName(travelMap, { includeAppName: true })}
         />
       )}
 

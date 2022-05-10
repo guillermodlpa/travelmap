@@ -98,7 +98,7 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           open={shareMapDialogOpen}
           onClose={() => setShareMapDialogOpen(false)}
           pathView={travelMap.pathView}
-          name={getTravelMapName(travelMap)}
+          name={getTravelMapName(travelMap, { includeAppName: true })}
         />
       )}
 
