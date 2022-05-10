@@ -1,6 +1,7 @@
 import { Box, Button, Text, Layer, Heading } from 'grommet';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Aggregate } from 'grommet-icons';
 
 export default function CreateTogetherMapDialog({
   open,
@@ -53,7 +54,8 @@ export default function CreateTogetherMapDialog({
     >
       <Box pad="medium" gap="small" width="medium">
         <Heading level={3} margin="none">
-          {`Create "Together" Map`}
+          <Aggregate />
+          {` Create "Together" Map`}
         </Heading>
         <Text>
           {`Doing this will make it show for both of you in your list of "Together" Maps.`}
