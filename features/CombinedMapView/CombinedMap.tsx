@@ -2,15 +2,13 @@ import HighlightedCountriesMap from '../../components/Maps/HighlightedCountriesM
 import Legend from '../../components/Legend/Legend';
 import LegendTitle from '../../components/Legend/LegendTitle';
 import LegendBody from '../../components/Legend/LegendBody';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import getTravelMapName from '../../util/getTravelMapName';
 import LegendColorIndicators from '../../components/Legend/LegendColorIndicators';
 import getCountryName from '../../util/getCountryName';
 import LegendActions from '../../components/Legend/LegendActions';
 import { Box, Button, ResponsiveContext, Spinner, Text } from 'grommet';
 import ShareMap from '../ViewIndividualMap/ShareMap';
-import { useUser } from '@auth0/nextjs-auth0';
-import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
 import useCombinedMap from '../../hooks/useCombinedMap';
 import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { useRouter } from 'next/router';
@@ -53,15 +51,6 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
         travelMap.individualTravelMaps[1]
       )
     : [[], [], []];
-
-  const { user: auth0User } = useUser();
-  const isLoggedInUserMap = useMemo(
-    () =>
-      (travelMap?.individualTravelMaps || []).some(
-        (travelMap) => travelMap.userId === auth0User?.[CUSTOM_CLAIM_APP_USER_ID]
-      ),
-    [travelMap, auth0User]
-  );
 
   const [shareMapDialogOpen, setShareMapDialogOpen] = useState<boolean>(false);
 
