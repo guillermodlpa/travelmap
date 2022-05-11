@@ -3,6 +3,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from 'grommet';
 import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import withNoSsr from '../NoSsr/withNoSsr';
 import { HeightType } from 'grommet/utils';
 import { useThemeMode } from '../ThemeModeContext/ThemeModeContext';
@@ -102,6 +103,7 @@ const zoomMapToCountries = (
 const addCountryHoverInteractivity = (
   map: mapboxgl.Map,
   fillColor: string,
+  showHoveredCountryFill: boolean,
   onCountryClicked: (code: string) => void,
   onCountryHovered: (param: undefined | { code: string; name: string }) => void
 ) => {
@@ -123,21 +125,23 @@ const addCountryHoverInteractivity = (
 
   // add a layer of countries, in which only one filtered country is visible. We'll configure that
   // filter when hovering over the map
-  map.addLayer(
-    {
-      id: 'country-fills-hover',
-      type: 'fill',
-      source: 'countryBoundariesV1',
-      'source-layer': 'country_boundaries',
-      layout: {},
-      paint: {
-        'fill-color': fillColor,
-        'fill-opacity': 0.5,
+  if (showHoveredCountryFill) {
+    map.addLayer(
+      {
+        id: 'country-fills-hover',
+        type: 'fill',
+        source: 'countryBoundariesV1',
+        'source-layer': 'country_boundaries',
+        layout: {},
+        paint: {
+          'fill-color': fillColor,
+          'fill-opacity': 0.5,
+        },
+        filter: ['==', 'name', ''],
       },
-      filter: ['==', 'name', ''],
-    },
-    'country-fills'
-  );
+      'country-fills'
+    );
+  }
 
   // When the user moves their mouse over the page, we look for features
   // at the mouse position (e.point) and within the states layer (countries-fill).
@@ -147,15 +151,24 @@ const addCountryHoverInteractivity = (
     'mousemove',
     throttle((e: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
       const features = map.queryRenderedFeatures(e.point, { layers: ['country-fills'] });
-      if (features.length) {
+
+      const currentHoveredFeatureId = showHoveredCountryFill
+        ? map.getFilter('country-fills-hover')?.[2]
+        : undefined;
+
+      if (features.length && currentHoveredFeatureId !== features[0].properties?.name) {
         map.getCanvas().style.cursor = 'pointer';
-        map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
         const code = features[0].properties?.iso_3166_1_alpha_3;
         onCountryHovered({ code, name: getCountryName(code) || code });
-      } else {
-        map.setFilter('country-fills-hover', ['==', 'name', '']);
+        if (showHoveredCountryFill) {
+          map.setFilter('country-fills-hover', ['==', 'name', features[0].properties?.name]);
+        }
+      } else if (features.length === 0) {
         map.getCanvas().style.cursor = '';
         onCountryHovered(undefined);
+        if (showHoveredCountryFill) {
+          map.setFilter('country-fills-hover', ['==', 'name', '']);
+        }
       }
     }, 50)
   );
@@ -163,11 +176,13 @@ const addCountryHoverInteractivity = (
   // Reset the country-fills-hover layer's filter when the mouse leaves the map
   map.on(
     'mouseout',
-    throttle(() => {
+    debounce(() => {
       map.getCanvas().style.cursor = 'auto';
-      map.setFilter('country-fills-hover', ['==', 'name', '']);
       onCountryHovered(undefined);
-    }, 50)
+      if (showHoveredCountryFill) {
+        map.setFilter('country-fills-hover', ['==', 'name', '']);
+      }
+    }, 100)
   );
 
   map.on('click', (event: mapboxgl.MapMouseEvent & mapboxgl.EventData) => {
@@ -195,7 +210,8 @@ type HighlighedCountriesMapProps = {
   scrollZoom?: boolean;
   highlightedCountries?: HighlighterCountriesDescriptor[];
   initialZoomPadding?: ZoomPadding;
-  countriesCanBeSelected: boolean;
+  countriesAreInteractive: boolean;
+  showHoveredCountryFill: boolean;
   onCountrySelected?: (code: string) => void;
   onCountryHovered?: (param: undefined | { code: string; name: string }) => void;
 };
@@ -209,7 +225,8 @@ function HighlightedCountriesMap({
   zoomCountriesOnLoad = false,
   initialZoomPadding = { top: 0, bottom: 0, left: 0, right: 0 },
   highlightedCountries = [],
-  countriesCanBeSelected,
+  countriesAreInteractive,
+  showHoveredCountryFill,
   scrollZoom = true,
   onCountrySelected = () => {},
   onCountryHovered = () => {},
@@ -223,7 +240,8 @@ function HighlightedCountriesMap({
 
   const interactiveRef = useRef(interactive);
   const scrollZoomRef = useRef(scrollZoom);
-  const countriesCanBeSelectedRef = useRef(countriesCanBeSelected);
+  const countriesAreInteractiveRef = useRef(countriesAreInteractive);
+  const showHoveredCountryFillRef = useRef(showHoveredCountryFill);
   const onCountrySelectedRef = useRef(onCountrySelected);
   const onCountryHoveredRef = useRef(onCountryHovered);
   const themeRef = useRef(theme);
@@ -288,10 +306,11 @@ function HighlightedCountriesMap({
       }
       addLayerToMap(map, descriptor.id, color);
     });
-    if (countriesCanBeSelectedRef.current) {
+    if (countriesAreInteractiveRef.current) {
       addCountryHoverInteractivity(
         map,
         themeRef.current.global.colors.border[themeRef.current.dark ? 'dark' : 'light'],
+        showHoveredCountryFillRef.current,
         onCountrySelectedRef.current,
         onCountryHoveredRef.current
       );

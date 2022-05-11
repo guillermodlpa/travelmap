@@ -90,9 +90,6 @@ export default function EditMap({
   const [hoveredCountry, setHoveredCountry] = useState<
     undefined | { code: string; name: string }
   >();
-  const handleCountryHovered = (param: undefined | { code: string; name: string }) => {
-    setHoveredCountry(param);
-  };
 
   return (
     <>
@@ -110,9 +107,10 @@ export default function EditMap({
         applyMapMotion={false}
         animateCamera={false}
         zoomCountriesOnLoad={false}
-        countriesCanBeSelected={true}
+        countriesAreInteractive
+        showHoveredCountryFill
         onCountrySelected={toggleCountry}
-        onCountryHovered={handleCountryHovered}
+        onCountryHovered={(param) => setHoveredCountry(param)}
       />
 
       <EditMapSettings

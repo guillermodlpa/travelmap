@@ -20,6 +20,7 @@ import HeadWithDefaults from '../../components/HeadWithDefaults';
 import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 import { Aggregate, Edit, ShareOption } from 'grommet-icons';
 import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
+import HoveredCountryToast from '../EditIndividualMap/HoveredCountryToast';
 
 export default function ViewIndividualMap({
   individualMapId,
@@ -55,6 +56,10 @@ export default function ViewIndividualMap({
   const size = useContext(ResponsiveContext);
   const canHoverWithEase = useCanHoverWithEase();
 
+  const [hoveredCountry, setHoveredCountry] = useState<
+    undefined | { code: string; name: string }
+  >();
+
   return (
     <>
       <HeadWithDefaults
@@ -74,12 +79,16 @@ export default function ViewIndividualMap({
           ]}
           interactive
           zoomCountriesOnLoad
-          countriesCanBeSelected={false}
+          countriesAreInteractive
+          showHoveredCountryFill={false}
+          onCountryHovered={(param) => setHoveredCountry(param)}
           applyMapMotion
           animateCamera
           initialZoomPadding={size === 'small' ? { bottom: 100, top: 50 } : { bottom: 10, top: 10 }}
         />
       )}
+
+      <HoveredCountryToast hoveredCountry={hoveredCountry} />
 
       {travelMap && confirmedUserDoesntHaveTogetherMaps && (
         <CreateTogetherMapDialog

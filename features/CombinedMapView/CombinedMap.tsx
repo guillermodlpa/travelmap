@@ -19,6 +19,7 @@ import {
 } from '../../util/mapHighlightColors';
 import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
 import { ShareOption } from 'grommet-icons';
+import HoveredCountryToast from '../EditIndividualMap/HoveredCountryToast';
 
 function arrayExclude<T>(array1: T[], array2: T[]): T[] {
   return (array1 || []).filter((value) => !(array2 || []).includes(value));
@@ -57,6 +58,10 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
   const size = useContext(ResponsiveContext);
   const canHoverWithEase = useCanHoverWithEase();
 
+  const [hoveredCountry, setHoveredCountry] = useState<
+    undefined | { code: string; name: string }
+  >();
+
   return (
     <>
       <HeadWithDefaults
@@ -86,12 +91,16 @@ export default function CombinedMap({ combinedMapId }: { combinedMapId: string |
           ]}
           zoomCountriesOnLoad
           interactive
-          countriesCanBeSelected={false}
+          countriesAreInteractive
+          showHoveredCountryFill={false}
+          onCountryHovered={(param) => setHoveredCountry(param)}
           applyMapMotion
           animateCamera
           initialZoomPadding={size === 'small' ? { bottom: 180, top: 50 } : { bottom: 10, top: 10 }}
         />
       )}
+
+      <HoveredCountryToast hoveredCountry={hoveredCountry} />
 
       {travelMap && (
         <ShareMap

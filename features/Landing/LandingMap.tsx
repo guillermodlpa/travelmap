@@ -32,7 +32,8 @@ export default function LandingMap({ height }: { height: string }) {
         ]}
         interactive
         zoomCountriesOnLoad
-        countriesCanBeSelected={false}
+        countriesAreInteractive={false}
+        showHoveredCountryFill={false}
         applyMapMotion
         animateCamera
         scrollZoom={false}
