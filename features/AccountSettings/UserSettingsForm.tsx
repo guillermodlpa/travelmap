@@ -2,13 +2,13 @@ import {
   Avatar,
   Box,
   Button,
-  CheckBox,
   FormField,
   Heading,
   ResponsiveContext,
   Text,
   TextInput,
 } from 'grommet';
+import { Camera } from 'grommet-icons';
 import { useContext, useEffect, useState } from 'react';
 import useMyUser from '../../hooks/useMyUser';
 
@@ -108,7 +108,7 @@ export default function UserSettingsForm({
         direction={size === 'small' ? 'column' : 'row'}
         gap={size === 'small' ? 'medium' : 'large'}
       >
-        <Box flex={{ grow: 1 }} margin={{ top: 'large', bottom: 'medium' }} gap="medium">
+        <Box flex={{ grow: 1 }} margin={{ top: 'large', bottom: 'small' }} gap="medium">
           <Heading level={4} margin={'0'}>
             User
           </Heading>
@@ -124,6 +124,14 @@ export default function UserSettingsForm({
                 >
                   {(displayName || '').substring(0, 1)}
                 </Avatar>
+
+                <Button
+                  as="div"
+                  a11yTitle="Change avatar picture"
+                  icon={<Camera color="brand" />}
+                  style={{ display: 'flex', justifyContent: 'center' }}
+                />
+
                 <input
                   type="file"
                   id="user-picture-file-input"
