@@ -1,14 +1,15 @@
+import { useUser } from '@auth0/nextjs-auth0';
 import { Box, Heading } from 'grommet';
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 import Parchment from '../../components/Parchment';
 
-const FloatingBox = styled(Box)`
+const FloatingBox = styled(Box)<{ $loggedInNavVisible: boolean }>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   z-index: 150;
-  top: 80px;
+  top: ${({ $loggedInNavVisible }) => ($loggedInNavVisible ? 70 : 10)}px;
 
   @media (min-width: ${({ theme }) => theme.global.breakpoints?.small?.value}px) {
     top: 10px;
@@ -39,8 +40,10 @@ export default function HoveredCountryToast({
     }
   }, [hoveredCountry]);
 
+  const { user: auth0User } = useUser();
+
   return (
-    <FloatingBox animation={animation}>
+    <FloatingBox animation={animation} $loggedInNavVisible={Boolean(auth0User)}>
       <Parchment
         contentBox={{ pad: { horizontal: 'medium', vertical: 'small' } }}
         insetShadowSize="xsmall"
