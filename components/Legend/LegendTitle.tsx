@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Heading, Anchor } from 'grommet';
-import { FormEdit } from 'grommet-icons';
+import { Edit } from 'grommet-icons';
 import { SyntheticEvent } from 'react';
 import NextLink from 'next/link';
 import styled from 'styled-components';
@@ -85,7 +85,7 @@ export default function LegendTitle({
       {showEditNameButton && (
         <Box flex={{ shrink: 0 }} alignSelf="center">
           <Button
-            icon={<FormEdit color="text" />}
+            icon={<Edit color="brand" />}
             size="medium"
             tip="Edit name and picture"
             a11yTitle="Edit name and picture"
