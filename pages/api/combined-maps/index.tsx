@@ -72,6 +72,7 @@ const handleGet = async (
     },
     include: {
       combinedTravelMaps: {
+        where: otherUserId ? { users: { some: { id: otherUserId } } } : {},
         include: {
           users: {
             include: {
