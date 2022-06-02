@@ -23,6 +23,14 @@ export default function Document() {
           rel="shortcut icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗺</text></svg>"
         />
+        {process.env.NODE_ENV === 'production' && (
+          <script
+            async
+            defer
+            data-website-id="4f53ffcd-b816-4137-ac72-f07d65d41273"
+            src="https://umami-pvn48eb4t-guillermodlpa.vercel.app/umami.js"
+          ></script>
+        )}
       </Head>
       <body>
         <Main />
