@@ -37,3 +37,10 @@ model User {
     individualTravelMap IndividualTravelMap[]
     combinedTravelMaps  CombinedTravelMap[]   @relation(references: [id])
 }
+
+model TravelMapCounts {
+    id                       String   @id @default(uuid())
+    individualTravelMapCount Int
+    combinedTravelMapCount   Int
+    created                  DateTime @default(now())
+}
