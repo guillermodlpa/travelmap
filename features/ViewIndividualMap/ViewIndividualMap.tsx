@@ -21,6 +21,7 @@ import { MAP_HIGHLIGHT_COLOR_1 } from '../../util/mapHighlightColors';
 import { Aggregate, Edit, ShareOption } from 'grommet-icons';
 import useCanHoverWithEase from '../../hooks/useCanHoverWithEase';
 import HoveredCountryToast from '../EditIndividualMap/HoveredCountryToast';
+import { useCanEditTravelmap } from '../../lib/authorization/canEditTravelmap';
 
 export default function ViewIndividualMap({
   individualMapId,
@@ -45,8 +46,7 @@ export default function ViewIndividualMap({
     otherUserId: travelMap?.userId,
   });
 
-  const userCanEditThisMap =
-    travelMap && auth0User?.[CUSTOM_CLAIM_APP_USER_ID] === travelMap?.userId;
+  const { canAccess: userCanEditThisMap } = useCanEditTravelmap({ individualMapId });
   const confirmedUserDoesntHaveTogetherMaps = togetherMapList && togetherMapList.length === 0;
   const confirmedUserHasTogeherMaps = togetherMapList && togetherMapList.length > 0;
 
