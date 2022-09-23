@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
-import { getPrismaClient } from '../../../../util/prisma';
+import { getPrismaClient } from '../../../../lib/prisma';
 
 const hasInitialMap = (prisma: PrismaClient, userId: string) =>
   Boolean(

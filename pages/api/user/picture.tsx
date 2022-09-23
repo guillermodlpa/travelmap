@@ -4,7 +4,7 @@ import { ManagementClient } from 'auth0';
 import multiparty from 'multiparty';
 import { v2 as cloudinary } from 'cloudinary';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
-import { getPrismaClient } from '../../../util/prisma';
+import { getPrismaClient } from '../../../lib/prisma';
 
 type ErrorResponse = { error: string };
 type ParsedFile = {

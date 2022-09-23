@@ -1,7 +1,7 @@
 import { useUser } from '@auth0/nextjs-auth0';
 import { User } from '@prisma/client';
 import useSWRImmutable, { useSWRConfig } from 'swr';
-import getFetcher from '../util/fetcher';
+import getFetcher from '../lib/fetcher';
 
 const fetcher = getFetcher<User>();
 

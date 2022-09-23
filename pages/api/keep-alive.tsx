@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getPrismaClient } from '../../util/prisma';
+import { getPrismaClient } from '../../lib/prisma';
 
 type ErrorResponse = { error: string };
 type SuccessResponse = { individualTravelMapCount: number; combinedTravelMapCount: number };

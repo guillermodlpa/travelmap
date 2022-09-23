@@ -3,7 +3,7 @@ import {
   formatApiCombinedTravelMapResponse,
   formatApiIndividualTravelMapResponse,
 } from '../../util/formatApiResponse';
-import { getPrismaClient } from '../../util/prisma';
+import { getPrismaClient } from '../../lib/prisma';
 
 type ErrorResponse = { error: string };
 

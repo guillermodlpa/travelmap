@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { User } from '@prisma/client';
 import { ManagementClient } from 'auth0';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
-import { getPrismaClient } from '../../../util/prisma';
+import { getPrismaClient } from '../../../lib/prisma';
 
 type ErrorResponse = { error: string };
 

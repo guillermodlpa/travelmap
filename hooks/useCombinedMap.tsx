@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import getFetcher from '../util/fetcher';
+import getFetcher from '../lib/fetcher';
 
 const fetcher = getFetcher<ClientCombinedTravelMap>();
 

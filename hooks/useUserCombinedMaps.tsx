@@ -1,6 +1,6 @@
 import { useUser } from '@auth0/nextjs-auth0';
 import useSWR from 'swr';
-import getFetcher from '../util/fetcher';
+import getFetcher from '../lib/fetcher';
 
 const fetcher = getFetcher<Array<ClientCombinedTravelMap>>();
 

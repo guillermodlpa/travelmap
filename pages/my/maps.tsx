@@ -4,7 +4,7 @@ import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
 import type { GetServerSideProps, NextPage } from 'next';
 import MyMaps from '../../features/MyMaps';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../util/tokenCustomClaims';
-import { getPrismaClient } from '../../util/prisma';
+import { getPrismaClient } from '../../lib/prisma';
 
 const UserMapsPage: NextPage = () => {
   return (

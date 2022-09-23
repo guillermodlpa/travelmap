@@ -2,7 +2,7 @@ import { getSession, withApiAuthRequired } from '@auth0/nextjs-auth0';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { CUSTOM_CLAIM_APP_USER_ID } from '../../../util/tokenCustomClaims';
 import { formatApiCombinedTravelMapResponse } from '../../../util/formatApiResponse';
-import { getPrismaClient } from '../../../util/prisma';
+import { getPrismaClient } from '../../../lib/prisma';
 
 type ErrorResponse = { error: string };
 
