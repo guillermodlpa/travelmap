@@ -7,6 +7,8 @@ import { getPrismaClient } from '../../lib/prisma';
 
 type ErrorResponse = { error: string };
 
+const PAGE_SIZE = 10;
+
 const handleGet = async (
   req: NextApiRequest,
   res: NextApiResponse<Array<ClientIndividualTravelMap | ClientCombinedTravelMap> | ErrorResponse>
@@ -20,7 +22,7 @@ const handleGet = async (
     where: {
       visitedCountries: { not: [] },
     },
-    take: 5,
+    take: PAGE_SIZE,
     include: {
       user: true,
     },
@@ -29,7 +31,7 @@ const handleGet = async (
     orderBy: {
       created: 'desc',
     },
-    take: 5,
+    take: PAGE_SIZE,
     include: {
       users: {
         include: {
@@ -50,7 +52,7 @@ const handleGet = async (
   const allMaps = [...individualTravelMaps, ...combinedTravelMaps];
   allMaps.sort((a, b) => (b.created && a.created ? b.created - a.created : 0));
 
-  const response = allMaps.slice(0, 5);
+  const response = allMaps.slice(0, PAGE_SIZE);
   res.setHeader('Cache-Control', 'max-age=0, stale-while-revalidate');
   res.status(200).json(response);
 };
