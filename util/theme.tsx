@@ -37,6 +37,7 @@ const customTheme = deepMerge(grommet, {
       placeholder: 'text',
       text: { light: '#0f0f0f', dark: '#FCF5E5' },
       'text-inverted': { light: '#FCF5E5', dark: '#0f0f0f' },
+      'text-footer': { light: '#FCF5E5', dark: '#FCF5E5' },
       'text-strong': { light: '#000000', dark: '#FFFFFF' },
       'text-weak': { light: '#555555', dark: '#CCCCCC' },
       'text-xweak': { light: '#666666', dark: '#BBBBBB' },

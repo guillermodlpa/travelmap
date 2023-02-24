@@ -12,7 +12,7 @@ export default function LandingFooter() {
               href="https://github.com/guillermodlpa/travelmap/issues"
               target="_blank"
               size="medium"
-              color="text-inverted"
+              color="text-footer"
             >
               Report an issue
             </Anchor>
@@ -22,7 +22,7 @@ export default function LandingFooter() {
               href="https://github.com/guillermodlpa/travelmap"
               target="_blank"
               size="medium"
-              color="text-inverted"
+              color="text-footer"
             >
               Source code
             </Anchor>
@@ -32,7 +32,7 @@ export default function LandingFooter() {
               href="https://guillermodlpa.com"
               target="_blank"
               size="medium"
-              color="text-inverted"
+              color="text-footer"
             >{`About the author`}</Anchor>
           </Box>
         </Box>
